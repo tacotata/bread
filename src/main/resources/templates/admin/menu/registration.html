@@ -1,0 +1,149 @@
+<!-- /*
+* Template Name: Style
+* Template Author: Untree.co
+* Tempalte URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
+<!DOCTYPE HTML>
+<html lang="ko" xmlns:th="http:/www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+    <link rel="shortcut icon" href="favicon.png">
+
+    <meta name="description" content=""/>
+    <meta name="keywords" content="free template, bootstrap, bootstrap4"/>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/animate.min.css}">
+    <link rel="stylesheet" th:href="@{/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/owl.theme.default.min.css}">
+    <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}">
+    <link rel="stylesheet" th:href="@{/fonts/feather/style.css}">
+    <link rel="stylesheet" th:href="@{/fonts/flaticon/font/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/jquery.fancybox.min.css}">
+    <link rel="stylesheet" th:href="@{/aos.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/add.css}">
+
+    <title>Bread.</title>
+</head>
+<body>
+<div class="lines-wrap">
+    <div class="lines-inner">
+        <div class="lines"></div>
+    </div>
+</div>
+<!-- END lines -->
+
+
+<th:block th:replace="/include/header :: headerFragment"></th:block>
+<th:block th:replace="/include/nav :: navFragment"></th:block>
+
+
+<div class="custom-hero">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <h1 class="hero-heading">Menu</h1>
+                <div class="line js-line mx-auto mb-3 my-3 mt-5"></div>
+                <p class="sub-text">Far far away, behind the word mountains, far from the countries Vokalia and
+                    Consonantia, there live the blind texts.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-grey contact-wrap">
+    <div class="container p-5">
+        <div class="block">
+            <div class="row justify-content-center">
+                <div class="col-md-12 col-lg-12 pb-4" data-aos="fade-up" data-aos-delay="200">
+                    <form>
+                        <div class="form-group">
+                            <label class="text-black" for="category">종류</label>
+                            <select class="form-control select" id="category" aria-label="Default select example">
+                                <option style="background:#E8E5DE;" selected>유형</option>
+                                <option value="1">도넛</option>
+                                <option value="2">케이크</option>
+                                <option value="3">베이커리</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="text-black" for="menuName">이름</label>
+                            <input type="text" class="form-control" id="menuName">
+                        </div>
+                        <div class="form-group">
+                            <label class="text-black" for="menuPrice">가격</label>
+                            <input type="text" class="form-control" id="menuPrice">
+                        </div>
+                        <div class="form-group">
+                            <label class="text-black" for="menuInfo">상품설명</label>
+                            <textarea name="" class="form-control" id="menuInfo" cols="30" rows="5"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="text-black" for="menuAlergy">알레르기 유발 요인</label>
+                          <textarea name="" class="form-control" id="menuAlergy" cols="30" rows="5"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="text-black" for="menuNutrition">원산지정보</label>
+                            <textarea name="" class="form-control" id="menuNutrition" cols="30" rows="5"></textarea>
+                        </div>
+                        <div style="margin-bottom: 0.5rem;">첨부사진</div>
+                        <div class="form-group file-upload-wrap">
+                            <div id="fileName"></div>
+                            <div>
+                                <i class="far fa-plus-square btn-upload" id="btn-upload" aria-hidden="true"></i>
+                                <input id="input_file" multiple="multiple" type="file" style="display:none;"
+                                       onchange='printName()' accept=".gif, .jpg, .png, .jpeg">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-primary">등록</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<th:block th:replace="/include/footer :: footerFragment"></th:block>
+
+<script th:src="@{/js/jquery-3.5.1.min.js}"></script>
+<script th:src="@{/js/jquery-migrate-3.0.0.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/aos.js}"></script>
+<script th:src="@{/js/imagesloaded.pkgd.js}"></script>
+<script th:src="@{/js/isotope.pkgd.min.js}"></script>
+<script th:src="@{/js/jquery.animateNumber.min.js}"></script>
+<script th:src="@{/js/jquery.stellar.min.js}"></script>
+<script th:src="@{/js/jarallax.min.js}"></script>
+<script th:src="@{/js/jarallax-element.min.js}"></script>
+<script th:src="@{/js/jquery.waypoints.min.js}"></script>
+<script th:src="@{/js/jquery.fancybox.min.js}"></script>
+
+<script th:src="@{/js/jquery.lettering.js}"></script>
+
+
+<script th:src="@{/js/TweenMax.min.js}"></script>
+<script th:src="@{/js/ScrollMagic.min.js}"></script>
+<script th:src="@{/js/scrollmagic.animation.gsap.min.js}"></script>
+<script th:src="@{/js/debug.addIndicators.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script src="https://kit.fontawesome.com/0b588c2a50.js" crossorigin="anonymous"></script>
+
+<script th:src="@{/js/custom.js}"></script>
+
+
+</body>
+</html>

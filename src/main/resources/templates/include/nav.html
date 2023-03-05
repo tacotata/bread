@@ -1,0 +1,58 @@
+<!-- /*
+* Template Name: Style
+* Template Author: Untree.co
+* Tempalte URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
+<!DOCTYPE HTML>
+<html lang="ko" xmlns:th="http:/www.thymeleaf.org">
+<!--<th:block th:fragment="footer">-->
+
+
+
+<nav th:fragment="navFragment" class="site-nav">
+    <div class="container">
+        <div class="site-navigation">
+            <a th:href="@{/}" class="logo float-left m-0">Bread <span class="text-primary">.</span></a>
+
+            <ul class="js-clone-nav d-none d-lg-inline-noone text-left site-menu">
+
+                <div class="row-lg-3">
+                    <ul class="list-unstyled social-icons light" style="display: flex;">
+                        <li style="padding:0px 10px 10px 11px;"><a th:href="@{/member/login}"><span style="font-weight: bold; font-size: 13px;" >Login</span></a></li>
+                        <li style="padding-right: 10px;"><a th:href="@{/member/mypage}"><span style="font-size: 10px; width: 34px; font-weight: bold;">My Page</span></a></li>
+                        <li><a th:href="@{/member/cart}"><span style="font-weight: bold; font-size: 13px;" >Cart</span></a></li>
+
+                    </ul>
+                </div>
+                <li class="active"><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/order/store-pick}">Reservation</a></li>
+                <li><a th:href="@{/menu}">Menu</a></li>
+                <li><a th:href="@{/stores}">Store</a></li>
+                <li class="has-children">
+                    <a th:href="@{/news/notice}">News</a>
+                    <ul class="dropdown">
+                        <li class="font-pretend"><a th:href="@{/news/notice}">공지사항</a></li>
+                        <li class="font-pretend"><a th:href="@{/news/event}">이벤트</a></li>
+                        <li><a th:href="@{/news/faq}" >FAQ</a></li>
+                    </ul>
+                </li>
+                <li><a th:href="@{/brand}">Brand</a></li>
+                <li><a th:href="@{/contact}">Contact</a></li>
+
+<!--single을 content로 게시글 -->
+
+
+
+            </ul>
+
+            <a href="#" class="burger ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-block" data-toggle="collapse" data-target="#main-navbar">
+                <span></span>
+            </a>
+
+        </div>
+    </div>
+</nav>
+
+<!--</th:block>-->
+</html>

@@ -1,0 +1,192 @@
+<!-- /*
+* Template Name: Style
+* Template Author: Untree.co
+* Tempalte URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
+<!DOCTYPE HTML>
+<html lang="ko" xmlns:th="http:/www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+    <link rel="shortcut icon" href="favicon.png">
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="free template, bootstrap, bootstrap4" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <link  rel="stylesheet" th:href="@{/bootstrap.min.css}" >
+    <link  rel="stylesheet" th:href="@{/animate.min.css}" >
+    <link  rel="stylesheet" th:href="@{/owl.carousel.min.css}">
+    <link  rel="stylesheet" th:href="@{/owl.theme.default.min.css}" >
+    <link  rel="stylesheet" th:href="@{/fonts/icomoon/style.css}" >
+    <link  rel="stylesheet" th:href="@{/fonts/feather/style.css}">
+    <link  rel="stylesheet" th:href="@{/fonts/flaticon/font/flaticon.css}">
+    <link  rel="stylesheet" th:href="@{/jquery.fancybox.min.css}">
+    <link  rel="stylesheet" th:href="@{/aos.css}">
+    <link  rel="stylesheet" th:href="@{/css/style.css}">
+   <link rel="stylesheet" th:href="@{/css/add.css}">
+
+
+    <title>Bread.</title>
+</head>
+<body>
+<div class="lines-wrap">
+    <div class="lines-inner">
+        <div class="lines"></div>
+    </div>
+</div>
+<!-- END lines -->
+
+<th:block th:replace="/include/header :: headerFragment"></th:block>
+<th:block th:replace="/include/nav :: navFragment"></th:block>
+
+
+
+<div class="custom-hero">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <h1 class="hero-heading">Edit Profile</h1>
+                <div  class="line js-line mx-auto mb-3 my-3 mt-5"></div>
+                <p class="sub-text">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="container pb-5 mb-5 border-bottom">
+    <div class="row justify-content-center font-pretend">
+        <div class="col-lg-7">
+            <form>
+                <div class="form-group">
+                    <label class="text-black" for="userId">아이디</label>
+                    <input type="text" readonly class="form-control" id="userId" >
+                </div>
+
+                <div class="form-group">
+                    <label class="text-black" for="oldPw">현재 비밀번호</label>
+                    <input type="password" class="form-control" id="oldPw">
+                    <small id="oldPwChkMsg" class="form-text text-muted">비밀번호가 일치하지 않습니다.</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="text-black" for="newPw">새 비밀번호</label>
+                    <input type="password" class="form-control" id="newPw" maxlength="16">
+                    <small id="newPwValidMsg" class="form-text text-muted">8~16자 영문자, 숫자, 특수문자를 사용하세요.</small>
+                </div>
+                <div class="form-group">
+                    <label class="text-black" for="newPwChk">새 비밀번호 확인</label>
+                    <input type="password" class="form-control" id="newPwChk">
+                    <small id="newPwChkMsg" class="form-text text-muted">비밀번호가 일치하지 않습니다.</small>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="text-black" for="yy">생년월일</label>
+                            <input type="text" class="form-control" id="yy" placeholder="년(4자)">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="text-black hidden" for="mm" >월</label>
+                            <input type="text" class="form-control" id="mm" placeholder="월(2자)">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="text-black hidden" for="dd" >일</label>
+                            <input type="text" class="form-control" id="dd" placeholder="일(2자)">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="text-black" for="email">이메일</label>
+                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label class="text-black" for="phone">휴대전화</label>
+                            <input type="text" class="form-control" id="phone">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="text-black hidden" >인증번호 버튼</label>
+                            <button type="submit" class="btn btn-primary submit-btn">인증번호 받기</button>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <input type="text"  class="form-control" id="phoneChk" placeholder="인증번호 입력하세요.">
+                    <small id="phoneChkMsg" class="form-text text-muted">We'll never share your email with anyone else.</small>
+
+                </div>
+
+                <div class="form-group">
+                    <label class="text-black" for="message">프로모션 정보 수신 동의 <span class="font-weight-bold">(선택)</span></label>
+                    <textarea name="" class="form-control" id="message" cols="30" rows="5">
+Bread.에서 제공하는 이벤트/혜택 등 다양한 정보를 휴대전화(네이버앱 알림 또는 문자), 이메일로 받아보실 수 있습니다. 일부 서비스(별도 회원 체계로 운영하거나 네이버 가입 이후 추가 가입하여 이용하는 서비스 등)의 경우, 개별 서비스에 대해 별도 수신 동의를 받을 수 있으며, 이때에도 수신 동의에 대해 별도로 안내하고 동의를 받습니다.
+                    </textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="control control--checkbox">
+                        <span class="caption">동의합니다.</span>
+                        <input type="checkbox"/>
+                        <div class="control__indicator"></div>
+                    </label>
+                </div>
+                <p class="text-right"><a>회원탈퇴</a></p>
+                <button type="submit" class="btn btn-primary submit-btn">가입하기</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<th:block th:replace="/include/footer :: footerFragment"></th:block>
+
+<script th:src="@{/js/jquery-3.5.1.min.js}"></script>
+<script th:src="@{/js/jquery-migrate-3.0.0.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/aos.js}"></script>
+<script th:src="@{/js/imagesloaded.pkgd.js}"></script>
+<script th:src="@{/js/isotope.pkgd.min.js}"></script>
+<script th:src="@{/js/jquery.animateNumber.min.js}"></script>
+<script th:src="@{/js/jquery.stellar.min.js}"></script>
+<script th:src="@{/js/jarallax.min.js}"></script>
+<script th:src="@{/js/jarallax-element.min.js}"></script>
+<script th:src="@{/js/jquery.waypoints.min.js}"></script>
+<script th:src="@{/js/jquery.fancybox.min.js}"></script>
+
+<script th:src="@{/js/jquery.lettering.js}"></script>
+
+
+<script th:src="@{/js/TweenMax.min.js}"></script>
+<script th:src="@{/js/ScrollMagic.min.js}"></script>
+<script th:src="@{/js/scrollmagic.animation.gsap.min.js}"></script>
+<script th:src="@{/js/debug.addIndicators.min.js}"></script>
+
+
+<script th:src="@{/js/custom.js}"></script>
+
+
+</body>
+</html>
