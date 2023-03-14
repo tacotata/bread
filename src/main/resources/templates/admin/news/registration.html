@@ -64,24 +64,24 @@
         <div class="block">
             <div class="row justify-content-center">
                 <div class="col-md-12 col-lg-12 pb-4" data-aos="fade-up" data-aos-delay="200">
-                    <form>
+                    <form  enctype="multipart/form-data" id="form">
                         <div class="form-group">
-                            <label class="text-black" for="category">유형</label>
-                            <select class="form-control select" id="category" aria-label="Default select example">
-                                <option style="background:#E8E5DE;" selected>유형</option>
-                                <option value="1">공지사항</option>
-                                <option value="2">이벤트</option>
-                                <option value="3">FAQ</option>
+                            <label class="text-black" for="type">유형</label>
+                            <select class="form-control select" name="type" id="type" aria-label="Default select example">
+                                <option style="background:#E8E5DE;" >유형</option>
+                                <option value="NOTICE">공지사항</option>
+                                <option value="EVENT">이벤트</option>
+                                <option value="FAQ">FAQ</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label class="text-black" for="noticeSubject">제목</label>
-                            <input type="text" class="form-control" id="noticeSubject">
+                            <input type="text" name="subject" class="form-control" id="noticeSubject">
                         </div>
 
                         <div class="form-group">
                             <label class="text-black" for="message">내용</label>
-                            <textarea name="" class="form-control" id="message" cols="30" rows="5"></textarea>
+                            <textarea  class="form-control" name="contents" id="message" cols="30" rows="5"></textarea>
                         </div>
 
                         <div style="margin-bottom: 0.5rem;">첨부사진</div>
@@ -89,12 +89,14 @@
                             <div id="fileName"></div>
                             <div>
                                 <i class="far fa-plus-square btn-upload" id="btn-upload" aria-hidden="true"></i>
-                                <input id="input_file" multiple="multiple" type="file" style="display:none;"
-                                       onchange='printName()' accept=".gif, .jpg, .png, .jpeg">
+                                <input id="input_file" name="file" multiple="multiple"  type="file" style="display:none;"
+                                       onchange='printName()'>
                             </div>
                         </div>
+                        <small class="form-text text-muted">파일 1개당 20MB 이하 총 5개까지 업로드 가능합니다.
+                        </small>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button type="submit" class="btn btn-primary">등록</button>
+                            <button type="button" id="newsSaveBtn" class="btn btn-primary">등록</button>
                         </div>
                     </form>
                 </div>

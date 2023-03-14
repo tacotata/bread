@@ -63,20 +63,16 @@
             <table class="table border border-1 border-secondary rounded noticeView-table">
                 <thead>
                 <tr>
-                    <th scope="col">X-MAS 홀케이크 판매점 안내</th>
-                    <th scope="col">2023-09-01
+                    <th scope="col" th:text ="${notice.subject}"></th>
+                    <th scope="col"class="date"th:text="${#temporals.format(notice.regDate, 'yyyy-MM-dd')}">
                     <th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td colspan="2" rowspan="150">It is a long established fact that a reader will be distracted by the
-                        readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it
-                        has a more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                        here', making it look like readable English. Many desktop publishing packages and web page
-                        editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                        uncover many web sites still in their infancy. Various versions have evolved over the years,
-                        sometimes by accident, sometimes on purpose (injected humour and the like).
+                    <td colspan="2" rowspan="150" th:text ="${notice.contents}">
+                        <div class="img_wrap">
+                        </div>
                     </td>
                 </tr>
                 </tbody>
@@ -84,9 +80,15 @@
         </div>
     </div>
 </div>
-<div class="container mb-5 border-bottom login-form-wrap mypage-table-wrap">
-    <div class="row justify-content-end pr-3">
-        <button type="submit" class="btn btn-primary">목록</button>
+<div class="container mb-5 border-bottom d-flex justify-content-end login-form-wrap mypage-table-wrap">
+    <div class="row justify-content-end pr-3 mr-2">
+        <button type="submit" class="btn btn-primary  bg-secondary border border-secondary">삭제</button>
+    </div>
+    <div class="row justify-content-end pr-3 mr-2 ">
+        <button type="submit" class="btn btn-primary  bg-secondary border border-secondary">수정</button>
+    </div>
+    <div class="row justify-content-end pr-3 ">
+        <button type="submit" class="btn btn-primary" th:onclick="|location.href='@{/news/notice}'|">목록</button>
     </div>
 </div>
 
