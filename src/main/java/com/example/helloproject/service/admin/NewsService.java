@@ -7,12 +7,14 @@ import com.example.helloproject.data.dto.admin.news.NewsUpdateRequestDto;
 import com.example.helloproject.data.entity.admin.news.News;
 import com.example.helloproject.data.entity.admin.news.NewsRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class NewsService {
@@ -48,7 +50,15 @@ public class NewsService {
 
     //news 테이블 전체 조회
     @Transactional(readOnly = true)
-    public List<NewsListResponseDto> findNoticeAllDesc(){
-        return newsRepository.findNoticeAllDesc().stream().map(NewsListResponseDto::new).collect(Collectors.toList());
+    public List<NewsListResponseDto> findNewsAllDesc(){
+        return newsRepository.findNewsAllDesc().stream().map(NewsListResponseDto::new).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public int delete (Long id) {
+        News news = newsRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+        newsRepository.delete(news);
+        return news.getFileCnt();
     }
 }

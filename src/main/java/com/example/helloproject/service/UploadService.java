@@ -36,7 +36,6 @@ public class UploadService {
                 = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         String localDateFormat
                 = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        Long newsId = id;
         String regId = "admin";
         String result = "FAIL";
         try {
@@ -56,7 +55,7 @@ public class UploadService {
 
                         targetFile.setWritable(false);
                         targetFile.setReadable(true);
-                        NewsFileSaveDto newsFileSaveDto = NewsFileSaveDto.builder().newsId(newsId)
+                        NewsFileSaveDto newsFileSaveDto = NewsFileSaveDto.builder().newsId(id)
                                 .fileName(savedFileName)
                                 .oriFileName(oriFileName)
                                 .filePath(savedFilePath)
@@ -93,9 +92,15 @@ public class UploadService {
 
     //newsFile 테이블 newsId로  조회
     @Transactional(readOnly = true)
-    public List<NewsFileResponseDto> findByNoticeFileId(Long newsId){
-        return newsFileRepository.findByNoticeFileId(newsId).stream().map(NewsFileResponseDto::new).collect(Collectors.toList());
+    public List<NewsFileResponseDto> findByNewsId(Long newsId){
+        return newsFileRepository.findByNewsId(newsId).stream().map(NewsFileResponseDto::new).collect(Collectors.toList());
     }
 
+    @Transactional
+    public List<Long> delete (Long newsId) {
+        List<Long> newsFileIds = newsFileRepository.findByNewsFileIds(newsId);
+        newsFileRepository.deleteAllByNewsFileIds(newsFileIds);
+        return newsFileIds;
+    }
 }
 

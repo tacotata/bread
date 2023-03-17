@@ -48,7 +48,13 @@ var main = {
             }else{
                  main.save();
             }
-        })
+        });
+
+        $('#btn-delete').on('click', function () {
+             if (confirm("삭제하시겠습니까?")) {
+                    main.delete();
+             }
+        });
     },
     save  : function () {
         var data = {
@@ -85,7 +91,22 @@ var main = {
             target.value ='';
             alert(JSON.stringify(error));
         });
-    }
-}
+    },
+
+     delete : function () {
+                var id = $('#newsId').val();
+            $.ajax({
+                type: 'DELETE',
+                url: '/news/api/v1/'+id,
+                dataType:'json',
+                contentType:'application/json; charset=utf-8'
+            }).done(function() {
+                alert('글이 삭제되었습니다.');
+                window.location.href = '/';
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+};
 
 main.init();

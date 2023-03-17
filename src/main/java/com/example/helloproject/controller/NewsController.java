@@ -26,20 +26,20 @@ public class NewsController {
     private final NewsService newsService;
     private final UploadService uploadService;
 
-    @GetMapping(value = "/notice")
+    @GetMapping( "/notice")
     public String notice(Model model){
-        model.addAttribute("notice", newsService.findNoticeAllDesc());
+        model.addAttribute("notice", newsService.findNewsAllDesc());
         return "/news/notice";
     }
 
-    @GetMapping(value = "/notice-detail/{id}")
+    @GetMapping("/notice-detail/{id}")
     public String noticeDetail( @PathVariable Long id , Model model) {
         try {
             NewsResponseDto notice = newsService.findById(id);
             int fileCnt = notice.getFileCnt();
-            log.info("fileCnt : {} ", fileCnt);
+            log.info("File CNT : {} ", fileCnt);
             if (fileCnt > 0) {
-                model.addAttribute("file", uploadService.findByNoticeFileId(id));
+                model.addAttribute("file", uploadService.findByNewsId(id));
             }
             model.addAttribute("notice", notice);
         }catch (Exception e){
@@ -52,21 +52,22 @@ public class NewsController {
 
     // 첨부 파일 다운로드
     @GetMapping("/attach/{newsId}/{fileName}")
-    public void downloadAttach(@PathVariable Long newsId,@PathVariable String fileName, HttpServletResponse response )  {
+    public void downloadAttach(@PathVariable Long newsId, @PathVariable String fileName, HttpServletResponse response )  {
         log.info("===============downloadAttach START ====================");
         try{
-            List<NewsFileResponseDto> list = uploadService.findByNoticeFileId(newsId);
+            List<NewsFileResponseDto> list = uploadService.findByNewsId(newsId);
             String extension = "";
             String[] fileAttachArr = {".pdf", ".txt", ".xls", ".xlsx"};
-            log.info(" list size {} ", list.size());
 
             for(int i=0; i < list.size(); i++ ) {
                 extension = list.get(i).getExtension();
                 for(int j =0; j < fileAttachArr.length; j++) {
                     if(fileAttachArr[j].equals(extension)){
+                        log.info("======================================");
                         log.info("NEWS FILE ID : {} ", String.valueOf(list.get(i).getId()));
                         log.info("NEWS ID : {} ",String.valueOf(newsId));
                         log.info("FILE NAME  : {} ", fileName);
+                        log.info("======================================");
 
                         File f = new File(list.get(i).getFilePath(), fileName);
                         response.setContentType("application/download");
@@ -87,6 +88,27 @@ public class NewsController {
             e.printStackTrace();
         }
         log.info("===============downloadAttach END ====================");
+    }
+
+    @DeleteMapping("/api/v1/{id}")
+    @ResponseBody
+    public Long delete(@PathVariable Long id ) {
+        log.info("===============NEWS DELETE START ====================");
+        try {
+            int fileCnt = newsService.delete(id);
+            log.info("FILE CNT : {}" ,fileCnt);
+            log.info("DELETE NEWS ID : {}" , id);
+            if (fileCnt > 0) {
+                List<Long> newsFilesIds = uploadService.delete(id);
+                for(Long fileId : newsFilesIds) {
+                    log.info("DELETE NEWS FILE ID : {}" , fileId);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        log.info("===============NEWS DELETE END ====================");
+        return id;
     }
 
     @RequestMapping(value = "/events" , method = RequestMethod.GET)
