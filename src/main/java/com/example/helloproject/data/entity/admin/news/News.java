@@ -1,6 +1,7 @@
 package com.example.helloproject.data.entity.admin.news;
 
 import com.example.helloproject.data.entity.BaseEntity;
+import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +18,10 @@ public class News extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.ORDINAL)
+    @NotNull
     private NewsType type;
 
+    @NotNull
     private String subject;
     private String contents;
     private String regId;

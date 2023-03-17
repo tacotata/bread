@@ -77,7 +77,7 @@
             <div class="col-md-6 mb-5 mb-lg-5 col-lg-4" th:each = "notice:${notice}">
                 <div class="blog_entry">
                     <div class="p-4 bg-white news-box">
-                        <input th:text="${notice.id}" style="display:none;"></input>
+                        <div th:text="${notice.id}" style="display:none;"></div>
                         <h3 style="font-family: 'Pretendard';" th:text="${notice.subject}"><a href="@{/news/notice-detail/{id}(id = ${notice.id})}" ></a></h3>
                         <a th:href="@{/news/notice-detail/{id}(id = ${notice.id})}"> <span class="date" th:text="${#temporals.format(notice.regDate, 'yyyy-MM-dd')}"></span>
                             <p class="news-content" style="font-family: 'Pretendard';" th:text="${notice.contents}"></p>

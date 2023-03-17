@@ -25,14 +25,20 @@ public class AdminController {
     @ResponseBody
     public Long save(@RequestPart(value = "file", required = false) List<MultipartFile> files, @RequestPart(value = "key") NewsSaveRequestDto requestDto) throws IOException {
         log.info("===============NEWS SAVE START ====================");
-        Long id = newsService.save(requestDto);
-        log.info("INSERT NEWS TABLE ID : {} ", id);
         String type = String.valueOf(requestDto.getType());
         String result = "FAIL";
+        Long id =0L;
         int fileCnt = files.size();
         try {
-            if (id != null) {
-                if (fileCnt > 0) {
+            if(type.isEmpty() || requestDto.getSubject().isEmpty() || (requestDto.getContents().isEmpty() && files.get(0).isEmpty()) ){
+                log.info("NEWS 등록 is Empty");
+                return Long.valueOf(0);
+            }else{
+                id = newsService.save(requestDto);
+                log.info("INSERT NEWS TABLE ID : {} ", id);
+            }
+            if (id != 0) {
+                if (!files.get(0).isEmpty()) {
                     for (int i = 0; i <= fileCnt - 1; i++) {
                         log.info("===================================");
                         log.info("OriginalFilename : {} ", files.get(i).getOriginalFilename());
@@ -72,7 +78,7 @@ public class AdminController {
         return newsService.update(id, requestDto);
     }
 
-    @RequestMapping(value = "/news/registration", method = RequestMethod.GET)
+    @GetMapping("/news/registration")
     public String adminNewsRegi() {
         return "/admin/news/registration";
     }

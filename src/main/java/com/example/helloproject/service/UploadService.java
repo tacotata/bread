@@ -1,6 +1,7 @@
 
 package com.example.helloproject.service;
 
+import com.example.helloproject.data.dto.admin.news.NewsFileResponseDto;
 import com.example.helloproject.data.dto.admin.news.NewsFileSaveDto;
 import com.example.helloproject.data.entity.admin.news.NewsFile;
 import com.example.helloproject.data.entity.admin.news.NewsFileRepository;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,7 +32,6 @@ public class UploadService {
 
 
     public String saveFile(List<MultipartFile> multipartFiles, Long id, String type)  {
-
         String localDateTimeFormat
                 = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         String localDateFormat
@@ -44,13 +45,13 @@ public class UploadService {
                     for (MultipartFile multipartFile : multipartFiles) {
                         String oriFileName = multipartFile.getOriginalFilename();
                         String extension = oriFileName.substring(oriFileName.lastIndexOf("."));
-                        String savedFileName = UUID.randomUUID() + "_" + localDateTimeFormat;
+                        String savedFileName = UUID.randomUUID() + "_" + localDateTimeFormat+extension;
                         String savedFilePath = uploadDir + File.separator + type.toLowerCase() + File.separator + localDateFormat + File.separator;
                         File dir = new File(savedFilePath);
                         if (!dir.exists()) {
                             dir.mkdir();
                         }
-                        File targetFile = new File(savedFilePath, savedFileName + extension);
+                        File targetFile = new File(savedFilePath, savedFileName);
                         multipartFile.transferTo(targetFile);
 
                         targetFile.setWritable(false);
@@ -84,9 +85,17 @@ public class UploadService {
         return result;
     }
 
+    //news-file 테이블 insert
     @Transactional
     public Long insertFile(NewsFile newsFile) {
         return newsFileRepository.save(newsFile).getId();
     }
+
+    //newsFile 테이블 newsId로  조회
+    @Transactional(readOnly = true)
+    public List<NewsFileResponseDto> findByNoticeFileId(Long newsId){
+        return newsFileRepository.findByNoticeFileId(newsId).stream().map(NewsFileResponseDto::new).collect(Collectors.toList());
+    }
+
 }
 

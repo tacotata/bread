@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Untree.co">
-    <link rel="shortcut icon" href="favicon.png">
+<!--    <link rel="shortcut icon" href="favicon.png">-->
 
     <meta name="description" content=""/>
     <meta name="keywords" content="free template, bootstrap, bootstrap4"/>
@@ -76,12 +76,12 @@
                         </div>
                         <div class="form-group">
                             <label class="text-black" for="noticeSubject">제목</label>
-                            <input type="text" name="subject" class="form-control" id="noticeSubject">
+                            <input type="text" name="subject" class="form-control" id="noticeSubject"  maxlength="30" required>
                         </div>
 
                         <div class="form-group">
                             <label class="text-black" for="message">내용</label>
-                            <textarea  class="form-control" name="contents" id="message" cols="30" rows="5"></textarea>
+                            <textarea  class="form-control" name="contents" id="message" cols="30" rows="5" maxlength="5000"></textarea>
                         </div>
 
                         <div style="margin-bottom: 0.5rem;">첨부사진</div>
@@ -90,10 +90,11 @@
                             <div>
                                 <i class="far fa-plus-square btn-upload" id="btn-upload" aria-hidden="true"></i>
                                 <input id="input_file" name="file" multiple="multiple"  type="file" style="display:none;"
-                                       onchange='printName()'>
+                                       onchange='printName()' accept=".gif, .jpg, .png, .pdf, .txt, .xls, .xlsx">
                             </div>
                         </div>
-                        <small class="form-text text-muted">파일 1개당 20MB 이하 총 5개까지 업로드 가능합니다.
+                        <small class="form-text text-muted mb-3">파일 1개당 20MB 이하 총 5개까지 업로드 가능합니다.<br>
+                            등록 가능 확장자 : pdf, txt, xls, xlsx, jpg, jpeg, png, gif
                         </small>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="button" id="newsSaveBtn" class="btn btn-primary">등록</button>

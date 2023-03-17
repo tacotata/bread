@@ -18,7 +18,6 @@ public class NewsFileSaveDto {
 
     @Builder
     public NewsFileSaveDto(Long newsId, String fileName, String oriFileName, String filePath, String extension, String regId, String updId) {
-
         this.newsId = newsId;
         this.fileName = fileName;
         this.oriFileName = oriFileName;
@@ -26,7 +25,6 @@ public class NewsFileSaveDto {
         this.extension = extension;
         this.regId = regId;
         this.updId = updId;
-
     }
 
     public NewsFile toEntity() {

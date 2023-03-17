@@ -13,7 +13,6 @@ public class NewsResponseDto {
     private NewsType type;
     private String subject;
     private String contents;
-    private String imgPath;
     private String regId;
     private String updId;
     private LocalDateTime regDate;

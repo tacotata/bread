@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Untree.co">
-    <link rel="shortcut icon" href="favicon.png">
+   <!-- <link rel="shortcut icon" href="favicon.png">-->
 
     <meta name="description" content=""/>
     <meta name="keywords" content="free template, bootstrap, bootstrap4"/>
@@ -62,19 +62,23 @@
         <div class="col-lg-12">
             <table class="table border border-1 border-secondary rounded noticeView-table">
                 <thead>
-                <tr>
+                <tr class="d-flex flex-row justify-content-between">
                     <th scope="col" th:text ="${notice.subject}"></th>
-                    <th scope="col"class="date"th:text="${#temporals.format(notice.regDate, 'yyyy-MM-dd')}">
-                    <th>
+                    <th scope="col"class="date"th:text="${#temporals.format(notice.regDate, 'yyyy-MM-dd')}"></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td colspan="2" rowspan="150" th:text ="${notice.contents}">
-                        <div class="img_wrap">
-                        </div>
-                    </td>
-                </tr>
+                    <tr class="d-flex flex-column" >
+                        <th:block  th:each="file : ${file}" th:if="${file.extension} == '.pdf' or ${file.extension} == '.txt' or ${file.extension} == '.xls' or ${file.extension} == '.xlsx' ">
+                            <td>
+                            <small><a th:href="|/news/attach/${file.newsId}/${file.fileName}|"}| th:text="${file.oriFileName}"></a><br></small>
+                            </td>
+                        </th:block>
+                        <td class="text-center p-0" th:each = "file:${file}" th:if="${file.extension} == '.jpg' or ${file.extension} == '.jpeg' or ${file.extension} == '.png' or ${file.extension} == '.gif'">
+                            <img   th:src="|/upload/notice/${#temporals.format(file.regDate, 'yyyyMMdd')}/${file.fileName}|"  width="90%" >
+                        </td>
+                        <td  style="white-space: pre-line;" colspan="2" rowspan="150" th:text ="${notice.contents}"></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
