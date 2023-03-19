@@ -30,14 +30,14 @@ public class UploadService {
 
     private final NewsFileRepository newsFileRepository;
 
-
-    public String saveFile(List<MultipartFile> multipartFiles, Long id, String type)  {
+    //파일 저장
+    public boolean saveFile(List<MultipartFile> multipartFiles, Long id, String type)  {
         String localDateTimeFormat
                 = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         String localDateFormat
                 = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String regId = "admin";
-        String result = "FAIL";
+        Boolean result = false;
         try {
             if (!CollectionUtils.isEmpty(multipartFiles) && id != null) {
                 if (multipartFiles.size() > 0) {
@@ -73,7 +73,7 @@ public class UploadService {
                         log.info("===================================");
 
                         if (fileId != null) {
-                            result = "SUCCESS";
+                            result = true;
                         }
                     }
                 }
@@ -96,11 +96,20 @@ public class UploadService {
         return newsFileRepository.findByNewsId(newsId).stream().map(NewsFileResponseDto::new).collect(Collectors.toList());
     }
 
+    //news File 전체 삭제
     @Transactional
     public List<Long> delete (Long newsId) {
         List<Long> newsFileIds = newsFileRepository.findByNewsFileIds(newsId);
         newsFileRepository.deleteAllByNewsFileIds(newsFileIds);
         return newsFileIds;
+    }
+
+    //news File 단건 삭제
+    @Transactional
+    public void fileDelete (Long id) {
+        NewsFile newsFile = newsFileRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id=" + id));
+        newsFileRepository.delete(newsFile);
     }
 }
 

@@ -33,7 +33,6 @@ public class NewsService {
         return id;
     }
 
-    //news 테이블 fileCnt update 그냥 update로 다 하면 안됨?
     @Transactional
     public Long updateFileCnt(Long id, int fileCnt){
         News news = newsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));

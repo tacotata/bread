@@ -1,5 +1,6 @@
 package com.example.helloproject.controller;
 
+import com.example.helloproject.data.dto.admin.news.NewsResponseDto;
 import com.example.helloproject.data.dto.admin.news.NewsSaveRequestDto;
 import com.example.helloproject.data.dto.admin.news.NewsUpdateRequestDto;
 import com.example.helloproject.service.UploadService;
@@ -7,6 +8,7 @@ import com.example.helloproject.service.admin.NewsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -26,7 +28,6 @@ public class AdminController {
     public Long save(@RequestPart(value = "file", required = false) List<MultipartFile> files, @RequestPart(value = "key") NewsSaveRequestDto requestDto) throws IOException {
         log.info("===============NEWS SAVE START ====================");
         String type = String.valueOf(requestDto.getType());
-        String result = "FAIL";
         Long id =0L;
         int fileCnt = files.size();
         try {
@@ -46,10 +47,9 @@ public class AdminController {
                         log.info("ContentType : {} ", files.get(i).getContentType());
                         log.info("===================================");
                     }
-                    // news_file table insert
-                    result = uploadService.saveFile(files, id, type);
-                    log.info("NEWS_FILE TABLE INSERT RESULT {}", result);
-                    if (result.equals("SUCCESS")) {
+                    if (uploadService.saveFile(files, id, type)) {
+                        // news_file table insert
+                        log.info("NEWS_FILE TABLE INSERT SUCCESS");
                         //news table  fileCnt update
                         Long updId = newsService.updateFileCnt(id, fileCnt);
                         log.info("INSERT ID {} , UPDATE ID {}", id, updId);
@@ -73,20 +73,61 @@ public class AdminController {
         return id;
     }
 
-    @PutMapping("/api/v1/news/{id}")
-    public Long update(@PathVariable Long id, @RequestBody NewsUpdateRequestDto requestDto) {
-        return newsService.update(id, requestDto);
-    }
-
     @GetMapping("/news/registration")
     public String adminNewsRegi() {
         return "/admin/news/registration";
     }
 
-    @RequestMapping(value = "/news/modify", method = RequestMethod.GET)
-    public String adminNoticeModify() {
+    @GetMapping("/news/modify/{id}")
+    public String adminNewsModify(@PathVariable Long id, Model model) {
+        try {
+                NewsResponseDto news = newsService.findById(id);
+                int fileCnt = news.getFileCnt();
+                log.info("FILE CNT : {} ", fileCnt);
+                if (fileCnt > 0) {
+                    model.addAttribute("file", uploadService.findByNewsId(id));
+                }
+                    model.addAttribute("news", news);
+        }catch (Exception e){
+                e.printStackTrace();
+        }
         return "/admin/news/modify";
     }
+
+    @DeleteMapping("/api/v1/news/{newsId}/{fileId}")
+    @ResponseBody
+    public Long fileDelete(@PathVariable Long newsId, @PathVariable Long fileId, @RequestBody NewsUpdateRequestDto requestDto) {
+        log.info("=============== fileDelete START ====================");
+        uploadService.fileDelete(fileId);
+        log.info("DELETE NEWS FILE ID : {} ", String.valueOf(fileId));
+        //file cnt update
+        Long id = newsService.updateFileCnt(newsId, requestDto.getFileCnt());
+        log.info("UPDATE NEWS ID : {} ", String.valueOf(id));
+        log.info("=============== fileDelete END ====================");
+        return fileId;
+    }
+
+
+    @PutMapping("/api/v1/news/{id}")
+    @ResponseBody
+    public Long update(@PathVariable Long id , @RequestPart(value = "file", required = false) List<MultipartFile> files, @RequestPart(value = "key") NewsUpdateRequestDto requestDto) {
+        log.info("=============== news update START ====================");
+        String type = String.valueOf(requestDto.getType());
+        try{
+            if (!files.get(0).isEmpty()) {
+                log.info("FILE SIZE: {}", files.size());
+                // news_file table insert
+                if (uploadService.saveFile(files, id, type)) {
+                    log.info("NEWS_FILE TABLE INSERT SUCCESS");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        log.info("=============== news update end ====================");
+        return newsService.update(id, requestDto);
+    }
+
 
     @RequestMapping(value = "/menu/registration", method = RequestMethod.GET)
     public String adminMenuRegi() {

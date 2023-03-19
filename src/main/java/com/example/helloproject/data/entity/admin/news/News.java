@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 
 @Getter
 @NoArgsConstructor
@@ -27,12 +30,14 @@ public class News extends BaseEntity {
     private String regId;
     private String updId;
     private int fileCnt;
+    //private LocalDateTime updDate;
 
     public void update(String subject, String contents, String updId, int fileCnt) {
         this.subject = subject;
         this.contents = contents;
         this.updId = updId;
         this.fileCnt = fileCnt;
+        //this.setUpdDate(LocalDateTime.now());
     }
 
     public void updateFileCnt(int fileCnt){

@@ -421,3 +421,16 @@ color:#c2bebe;
     border: 1px solid #000;
     color: #FFF;
 }
+
+/*modify*/
+
+@media all and (max-width: 449px)  {
+  .news-modify-btn {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 13px;
+      padding-right: 13px;
+      border-radius: 4px;
+      font-size: 12px;
+      }
+}
