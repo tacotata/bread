@@ -2,10 +2,14 @@ package com.example.helloproject.controller;
 
 import com.example.helloproject.data.dto.admin.news.NewsFileResponseDto;
 import com.example.helloproject.data.dto.admin.news.NewsResponseDto;
+import com.example.helloproject.data.entity.admin.news.News;
 import com.example.helloproject.service.UploadService;
 import com.example.helloproject.service.admin.NewsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -17,6 +21,8 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.List;
 
+import static org.springframework.data.domain.Sort.*;
+
 @Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -27,13 +33,24 @@ public class NewsController {
     private final UploadService uploadService;
 
     @GetMapping( "/notice")
-    public String notice(Model model){
-        model.addAttribute("notice", newsService.findNewsAllDesc());
+    public String notice(@PageableDefault(size=9, sort="id", direction= Direction.DESC) Pageable pageable, Model model){
+        //log.info("===============notice START ====================");
+            Page<News> notice = newsService.pageList(pageable);
+            // pageable은 0부터 시작
+            int nowPage = notice.getPageable().getPageNumber() + 1; //1 더해서 0+1 = 1부터 시작
+
+           // log.info("총 페이지 개수 : {} ", notice.getTotalPages()); // pageable은 -1 해야함
+           // log.info("현재 페이지 : {} ", nowPage );//1부터 시작 pageable은 0부터 시작
+
+            model.addAttribute("notice", notice);
+            model.addAttribute("nowPage",nowPage);
+            model.addAttribute("maxPage", 5);// 페이징 수
+        //log.info("===============notice END ====================");
         return "/news/notice";
     }
 
     @GetMapping("/notice-detail/{id}")
-    public String noticeDetail( @PathVariable Long id , Model model) {
+    public String noticeDetail( @PathVariable Long id , @RequestParam(value = "page", required=false) int page, Model model) {
         try {
             NewsResponseDto notice = newsService.findById(id);
             int fileCnt = notice.getFileCnt();
@@ -42,6 +59,7 @@ public class NewsController {
                 model.addAttribute("file", uploadService.findByNewsId(id));
             }
             model.addAttribute("notice", notice);
+            model.addAttribute("page", page);// 0부터 시작
         }catch (Exception e){
             e.printStackTrace();
         }

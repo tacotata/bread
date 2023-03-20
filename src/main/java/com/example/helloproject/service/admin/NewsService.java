@@ -8,6 +8,8 @@ import com.example.helloproject.data.entity.admin.news.News;
 import com.example.helloproject.data.entity.admin.news.NewsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,5 +61,11 @@ public class NewsService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
         newsRepository.delete(news);
         return news.getFileCnt();
+    }
+
+    /* Paging */
+    @Transactional(readOnly = true)
+    public Page<News> pageList(Pageable pageable) {
+        return newsRepository.findAll(pageable);
     }
 }

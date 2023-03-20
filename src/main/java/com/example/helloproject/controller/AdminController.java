@@ -79,7 +79,7 @@ public class AdminController {
     }
 
     @GetMapping("/news/modify/{id}")
-    public String adminNewsModify(@PathVariable Long id, Model model) {
+    public String adminNewsModify(@PathVariable Long id, @RequestParam(value = "page", required=false) int page, Model model) {
         try {
                 NewsResponseDto news = newsService.findById(id);
                 int fileCnt = news.getFileCnt();
@@ -88,6 +88,7 @@ public class AdminController {
                     model.addAttribute("file", uploadService.findByNewsId(id));
                 }
                     model.addAttribute("news", news);
+                    model.addAttribute("page", page);
         }catch (Exception e){
                 e.printStackTrace();
         }

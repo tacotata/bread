@@ -78,11 +78,11 @@
                 <div class="blog_entry">
                     <div class="p-4 bg-white news-box">
                         <input type="hidden" id="newsId" th:value="${notice.id}">
-                        <a th:href="@{/news/notice-detail/{id}(id = ${notice.id})}"><h3 style="font-family: 'Pretendard';" th:text="${notice.subject}"></h3></a>
-                        <a th:href="@{/news/notice-detail/{id}(id = ${notice.id})}"> <span class="date" th:text="${#temporals.format(notice.regDate, 'yyyy-MM-dd')}"></span>
+                        <a th:href="@{/news/notice-detail/{id}( id=${notice.id}, page=${nowPage-1})}"><h3 style="font-family: 'Pretendard';" th:text="${notice.subject}"></h3></a>
+                        <a th:href="@{/news/notice-detail/{id}( id=${notice.id}, page=${nowPage-1})}"> <span class="date" th:text="${#temporals.format(notice.regDate, 'yyyy-MM-dd')}"></span>
                             <p class="news-content" style="font-family: 'Pretendard';" th:text="${notice.contents}"></p>
                         </a>
-                        <p class="more"><a th:href="@{/news/notice-detail/{id}(id = ${notice.id})}">Read more...</a></p>
+                        <p class="more"><a th:href="@{/news/notice-detail/{id}( id=${notice.id}, page=${nowPage-1})}">Read more...</a></p>
                     </div>
                 </div>
             </div>
@@ -90,12 +90,31 @@
 
         <div class="row">
             <div class="col-lg-12 text-center">
-                <ul class="list-unstyled custom-pagination">
-                    <li><a href="#">1</a></li>
-                    <li class="active"><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
+                <ul class="list-unstyled custom-pagination" th:with="start=${(notice.number/maxPage)*maxPage + 1}, end=(${(notice.totalPages == 0) ? 1 : (start + (maxPage - 1) < notice.totalPages ? start + (maxPage - 1) : notice.totalPages)})">
+                    <li th:if="${start > 1}">
+                        <a th:href="@{/news/notice(page=0)}" th:text="'<<'"></a>
+                    </li>
+
+                    <li th:if="${start > 1}">
+                        <a th:href="@{/news/notice(page=${start - maxPage-1})}" th:text="'<'"></a>
+                    </li>
+
+                    <th:block th:each="page: ${#numbers.sequence(start, end)}">
+                        <li>
+                            <a th:text="${page}"  th:if="${page != nowPage}" th:href="@{/news/notice(page=${page - 1})}"></a>
+                        </li>
+                        <li class="active">
+                            <a th:if="${page==nowPage}" th:text ="${page}"></a>
+                        </li>
+                    </th:block>
+
+                    <li th:if="${end < notice.totalPages}">
+                        <a th:href="@{/news/notice(page=${start + maxPage-1})}" th:text="'>'"></a>
+                    </li>
+
+                    <li th:if="${end < notice.totalPages}">
+                        <a th:href="@{/news/notice(page=${notice.totalPages - 1})}" th:text="'>>'"></a>
+                    </li>
                 </ul>
             </div>
         </div>
