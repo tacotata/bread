@@ -33,16 +33,23 @@ public class NewsController {
     private final UploadService uploadService;
 
     @GetMapping( "/notice")
-    public String notice(@PageableDefault(size=9, sort="id", direction= Direction.DESC) Pageable pageable, Model model){
+    public String notice(@PageableDefault(size=9, sort="id", direction= Direction.DESC) Pageable pageable, String search, Model model){
         //log.info("===============notice START ====================");
-            Page<News> notice = newsService.pageList(pageable);
+            Page<News> list = null;
+            if(search == null ){
+                list = newsService.pageList(pageable);
+            }else{
+                list = newsService.searchNewsList(search, pageable);
+            }
+            // Page<News> notice = newsService.pageList(pageable);
             // pageable은 0부터 시작
-            int nowPage = notice.getPageable().getPageNumber() + 1; //1 더해서 0+1 = 1부터 시작
+            int nowPage = list.getPageable().getPageNumber() + 1; //1 더해서 0+1 = 1부터 시작
 
-           // log.info("총 페이지 개수 : {} ", notice.getTotalPages()); // pageable은 -1 해야함
-           // log.info("현재 페이지 : {} ", nowPage );//1부터 시작 pageable은 0부터 시작
+            log.info("총 페이지 개수 : {} ", list.getTotalPages()); // pageable은 -1 해야함
+            log.info("검색 키워드 : {} ", search );
+            // log.info("현재 페이지 : {} ", nowPage );//1부터 시작 pageable은 0부터 시작
 
-            model.addAttribute("notice", notice);
+            model.addAttribute("notice", list);
             model.addAttribute("nowPage",nowPage);
             model.addAttribute("maxPage", 5);// 페이징 수
         //log.info("===============notice END ====================");
@@ -65,8 +72,6 @@ public class NewsController {
         }
         return "/news/notice-detail";
     }
-
-
 
     // 첨부 파일 다운로드
     @GetMapping("/attach/{newsId}/{fileName}")

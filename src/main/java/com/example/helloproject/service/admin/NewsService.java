@@ -68,4 +68,11 @@ public class NewsService {
     public Page<News> pageList(Pageable pageable) {
         return newsRepository.findAll(pageable);
     }
+
+    //검색
+    @Transactional
+    public Page<News> searchNewsList (String search, Pageable pageable) {
+        return newsRepository.findBySubjectContaining(search, pageable);
+
+    }
 }

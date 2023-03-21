@@ -65,13 +65,15 @@
                 <a th:href="@{/news/events}"><li>Event</li></a>
                 <a th:href="@{/news/faq}"><li>FAQ</li></a>
             </ul>
-            <ul style="padding:16px;">
-                <li class="search-menu_wrap">
-                    <input id="search" class="search-menu" spellcheck="false" type="text">
-                    <label for="search"></label>
-                    <button style="" type="submit">검색</button>
-                </li>
-            </ul>
+            <form th:action="@{/news/notice}">
+                <ul style="padding:16px;">
+                    <li class="search-menu_wrap">
+                        <input id="search" class="search-menu" name="search" spellcheck="false" type="text">
+                        <label for="search"></label>
+                        <button style="" type="submit">검색</button>
+                    </li>
+                </ul>
+            </form>
         </div>
         <div class="row mb-5">
             <div class="col-md-6 mb-5 mb-lg-5 col-lg-4" th:each = "notice:${notice}"  th:if="${notice.type.toString().equals('NOTICE')}">
@@ -92,16 +94,16 @@
             <div class="col-lg-12 text-center">
                 <ul class="list-unstyled custom-pagination" th:with="start=${(notice.number/maxPage)*maxPage + 1}, end=(${(notice.totalPages == 0) ? 1 : (start + (maxPage - 1) < notice.totalPages ? start + (maxPage - 1) : notice.totalPages)})">
                     <li th:if="${start > 1}">
-                        <a th:href="@{/news/notice(page=0)}" th:text="'<<'"></a>
+                        <a th:href="@{/news/notice((page=0), search= ${param.search})}" th:text="'<<'"></a>
                     </li>
 
                     <li th:if="${start > 1}">
-                        <a th:href="@{/news/notice(page=${start - maxPage-1})}" th:text="'<'"></a>
+                        <a th:href="@{/news/notice(page=${start - maxPage-1}, search= ${param.search})}" th:text="'<'"></a>
                     </li>
 
                     <th:block th:each="page: ${#numbers.sequence(start, end)}">
                         <li>
-                            <a th:text="${page}"  th:if="${page != nowPage}" th:href="@{/news/notice(page=${page - 1})}"></a>
+                            <a th:text="${page}"  th:if="${page != nowPage}" th:href="@{/news/notice(page=${page - 1}, search= ${param.search})}"></a>
                         </li>
                         <li class="active">
                             <a th:if="${page==nowPage}" th:text ="${page}"></a>
@@ -109,11 +111,11 @@
                     </th:block>
 
                     <li th:if="${end < notice.totalPages}">
-                        <a th:href="@{/news/notice(page=${start + maxPage-1})}" th:text="'>'"></a>
+                        <a th:href="@{/news/notice(page=${start + maxPage-1}, search= ${param.search})}" th:text="'>'"></a>
                     </li>
 
                     <li th:if="${end < notice.totalPages}">
-                        <a th:href="@{/news/notice(page=${notice.totalPages - 1})}" th:text="'>>'"></a>
+                        <a th:href="@{/news/notice(page=${notice.totalPages - 1}, search= ${param.search})}" th:text="'>>'"></a>
                     </li>
                 </ul>
             </div>
