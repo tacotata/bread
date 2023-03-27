@@ -1,7 +1,9 @@
 package com.example.helloproject.config;
 
+import com.example.helloproject.utils.StringToNewsTypeConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -16,11 +18,12 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // TODO [resources >> static >> 리소스 연결]
-        //WebMvcConfigurer.super.addResourceHandlers(registry);
-     //   registry.addResourceHandler("/**")
-          //      .addResourceLocations("classpath:/templates/", "classpath:/static/");
-           registry.addResourceHandler(uploadPath)
-              .addResourceLocations(resourcePath);
+        registry.addResourceHandler(uploadPath)
+            .addResourceLocations(resourcePath);
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new StringToNewsTypeConverter());
     }
 }
