@@ -1,4 +1,4 @@
-package com.example.helloproject.data.entity.admin.news;
+package com.example.helloproject.data.entity.news;
 
 import com.example.helloproject.data.entity.BaseEntity;
 import lombok.Builder;

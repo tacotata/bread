@@ -434,3 +434,13 @@ color:#c2bebe;
       font-size: 12px;
       }
 }
+
+/* faq */
+.btn.btn-faq{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-radius: 15px;
+    font-size: 10px;
+}

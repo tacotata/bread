@@ -1,5 +1,6 @@
-package com.example.helloproject.data.entity.admin.news;
+package com.example.helloproject.data.repository.news;
 
+import com.example.helloproject.data.entity.news.NewsFile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

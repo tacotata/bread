@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Untree.co">
-    <link rel="shortcut icon" href="favicon.png">
+    <!--<link rel="shortcut icon" href="favicon.png">-->
 
     <meta name="description" content=""/>
     <meta name="keywords" content="free template, bootstrap, bootstrap4"/>
@@ -60,16 +60,18 @@
         <div class="filters" data-aos="fade-up" data-aos-delay="100">
             <ul>
                 <a th:href="@{/news/notice}"><li>Notice</li></a>
-                <a th:href="@{/news/events}"><li >Event</li></a>
+                <a th:href="@{/news/event}"><li >Event</li></a>
                 <a th:href="@{/news/faq}"><li class="active">FAQ</li></a>
             </ul>
-            <ul>
-                <li class="search-menu_wrap">
-                    <input id="search" class="search-menu" spellcheck="false" type="text">
-                    <label for="search"></label>
-                    <button style="" type="submit">검색</button>
-                </li>
-            </ul>
+            <form th:action="@{/news/faq}">
+                <ul style="padding:16px;">
+                    <li class="search-menu_wrap">
+                        <input id="search" class="search-menu" name="search" spellcheck="false" type="text">
+                        <label for="search"></label>
+                        <button style="" type="submit">검색</button>
+                    </li>
+                </ul>
+            </form>
         </div>
 
         <div class="row mb-5" style="margin-top: 1rem;">
@@ -77,60 +79,29 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="custom-accordion" id="accordion_1">
-                            <div class="accordion-item">
+                            <div class="accordion-item" th:each = "news:${news}" th:if="${news.type.toString().equals('FAQ')}">
                                 <h2 class="mb-0">
                                     <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        How to download and register?
+                                            th:attr="data-target='#collapse'+${news.id }" aria-expanded="false" th:text="${news.subject}">
                                     </button>
                                 </h2>
-
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                <div  th:id="|collapse${news.id}|"  class="collapse "  th:attr="aria-labelledby='heading'+ ${news.id}"
                                      data-parent="#accordion_1">
-                                    <div class="accordion-body">
-                                        Far far away, behind the word mountains, far from the countries Vokalia and
-                                        Consonantia, there live the blind texts. Separated they live in Bookmarksgrove
-                                        right at the coast of the Semantics, a large language ocean.
+                                    <input type="hidden" th:value="${news.id}" id="newsId">
+                                    <div class="accordion-body" >
+                                         <th:block  th:text="${news.contents}">
+                                        </th:block>
+                                    </div>
+                                    <div class="container mb-5 border-bottom d-flex justify-content-end login-form-wrap mypage-table-wrap">
+                                        <div class="row justify-content-end pr-3 mr-2">
+                                            <button type="button" class="btn btn-faq btn-primary bg-secondary border border-secondary" id="btn-delete">삭제</button>
+                                        </div>
+                                        <div class="row justify-content-end">
+                                            <button type="button" class="btn btn-faq btn-primary" th:onclick="|location.href='@{/admin/news/modify/{newsId}(newsId=${news?.id}, page=${nowPage-1})}'|">수정</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div> <!-- .accordion-item -->
-
-                            <div class="accordion-item font-pretend">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                                            data-target="#collapseTwo" aria-expanded="false"
-                                            aria-controls="collapseTwo">How to create your paypal account?
-                                    </button>
-                                </h2>
-                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                                     data-parent="#accordion_1">
-                                    <div class="accordion-body">
-                                        A small river named Duden flows by their place and supplies it with the
-                                        necessary regelialia. It is a paradisematic country, in which roasted parts of
-                                        sentences fly into your mouth.
-                                    </div>
-                                </div>
-                            </div> <!-- .accordion-item -->
-                            <div class="accordion-item">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                                            data-target="#collapseThree" aria-expanded="false"
-                                            aria-controls="collapseThree">How to link your paypal and bank account?
-                                    </button>
-                                </h2>
-
-                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
-                                     data-parent="#accordion_1">
-                                    <div class="accordion-body">
-                                        When she reached the first hills of the Italic Mountains, she had a last view
-                                        back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet
-                                        Village and the subline of her own road, the Line Lane. Pityful a rethoric
-                                        question ran over her cheek, then she continued her way.
-                                    </div>
-                                </div>
-
-                            </div> <!-- .accordion-item -->
-
                         </div>
                     </div>
                 </div>
@@ -139,12 +110,31 @@
 
         <div class="row">
             <div class="col-lg-12 text-center">
-                <ul class="list-unstyled custom-pagination">
-                    <li><a href="#">1</a></li>
-                    <li class="active"><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
+                <ul class="list-unstyled custom-pagination" th:with="start=${(news.number/maxPage)*maxPage + 1}, end=(${(news.totalPages == 0) ? 1 : (start + (maxPage - 1) < news.totalPages ? start + (maxPage - 1) : news.totalPages)})">
+                    <li th:if="${start > 1}">
+                        <a th:href="@{/news/faq((page=0), search= ${param.search})}" th:text="'<<'"></a>
+                    </li>
+
+                    <li th:if="${start > 1}">
+                        <a th:href="@{/news/faq(page=${start - maxPage-1}, search= ${param.search})}" th:text="'<'"></a>
+                    </li>
+
+                    <th:block th:each="page: ${#numbers.sequence(start, end)}">
+                        <li>
+                            <a th:text="${page}"  th:if="${page != nowPage}" th:href="@{/news/faq(page=${page - 1}, search= ${param.search})}"></a>
+                        </li>
+                        <li class="active">
+                            <a th:if="${page==nowPage}" th:text ="${page}"></a>
+                        </li>
+                    </th:block>
+
+                    <li th:if="${end < news.totalPages}">
+                        <a th:href="@{/news/faq(page=${start + maxPage-1}, search= ${param.search})}" th:text="'>'"></a>
+                    </li>
+
+                    <li th:if="${end < news.totalPages}">
+                        <a th:href="@{/news/faq(page=${news.totalPages - 1}, search= ${param.search})}" th:text="'>>'"></a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -179,7 +169,7 @@
 
 
 <script th:src="@{/js/custom.js}"></script>
-
+<script th:src="@{/js/main.js}"></script>
 
 </body>
 </html>

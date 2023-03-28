@@ -1,11 +1,12 @@
-package com.example.helloproject.service.admin;
+package com.example.helloproject.service;
 
-import com.example.helloproject.data.dto.admin.news.NewsListResponseDto;
-import com.example.helloproject.data.dto.admin.news.NewsResponseDto;
-import com.example.helloproject.data.dto.admin.news.NewsSaveRequestDto;
-import com.example.helloproject.data.dto.admin.news.NewsUpdateRequestDto;
-import com.example.helloproject.data.entity.admin.news.News;
-import com.example.helloproject.data.entity.admin.news.NewsRepository;
+import com.example.helloproject.data.dto.news.NewsListResponseDto;
+import com.example.helloproject.data.dto.news.NewsResponseDto;
+import com.example.helloproject.data.dto.news.NewsSaveRequestDto;
+import com.example.helloproject.data.dto.news.NewsUpdateRequestDto;
+import com.example.helloproject.data.entity.news.News;
+import com.example.helloproject.data.entity.news.NewsType;
+import com.example.helloproject.data.repository.news.NewsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -74,5 +75,10 @@ public class NewsService {
     public Page<News> searchNewsList (String search, Pageable pageable) {
         return newsRepository.findBySubjectContaining(search, pageable);
 
+    }
+
+    @Transactional
+    public Page<News> searchNewsAll (NewsType newsType, String search, Pageable pageable){
+        return newsRepository.searchNewsAll(newsType, search, pageable);
     }
 }

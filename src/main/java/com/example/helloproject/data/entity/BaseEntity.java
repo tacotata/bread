@@ -1,9 +1,6 @@
 package com.example.helloproject.data.entity;
 
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -25,7 +22,7 @@ public class BaseEntity {
     @LastModifiedBy
     private LocalDateTime updDate;
 
-//    @CreatedBy
-//    @Column( updatable = false)
-//    private Long regMemberSeq;
+//    public void setUpdDate(LocalDateTime updDate) {
+//        this.updDate = updDate;
+//    }
 }

@@ -1,10 +1,10 @@
 package com.example.helloproject.controller;
 
-import com.example.helloproject.data.dto.admin.news.NewsResponseDto;
-import com.example.helloproject.data.dto.admin.news.NewsSaveRequestDto;
-import com.example.helloproject.data.dto.admin.news.NewsUpdateRequestDto;
+import com.example.helloproject.data.dto.news.NewsResponseDto;
+import com.example.helloproject.data.dto.news.NewsSaveRequestDto;
+import com.example.helloproject.data.dto.news.NewsUpdateRequestDto;
 import com.example.helloproject.service.UploadService;
-import com.example.helloproject.service.admin.NewsService;
+import com.example.helloproject.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

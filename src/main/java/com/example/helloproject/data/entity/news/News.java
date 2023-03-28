@@ -1,4 +1,4 @@
-package com.example.helloproject.data.entity.admin.news;
+package com.example.helloproject.data.entity.news;
 
 import com.example.helloproject.data.entity.BaseEntity;
 import com.sun.istack.NotNull;
@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 
 @Getter

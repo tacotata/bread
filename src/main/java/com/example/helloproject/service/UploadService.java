@@ -1,10 +1,10 @@
 
 package com.example.helloproject.service;
 
-import com.example.helloproject.data.dto.admin.news.NewsFileResponseDto;
-import com.example.helloproject.data.dto.admin.news.NewsFileSaveDto;
-import com.example.helloproject.data.entity.admin.news.NewsFile;
-import com.example.helloproject.data.entity.admin.news.NewsFileRepository;
+import com.example.helloproject.data.dto.news.NewsFileResponseDto;
+import com.example.helloproject.data.dto.news.NewsFileSaveDto;
+import com.example.helloproject.data.entity.news.NewsFile;
+import com.example.helloproject.data.repository.news.NewsFileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

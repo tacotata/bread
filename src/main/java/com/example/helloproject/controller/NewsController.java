@@ -1,10 +1,11 @@
 package com.example.helloproject.controller;
 
-import com.example.helloproject.data.dto.admin.news.NewsFileResponseDto;
-import com.example.helloproject.data.dto.admin.news.NewsResponseDto;
-import com.example.helloproject.data.entity.admin.news.News;
+import com.example.helloproject.data.dto.news.NewsFileResponseDto;
+import com.example.helloproject.data.dto.news.NewsResponseDto;
+import com.example.helloproject.data.entity.news.News;
+import com.example.helloproject.data.entity.news.NewsType;
 import com.example.helloproject.service.UploadService;
-import com.example.helloproject.service.admin.NewsService;
+import com.example.helloproject.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,45 +33,48 @@ public class NewsController {
     private final NewsService newsService;
     private final UploadService uploadService;
 
-    @GetMapping( "/notice")
-    public String notice(@PageableDefault(size=9, sort="id", direction= Direction.DESC) Pageable pageable, String search, Model model){
-        //log.info("===============notice START ====================");
-            Page<News> list = null;
-            if(search == null ){
-                list = newsService.pageList(pageable);
-            }else{
-                list = newsService.searchNewsList(search, pageable);
-            }
-            // Page<News> notice = newsService.pageList(pageable);
-            // pageable은 0부터 시작
-            int nowPage = list.getPageable().getPageNumber() + 1; //1 더해서 0+1 = 1부터 시작
+    @GetMapping( "/{newsType}")
+    public String news(@PathVariable("newsType") NewsType newsType, @PageableDefault(size=9, sort="id", direction= Direction.DESC) Pageable pageable, String search, Model model){
+        log.info("===============news START ====================");
+        log.info("NEWS TYPE :{}", newsType);
 
-            log.info("총 페이지 개수 : {} ", list.getTotalPages()); // pageable은 -1 해야함
-            log.info("검색 키워드 : {} ", search );
-            // log.info("현재 페이지 : {} ", nowPage );//1부터 시작 pageable은 0부터 시작
+        Page<News> list = newsService.searchNewsAll(newsType, search, pageable);
 
-            model.addAttribute("notice", list);
-            model.addAttribute("nowPage",nowPage);
-            model.addAttribute("maxPage", 5);// 페이징 수
-        //log.info("===============notice END ====================");
-        return "/news/notice";
+        // pageable은 0부터 시작
+        int nowPage = list.getPageable().getPageNumber() + 1; //1 더해서 0+1 = 1부터 시작
+        log.info("getTotalElements : {}", String.valueOf(list.getTotalElements()));
+        log.info("총 페이지 개수 : {} ", list.getTotalPages()); // pageable은 -1 해야함
+        log.info("검색 키워드 : {} ", search);
+        log.info("현재 페이지 : {} ", nowPage );//1부터 시작 pageable은 0부터 시작
+
+        model.addAttribute("news", list);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("maxPage", 5);// 페이징 수
+
+        log.info("===============news END ====================");
+
+        return "/news/"+ newsType.toString().toLowerCase();
     }
 
-    @GetMapping("/notice-detail/{id}")
-    public String noticeDetail( @PathVariable Long id , @RequestParam(value = "page", required=false) int page, Model model) {
+
+    @GetMapping("/{newsType}/{id}")
+    public String newsView(@PathVariable("newsType") NewsType newsType, @PathVariable Long id , @RequestParam(value = "page", required=false) int page, Model model) {
+        log.info("===============newsView START ====================");
         try {
-            NewsResponseDto notice = newsService.findById(id);
-            int fileCnt = notice.getFileCnt();
-            log.info("File CNT : {} ", fileCnt);
+            log.info("NEWS TYPE :{}", newsType);
+            NewsResponseDto news = newsService.findById(id);
+            int fileCnt = news.getFileCnt();
+            log.info("FILE CNT : {} ", fileCnt);
             if (fileCnt > 0) {
                 model.addAttribute("file", uploadService.findByNewsId(id));
             }
-            model.addAttribute("notice", notice);
+            model.addAttribute("news", news);
             model.addAttribute("page", page);// 0부터 시작
         }catch (Exception e){
             e.printStackTrace();
         }
-        return "/news/notice-detail";
+        log.info("===============newsView END ====================");
+        return "/news/"+newsType.toString().toLowerCase()+"/view";
     }
 
     // 첨부 파일 다운로드
@@ -134,18 +138,4 @@ public class NewsController {
         return id;
     }
 
-    @RequestMapping(value = "/events" , method = RequestMethod.GET)
-    public String events( ){
-        return "/news/events";
-    }
-
-    @RequestMapping(value = "/event-detail" , method = RequestMethod.GET)
-    public String eventDetail( ){
-        return "/news/event-detail";
-    }
-
-    @RequestMapping(value = "/faq" , method = RequestMethod.GET)
-    public String faq( ){
-        return "/news/faq";
-    }
 }

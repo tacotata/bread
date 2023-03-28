@@ -1,7 +1,7 @@
-package com.example.helloproject.data.dto.admin.news;
+package com.example.helloproject.data.dto.news;
 
-import com.example.helloproject.data.entity.admin.news.News;
-import com.example.helloproject.data.entity.admin.news.NewsType;
+import com.example.helloproject.data.entity.news.News;
+import com.example.helloproject.data.entity.news.NewsType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

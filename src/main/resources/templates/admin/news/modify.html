@@ -67,11 +67,12 @@
                         <input type="hidden" id="fileCnt" th:value="${news.fileCnt}">
                        <div class="form-group">
                             <label class="text-black" for="type">유형</label>
-                            <select class="form-control select" th:value="${news.type}" name="type" id="type" aria-label="Default select example">
-                                    <option value="NOTICE"  th:selected="${newsType} == 'NOTICE'">공지사항</option>
-                                    <option value="EVENT" th:selected="${newsType} == 'EVENT'">이벤트</option>
-                                   <option  value="FAQ" th:selected="${newsType} == 'FAQ'">FAQ</option>
-                            </select>
+                           <select class="form-control select" name="type" id="type" aria-label="Default select example">
+                               <option style="background:#E8E5DE;" >유형</option>
+                               <option value="NOTICE">공지사항</option>
+                               <option value="EVENT">이벤트</option>
+                               <option value="FAQ">FAQ</option>
+                           </select>
                         </div>
 
                         <div class="form-group">
@@ -107,11 +108,19 @@
                         </small>
                         <div class="container mb-5 border-bottom d-flex justify-content-end login-form-wrap mypage-table-wrap">
                             <div class="row justify-content-end pr-3 mr-2 ">
-                                <button type="button" class="btn btn-primary bg-secondary border border-secondary news-modify-btn" th:onclick="|location.href='@{/news/notice}'|">목록</button>
+                                <button type="button" class="btn btn-primary bg-secondary border border-secondary news-modify-btn" th:onclick="|location.href='@{/news/{newsType}( newsType=${#strings.toLowerCase(news.type)})}'|">목록</button>
                             </div>
-                            <div class="row justify-content-end pr-3 mr-2">
-                                <button type="button"  class="btn btn-primary bg-secondary border border-secondary news-modify-btn"  th:onclick="|location.href='@{/news/notice-detail/{newsId}(newsId=${news?.id}, page=${page})}'|">게시글 확인</button>
-                            </div>
+                            <th:block  th:if="${news.type.toString().equals('FAQ')}">
+                                <div class="row justify-content-end pr-3 mr-2">
+                                    <button type="button"  class="btn btn-primary bg-secondary border border-secondary news-modify-btn"  th:onclick="|location.href='@{/news/{newsType}( newsType=${#strings.toLowerCase(news.type)}, page=${page})}'|">게시글 확인</button>
+                                </div>
+                            </th:block>
+                            <th:block  th:unless="${news.type.toString().equals('FAQ')}">
+                                <div class="row justify-content-end pr-3 mr-2">
+                                    <button type="button"  class="btn btn-primary bg-secondary border border-secondary news-modify-btn"  th:onclick="|location.href='@{/news/{newsType}/{newsId}( newsType=${#strings.toLowerCase(news.type)}, newsId=${news?.id}, page=${page})}'|">게시글 확인</button>
+                                </div>
+                            </th:block>
+
                             <div class="row justify-content-end">
                                 <button type="button" id="btn-update" class="  btn btn-primary news-modify-btn">수정</button>
                             </div>

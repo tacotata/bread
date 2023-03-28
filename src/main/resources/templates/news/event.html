@@ -42,12 +42,11 @@
 <th:block th:replace="/include/header :: headerFragment"></th:block>
 <th:block th:replace="/include/nav :: navFragment"></th:block>
 
-
 <div class="custom-hero">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6">
-                <h1 class="hero-heading">Notice</h1>
+                <h1 class="hero-heading">Event</h1>
                 <div class="line js-line mx-auto mb-3 my-3 mt-5"></div>
                 <p class="sub-text">Far far away, behind the word mountains, far from the countries Vokalia and
                     Consonantia, there live the blind texts.</p>
@@ -61,11 +60,11 @@
     <div class="container search">
         <div class="filters" data-aos="fade-up" data-aos-delay="100">
             <ul>
-                <a th:href="@{/news/notice}"><li class="active" >Notice</li></a>
-                <a th:href="@{/news/event}"><li>Event</li></a>
-                <a th:href="@{/news/faq}"><li>FAQ</li></a>
+                <a th:href="@{/news/notice}"><li>Notice</li></a>
+                <a th:href="@{/news/event}"><li  class="active" >Event</li></a>
+                <a th:href="@{/news/faq}"><li >FAQ</li></a>
             </ul>
-            <form th:action="@{/news/notice}">
+            <form th:action="@{/news/event}">
                 <ul style="padding:16px;">
                     <li class="search-menu_wrap">
                         <input id="search" class="search-menu" name="search" spellcheck="false" type="text">
@@ -75,36 +74,39 @@
                 </ul>
             </form>
         </div>
+
         <div class="row mb-5">
             <div class="col-md-6 mb-5 mb-lg-5 col-lg-4" th:each = "news:${news}" >
                 <div class="blog_entry">
-                    <a th:href="@{/news/notice/{id}( id=${news.id}, page=${nowPage-1})}">
-                        <div class="p-4 bg-white news-box">
-                            <input type="hidden" id="newsId" th:value="${news.id}">
-                            <h3 style="font-family: 'Pretendard';" th:text="${news.subject}"></h3>
-                            <span class="date" th:text="${#temporals.format(news.regDate, 'yyyy-MM-dd')}"></span>
-                            <p class="news-content" style="font-family: 'Pretendard';" th:text="${news.contents}"></p>
-                            <p class="more">Read more...</p>
-                        </div>
+                    <input type="hidden" id="newsId" th:value="${news.id}">
+<!--                    <input type="text" id="ss" th:value="${newsType}">-->
+<!--                    <input type="text" th:value="${news.type}">-->
+                    <a th:href="@{/news/event/{id}( id=${news.id}, page=${nowPage-1})}">
+                    <img src="/images/img_h_3-min.jpg"
+                                                    alt="Free Website Template by Untree.co" class="img-fluid">
+                    <div class="p-4 bg-white">
+                        <h3 style="font-family:'Pretendard';" th:text="${news.subject}"></h3>
+                        <span class="date" th:text="${#temporals.format(news.regDate, 'yyyy-MM-dd')}"></span>
+                    </div>
                     </a>
                 </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-lg-12 text-center">
-                <ul class="list-unstyled custom-pagination" th:with="start=${(news.number/maxPage)*maxPage + 1}, end=(${(news.totalPages == 0) ? 1 : (start + (maxPage - 1) < news.totalPages ? start + (maxPage - 1) : news.totalPages)})">
+            <div class="col-lg-12 text-center" >
+                <ul class="list-unstyled custom-pagination"  th:with="start=${(news.number/maxPage)*maxPage + 1}, end=(${(news.totalPages == 0) ? 1 : (start + (maxPage - 1) < news.totalPages ? start + (maxPage - 1) : news.totalPages)})">
                     <li th:if="${start > 1}">
-                        <a th:href="@{/news/notice((page=0), search= ${param.search})}" th:text="'<<'"></a>
+                        <a th:href="@{/news/event((page=0), search= ${param.search})}" th:text="'<<'"></a>
                     </li>
 
                     <li th:if="${start > 1}">
-                        <a th:href="@{/news/notice(page=${start - maxPage-1}, search= ${param.search})}" th:text="'<'"></a>
+                        <a th:href="@{/news/event(page=${start - maxPage-1}, search= ${param.search})}" th:text="'<'"></a>
                     </li>
 
                     <th:block th:each="page: ${#numbers.sequence(start, end)}">
                         <li>
-                            <a th:text="${page}"  th:if="${page != nowPage}" th:href="@{/news/notice(page=${page - 1}, search= ${param.search})}"></a>
+                            <a th:text="${page}"  th:if="${page != nowPage}" th:href="@{/news/event(page=${page - 1}, search= ${param.search})}"></a>
                         </li>
                         <li class="active">
                             <a th:if="${page==nowPage}" th:text ="${page}"></a>
@@ -112,11 +114,11 @@
                     </th:block>
 
                     <li th:if="${end < news.totalPages}">
-                        <a th:href="@{/news/notice(page=${start + maxPage-1}, search= ${param.search})}" th:text="'>'"></a>
+                        <a th:href="@{/news/event(page=${start + maxPage-1}, search= ${param.search})}" th:text="'>'"></a>
                     </li>
 
                     <li th:if="${end < news.totalPages}">
-                        <a th:href="@{/news/notice(page=${news.totalPages - 1}, search= ${param.search})}" th:text="'>>'"></a>
+                        <a th:href="@{/news/event(page=${news.totalPages - 1}, search= ${param.search})}" th:text="'>>'"></a>
                     </li>
                 </ul>
             </div>
