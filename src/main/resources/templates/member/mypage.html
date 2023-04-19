@@ -85,6 +85,21 @@
                     </tr>
                 </tbody>
             </table>
+            <th:block  th:if="${userName} != null and  ${#strings.equals(role, 'OWNER')} ">
+                <table class="table mypage-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Bread.</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><a th:href="@{/owner/reservation-list}">예약현황</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </th:block>
+
             <table class="table mypage-table">
                 <thead>
                     <tr>

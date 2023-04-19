@@ -1,5 +1,7 @@
 package com.example.helloproject.controller;
 
+import com.example.helloproject.config.auth.LoginUser;
+import com.example.helloproject.config.auth.dto.SessionUser;
 import com.example.helloproject.data.dto.news.NewsResponseDto;
 import com.example.helloproject.data.dto.news.NewsSaveRequestDto;
 import com.example.helloproject.data.dto.news.NewsUpdateRequestDto;
@@ -74,13 +76,21 @@ public class AdminController {
     }
 
     @GetMapping("/news/registration")
-    public String adminNewsRegi() {
+    public String adminNewsRegi(Model model, @LoginUser SessionUser user) {
+        if(user !=null){
+            model.addAttribute("userName", user.getName());
+            model.addAttribute("role", user.getRole());
+        }
         return "/admin/news/registration";
     }
 
     @GetMapping("/news/modify/{id}")
-    public String adminNewsModify(@PathVariable Long id, @RequestParam(value = "page", required=false) int page, Model model) {
+    public String adminNewsModify(@PathVariable Long id, @RequestParam(value = "page", required=false) int page, Model model, @LoginUser SessionUser user ) {
         try {
+            if(user !=null){
+                model.addAttribute("userName", user.getName());
+                model.addAttribute("role", user.getRole());
+            }
                 NewsResponseDto news = newsService.findById(id);
                 int fileCnt = news.getFileCnt();
                 log.info("FILE CNT : {} ", fileCnt);
@@ -131,25 +141,41 @@ public class AdminController {
 
 
     @RequestMapping(value = "/menu/registration", method = RequestMethod.GET)
-    public String adminMenuRegi() {
+    public String adminMenuRegi(Model model, @LoginUser SessionUser user) {
+        if(user !=null){
+            model.addAttribute("userName", user.getName());
+            model.addAttribute("role", user.getRole());
+        }
         return "/admin/menu/registration";
     }
 
 
     @RequestMapping(value = "/menu/modify", method = RequestMethod.GET)
-    public String adminMenuModify() {
+    public String adminMenuModify(Model model, @LoginUser SessionUser user) {
+        if(user !=null){
+            model.addAttribute("userName", user.getName());
+            model.addAttribute("role", user.getRole());
+        }
         return "/admin/menu/modify";
     }
 
 
     @RequestMapping(value = "/store/registration", method = RequestMethod.GET)
-    public String adminStoreRegi() {
+    public String adminStoreRegi(Model model, @LoginUser SessionUser user) {
+        if(user !=null){
+            model.addAttribute("userName", user.getName());
+            model.addAttribute("role", user.getRole());
+        }
         return "/admin/store/registration";
     }
 
 
     @RequestMapping(value = "/store/modify", method = RequestMethod.GET)
-    public String adminStoreModify() {
+    public String adminStoreModify(Model model, @LoginUser SessionUser user) {
+        if(user !=null){
+            model.addAttribute("userName", user.getName());
+            model.addAttribute("role", user.getRole());
+        }
         return "/admin/store/modify";
     }
 }

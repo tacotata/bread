@@ -1,5 +1,7 @@
 package com.example.helloproject.controller;
 
+import com.example.helloproject.config.auth.LoginUser;
+import com.example.helloproject.config.auth.dto.SessionUser;
 import com.example.helloproject.data.dto.news.NewsFileResponseDto;
 import com.example.helloproject.data.dto.news.NewsResponseDto;
 import com.example.helloproject.data.entity.news.News;
@@ -34,10 +36,15 @@ public class NewsController {
     private final UploadService uploadService;
 
     @GetMapping( "/{newsType}")
-    public String news(@PathVariable("newsType") NewsType newsType, @PageableDefault(size=9, sort="id", direction= Direction.DESC) Pageable pageable, String search, Model model){
+    public String news(@PathVariable("newsType") NewsType newsType, @PageableDefault(size=9, sort="id", direction= Direction.DESC) Pageable pageable, String search, Model model, @LoginUser SessionUser user){
         log.info("===============news START ====================");
-        log.info("NEWS TYPE :{}", newsType);
 
+        if(user !=null){
+            model.addAttribute("userName", user.getName());
+            model.addAttribute("role", user.getRole());
+        }
+
+        log.info("NEWS TYPE :{}", newsType);
         Page<News> list = newsService.searchNewsAll(newsType, search, pageable);
 
         // pageable은 0부터 시작
@@ -58,9 +65,14 @@ public class NewsController {
 
 
     @GetMapping("/{newsType}/{id}")
-    public String newsView(@PathVariable("newsType") NewsType newsType, @PathVariable Long id , @RequestParam(value = "page", required=false) int page, Model model) {
+    public String newsView(@PathVariable("newsType") NewsType newsType, @PathVariable Long id , @RequestParam(value = "page", required=false) int page, Model model, @LoginUser SessionUser user) {
         log.info("===============newsView START ====================");
         try {
+            if(user !=null){
+                model.addAttribute("userName", user.getName());
+                model.addAttribute("role", user.getRole());
+            }
+
             log.info("NEWS TYPE :{}", newsType);
             NewsResponseDto news = newsService.findById(id);
             int fileCnt = news.getFileCnt();

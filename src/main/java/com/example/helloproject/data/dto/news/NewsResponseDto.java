@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 @Getter
 public class NewsResponseDto {
-
     private Long id;
     private NewsType type;
     private String subject;
@@ -29,5 +28,6 @@ public class NewsResponseDto {
         this.regDate = entity.getRegDate();
         this.updDate = entity.getUpdDate();
         this.fileCnt = entity.getFileCnt();
+        this.type = entity.getType();
     }
 }
