@@ -1,3 +1,9 @@
+//   sns 회원가입 모달
+    var snsType=[[${snsType}]];
+    var num=[[${id}]];
+    if(snsType != null && num != null){
+        $(".modal").css("display","block");
+    }
 
  $(function () {
     $('#btn-upload').click(function (e) {
@@ -48,6 +54,35 @@ function newsValidation() {
     }
 }
 
+function snsUpdateValidation() {
+     if($('#birthyear').val() =="" ||$('#birthmonth').val() =="" || $('#birthday').val() =="" ){
+        alert("생년월일을 입력해주세요.");
+        return false;
+    }else if($('#mobile').val()==""){
+         alert("핸드폰번호를 입력해주세요.");
+         return false;
+    }else if($('#birthyear').val().length  != 4 ){
+         alert("생년월일을 확인해주세요.");
+    }else if($('#birthmonth').val().length  != 2 || $('#birthday').val().length  != 2 ){
+         alert("생년월일을 확인해주세요.");
+    }
+    else if($('#mobile').val() !=""){
+       return phoneValid($('#mobile').val());
+    }else{
+         return true;
+    }
+}
+
+
+function phoneValid(phone){
+    var regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+    console.log(phone)
+        if(!regPhone.test(phone)){
+                alert("잘못된 번호입니다.");
+                return false;
+            }
+            return true;
+}
 
 var main = {
     init : function(){
@@ -183,3 +218,57 @@ var main = {
         };
 
 main.init();
+
+
+
+// sns 회원가입
+var snsUser = {
+    init : function () {
+        var _this = this;
+        $('#sns-join-btn').on('click', function () {
+        if(snsUpdateValidation()){
+            snsUser.update();
+            }
+        });
+    },
+
+    update : function () {
+    var snsType = $('#snsType').val();
+    var id = $('#id').val()
+    var promotionAgree = 0;
+    if($('#promotionAgree').is(':checked')){
+        promotionAgree = 1;
+    }
+
+    if(snsType == 'Google'){
+        var data = {
+            birthyear: $('#birthyear').val(),
+            birthmonth: $('#birthmonth').val(),
+            birthday: $('#birthday').val(),
+            mobile: $('#mobile').val(),
+            promotionAgree: promotionAgree
+        };
+    }else{
+        var data = {
+            promotionAgree: promotionAgree
+        };
+    }
+
+        $.ajax({
+            type: 'PUT',
+            url: '/sns-join/'+id,
+            dataType: 'text',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function() {
+            alert('회원가입이 완료되었습니다.');
+            window.location.href = '/';
+        }).fail(function (request,status,error) {
+            alert(JSON.stringify(error));
+        });
+    },
+};
+
+snsUser.init();
+
+

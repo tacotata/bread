@@ -143,3 +143,9 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,intellij+all,java
 application.properties
+### Querydsl
+/src/main/generated
+
+application-oauth.properties
+
+*.build

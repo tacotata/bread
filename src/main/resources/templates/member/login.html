@@ -61,14 +61,15 @@
 <div class="container  mb-5 border-bottom login-form-wrap">
     <div class="row justify-content-center">
         <div class="col-lg-6">
-            <form>
+            <form role="form" method="post" action="/member/login">
                 <div class="form-group">
                     <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
-                           placeholder="아이디를 입력해주세요.">
+                         name="email"  placeholder="이메일을 입력해주세요.">
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" id="password" placeholder="비밀번호를 입력해주세요.">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호를 입력해주세요.">
                 </div>
+                <small style="color:#bd2130" th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></small>
                 <div class="container  mb-3 border-bottom ">
                     <div class="row justify-content-end">
                         <div class="col-lg-6 login-bottom p-0 login-find-wrap">
@@ -77,15 +78,17 @@
                     </div>
                 </div>
 
-              <button type="submit" class="btn btn-primary submit-btn" style="margin-bottom:10px; background: #eac775;
-    border-color: #eac775; color: #000;">로그인
+
+               <button type="button" class="btn btn-primary submit-btn" style="margin-bottom: 10px; background: #fff; border-color: #fff;">
+                   <a href="/oauth2/authorization/google">구글 로그인<!--<img  src="/images/btn_google_signin_light_normal_web.png" alt="Image" class="img-fluid" >--></a>
                 </button>
-                <button type="submit" class="btn btn-primary submit-btn" style="margin-bottom: 10px; background: #099b3d;
-    border-color: #099b3d;">네이버 로그인
+                <button type="button" class="btn btn-primary submit-btn" style="margin-bottom: 10px; background: #099b3d;
+    border-color: #099b3d;">
+                    <a href="/oauth2/authorization/naver">네이버 로그인</a>
                 </button>
+                <button class="btn btn-primary submit-btn" style="margin-bottom:10px; background: #eac775; border-color: #eac775; color: #000;">로그인 </button>
             </form>
                 <a th:href="@{/member/join}"><button  class="btn btn-primary submit-btn">회원가입</button></a>
-
         </div>
     </div>
 </div>
@@ -118,7 +121,15 @@
 
 
 <script th:src="@{/js/custom.js}"></script>
-
-
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            var errorMessage = [[${errorMessage}]];
+            if(errorMessage != null){
+                alert(errorMessage);
+            }
+        });
+    </script>
+</th:block>
 </body>
 </html>

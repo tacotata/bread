@@ -169,6 +169,9 @@ a{
     text-align:right;
 }
 
+.modalBtn{
+    font-size:10px;
+}
 /*login  end*/
 
 /*join*/
@@ -177,6 +180,9 @@ a{
     visibility: hidden;
 }
 
+.fieldError{
+    color:#bd2130;
+}
 
 /*mypage*/
 
