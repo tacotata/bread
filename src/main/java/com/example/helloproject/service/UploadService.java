@@ -3,8 +3,12 @@ package com.example.helloproject.service;
 
 import com.example.helloproject.data.dto.news.NewsFileResponseDto;
 import com.example.helloproject.data.dto.news.NewsFileSaveDto;
+import com.example.helloproject.data.dto.store.StoreFileResponseDto;
+import com.example.helloproject.data.dto.store.StoreFileSaveDto;
 import com.example.helloproject.data.entity.news.NewsFile;
+import com.example.helloproject.data.entity.store.StoreFile;
 import com.example.helloproject.data.repository.news.NewsFileRepository;
+import com.example.helloproject.data.repository.store.StoreFileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,15 +33,16 @@ public class UploadService {
     private String uploadDir;
 
     private final NewsFileRepository newsFileRepository;
+    private final StoreFileRepository storeFileRepository;
 
     //파일 저장
-    public boolean saveFile(List<MultipartFile> multipartFiles, Long id, String type)  {
+    public Long saveFiles(List<MultipartFile> multipartFiles, Long id, String type)  {
         String localDateTimeFormat
                 = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         String localDateFormat
                 = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String regId = "admin";
-        Boolean result = false;
+        Long fileId =0L;
         try {
             if (!CollectionUtils.isEmpty(multipartFiles) && id != null) {
                 if (multipartFiles.size() > 0) {
@@ -55,15 +60,31 @@ public class UploadService {
 
                         targetFile.setWritable(false);
                         targetFile.setReadable(true);
-                        NewsFileSaveDto newsFileSaveDto = NewsFileSaveDto.builder().newsId(id)
-                                .fileName(savedFileName)
-                                .oriFileName(oriFileName)
-                                .filePath(savedFilePath)
-                                .extension(extension)
-                                .regId(regId)
-                                .build();
 
-                        Long fileId = insertFile(newsFileSaveDto.toEntity());
+                        if("store".equals(type)){
+                            StoreFileSaveDto storeFileSaveDto = StoreFileSaveDto.builder()
+                                    .storeId(id)
+                                    .fileName(savedFileName)
+                                    .oriFileName(oriFileName)
+                                    .filePath(savedFilePath)
+                                    .extension(extension)
+                                    .build();
+                            fileId = insertStoreFile(storeFileSaveDto.toEntity());
+
+                        }else if("menu".equals(type)){
+
+                        }else{
+                            NewsFileSaveDto newsFileSaveDto = NewsFileSaveDto.builder().newsId(id)
+                                    .fileName(savedFileName)
+                                    .oriFileName(oriFileName)
+                                    .filePath(savedFilePath)
+                                    .extension(extension)
+                                    .regId(regId)
+                                    .build();
+
+                            fileId = insertFile(newsFileSaveDto.toEntity());
+
+                        }
 
                         log.info("===================================");
                         log.info("file ID : {}", fileId);
@@ -71,17 +92,13 @@ public class UploadService {
                         log.info("file name : {}", savedFileName);
                         log.info("file path : {}", savedFilePath);
                         log.info("===================================");
-
-                        if (fileId != null) {
-                            result = true;
-                        }
                     }
                 }
             }
         }catch (Exception e){
             e.printStackTrace();
         }
-        return result;
+        return fileId;
     }
 
     //news-file 테이블 insert
@@ -111,5 +128,28 @@ public class UploadService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id=" + id));
         newsFileRepository.delete(newsFile);
     }
+
+
+    //store-file 테이블 insert
+    @Transactional
+    public Long insertStoreFile(StoreFile storeFile) {
+        return storeFileRepository.save(storeFile).getId();
+    }
+
+    //store Id로 store_file 데이터 찾기
+    @Transactional(readOnly = true)
+    public StoreFileResponseDto findByStoreId (Long id){
+        StoreFile entity = storeFileRepository.findByStoreId(id);
+        return new StoreFileResponseDto(entity);
+    }
+
+    //store File 삭제
+    @Transactional
+    public void storeFileDelete (Long id) {
+        StoreFile storeFile = storeFileRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 이미지가 없습니다. id=" + id));
+        storeFileRepository.delete(storeFile);
+    }
+
 }
 

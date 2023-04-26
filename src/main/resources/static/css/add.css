@@ -168,7 +168,10 @@ a{
 .login-find-wrap{
     text-align:right;
 }
+/*modal */
+.modal{
 
+}
 .modalBtn{
     font-size:10px;
 }
@@ -431,7 +434,7 @@ color:#c2bebe;
 /*modify*/
 
 @media all and (max-width: 449px)  {
-  .news-modify-btn {
+  .news-modify-btn, store-modify-btn {
       padding-top: 10px;
       padding-bottom: 10px;
       padding-left: 13px;

@@ -10,7 +10,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="author" content="Untree.co">
-  <link rel="shortcut icon" href="favicon.png">
+ <!-- <link rel="shortcut icon" href="favicon.png">-->
 
   <meta name="description" content="" />
   <meta name="keywords" content="free template, bootstrap, bootstrap4" />
@@ -67,29 +67,47 @@
             <div data-jarallax-element="-100" class="jarallax" style="position: relative; z-index: 0; transform: translate3d(0px, -31.0769px, 0px);">
               <div id="jarallax-container-1" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; z-index: -100;"><div style="pointer-events: none; transform-style: preserve-3d; backface-visibility: hidden; will-change: transform, opacity; position: fixed;"></div></div></div>
           </div>
-          <div class="image-stack__item image-stack__item--bottom">
-            <img src="images/img_v_8-min.jpg" alt="Image" class="img-fluid">
+          <div class="image-stack__item image-stack__item--bottom" th:each = "file:${file}" th:if="${file.extension} == '.jpg' or ${file.extension} == '.jpeg' or ${file.extension} == '.png'">
+            <img th:src="|/upload/store/${#temporals.format(file.regDate, 'yyyyMMdd')}/${file.fileName}|" alt="Image" class="img-fluid">
           </div>
         </div>
       </div>
       <div class="col-lg-4">
-        <h2 class="mb-4 mt-3 font-weight-bold">Bread. 잠실점</h2>
+        <input type="hidden" id="storeId" th:value="${store.id}">
+        <h2 class="mb-4 mt-3 font-weight-bold" id="name"  th:text ="${store.name}"></h2>
         <div class="line my-3"></div>
         <div>
         <p class="text-secondary">전화번호</p>
-        <p>070878789878</p>
+        <p id="tel" th:text ="${store.tel}"></p>
         </div>
         <div>
-          <p class="text-secondary">주소</p>
-        <p>부산 서초구 도신대로32길 15<span class="pl-2" ><a class="text-secondary">[ 지도보기 ]</a></span></p>
+        <p class="text-secondary">주소</p>
+        <p id="address" th:text ="${store.address}"><span class="pl-2" ><a class="text-secondary">[ 지도보기 ]</a></span></p>
         </div>
         <div class="mb-5">
-          <p> <span class="text-secondary">영업시간</span>  09:00 ~ 21:00</p>
-          <p> <span class="text-secondary">Last order</span>   20:30</p>
+          <p> <span class="text-secondary">영업시간</span> <span id="hours" th:text ="${store.hours}"> 09:00 ~ 21:00</span></p>
+          <p> <span class="text-secondary">Last order</span> <span id="lastOrder" th:text ="${store.lastOrder}"> 20:30</span></p>
         </div>
+        <th:block th:if="${store.info != null}">
+        <div class="mb-5">
+          <p> <span class="text-secondary">**</span> <span id="info" th:text ="${store.info}"></span></p>
+        </div>
+        </th:block>
+
+        <div class="d-flex justify-content-left" >
+        <div class="d-grid gap-2 d-md-flex justify-content-md-left mt-5 mr-2">
+          <button type="button" class="btn btn-primary wd-300-btn" id="store-btn-hide">삭제</button>
+        </div>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-left mt-5 mr-2">
+          <button type="button" class="btn btn-primary wd-300-btn"  th:onclick="|location.href='@{/admin/store/modify/{storeId}(storeId=${store?.id}, page=${page})}'|">수정</button>
+        </div>
+
         <div class="d-grid gap-2 d-md-flex justify-content-md-left mt-5">
-          <button type="submit" class="btn btn-primary wd-300-btn">목록</button>
+          <button type="button" class="btn btn-primary wd-300-btn"  th:onclick="|location.href='@{/stores(page=${page})}'|">목록</button>
         </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -122,6 +140,7 @@
 
 
 <script th:src="@{/js/custom.js}"></script>
+<script th:src="@{/js/main.js}"></script>
 
 </body>
 </html>

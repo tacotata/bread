@@ -5,10 +5,15 @@ import com.example.helloproject.config.auth.dto.SessionUser;
 import com.example.helloproject.data.dto.news.NewsResponseDto;
 import com.example.helloproject.data.dto.news.NewsSaveRequestDto;
 import com.example.helloproject.data.dto.news.NewsUpdateRequestDto;
+import com.example.helloproject.data.dto.store.StoreResponseDto;
+import com.example.helloproject.data.dto.store.StoreSaveRequestDto;
+import com.example.helloproject.data.dto.store.StoreUpdateRequestDto;
+import com.example.helloproject.service.StoreService;
 import com.example.helloproject.service.UploadService;
 import com.example.helloproject.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +29,7 @@ public class AdminController {
 
     private final NewsService newsService;
     private final UploadService uploadService;
+    private final StoreService storeService;
 
     @PostMapping("/api/v1/news")
     @ResponseBody
@@ -31,6 +37,7 @@ public class AdminController {
         log.info("===============NEWS SAVE START ====================");
         String type = String.valueOf(requestDto.getType());
         Long id =0L;
+        Long fileId =0L;
         int fileCnt = files.size();
         try {
             if(type.isEmpty() || requestDto.getSubject().isEmpty() || (requestDto.getContents().isEmpty() && files.get(0).isEmpty()) ){
@@ -49,7 +56,8 @@ public class AdminController {
                         log.info("ContentType : {} ", files.get(i).getContentType());
                         log.info("===================================");
                     }
-                    if (uploadService.saveFile(files, id, type)) {
+                    fileId = uploadService.saveFiles(files, id, type);
+                    if (fileId > 0) {
                         // news_file table insert
                         log.info("NEWS_FILE TABLE INSERT SUCCESS");
                         //news table  fileCnt update
@@ -124,11 +132,13 @@ public class AdminController {
     public Long update(@PathVariable Long id , @RequestPart(value = "file", required = false) List<MultipartFile> files, @RequestPart(value = "key") NewsUpdateRequestDto requestDto) {
         log.info("=============== news update START ====================");
         String type = String.valueOf(requestDto.getType());
+        Long fileId = 0L;
         try{
             if (!files.get(0).isEmpty()) {
                 log.info("FILE SIZE: {}", files.size());
                 // news_file table insert
-                if (uploadService.saveFile(files, id, type)) {
+                fileId = uploadService.saveFiles(files, id, type);
+                if (fileId >0) {
                     log.info("NEWS_FILE TABLE INSERT SUCCESS");
                 }
             }
@@ -160,7 +170,7 @@ public class AdminController {
     }
 
 
-    @RequestMapping(value = "/store/registration", method = RequestMethod.GET)
+    @GetMapping("/store/registration")
     public String adminStoreRegi(Model model, @LoginUser SessionUser user) {
         if(user !=null){
             model.addAttribute("userName", user.getName());
@@ -169,13 +179,85 @@ public class AdminController {
         return "/admin/store/registration";
     }
 
+    @PostMapping("/api/v1/store")
+    @ResponseBody
+    public Long StoreSave(@RequestPart(value = "file", required = false) List<MultipartFile> files, @RequestPart(value = "key") StoreSaveRequestDto requestDto) throws IOException {
+        log.info("===============STORE SAVE START ====================");
+        String type= "store";
+        Long id = 0L;
+       // Long fileId=0L;
+        try {
+            id = storeService.save(requestDto);
+            log.info("INSERT STORE TABLE ID : {} ", id);
+                if (id != 0 && !files.get(0).isEmpty()) {
+                    log.info(" files.size() {}", files.size());
+                    for (int i = 0; i < files.size(); i++) {
+                        log.info("===================================");
+                        log.info("OriginalFilename : {} ", files.get(i).getOriginalFilename());
+                        log.info("Size : {} ", files.get(i).getSize());
+                        log.info("ContentType : {} ", files.get(i).getContentType());
+                        log.info("===================================");
+                    }
+                    Long fileId = uploadService.saveFiles(files, id, type);
+                    if (fileId > 0) {
+                        log.info("STORE_FILE TABLE INSERT ID : {}", fileId);
+                    }
+                }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        log.info("===============STORE SAVE END ====================");
+        return id;
+    }
 
-    @RequestMapping(value = "/store/modify", method = RequestMethod.GET)
-    public String adminStoreModify(Model model, @LoginUser SessionUser user) {
-        if(user !=null){
-            model.addAttribute("userName", user.getName());
-            model.addAttribute("role", user.getRole());
+    @GetMapping("/store/modify/{id}")
+    public String adminStoreModify(@PathVariable Long id, @RequestParam(value = "page", required=false) int page, Model model, @LoginUser SessionUser user ) {
+        try {
+            if(user !=null){
+                model.addAttribute("userName", user.getName());
+                model.addAttribute("role", user.getRole());
+            }
+            StoreResponseDto store = storeService.findById(id);
+            model.addAttribute("file", uploadService.findByStoreId(id));
+            model.addAttribute("store", store);
+            model.addAttribute("page", page);
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return "/admin/store/modify";
+    }
+
+    //store , storeFile 수정
+    @PutMapping("/api/v1/store/{id}/{fileId}")
+    @ResponseBody
+    public Long storeUpdate(@PathVariable Long id ,@PathVariable Long fileId, @RequestPart(value = "file", required = false) List<MultipartFile> files, @RequestPart(value = "key") StoreUpdateRequestDto requestDto) {
+        log.info("=============== STORE UPDATE START ====================");
+        try{
+            String type = "store";
+            Long savedFileId;
+            if (!files.get(0).isEmpty()) {
+                // 기존 파일 삭제하고
+                uploadService.storeFileDelete(fileId);
+                //새로운 파일 저장
+                savedFileId = uploadService.saveFiles(files, id, type);
+                if (savedFileId > 0) {
+                    log.info("STORE_FILE TABLE INSERT ID : {} ", savedFileId);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        log.info("=============== STORE UPDATE END ====================");
+        return storeService.update(id, requestDto);
+    }
+
+    //store 숨김으로 변경
+    @PutMapping("/store/api/v1/{id}")
+    @ResponseBody
+    public Long storeHide(@PathVariable Long id, @RequestBody StoreUpdateRequestDto requestDto) {
+        log.info("=============== STORE HIDE START ====================");
+        log.info(String.valueOf(requestDto.isHide_yn()));
+        log.info("=============== STORE HIDE END ====================");
+        return storeService.update(id, requestDto);
     }
 }

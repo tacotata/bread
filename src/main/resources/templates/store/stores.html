@@ -10,7 +10,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="author" content="Untree.co">
-  <link rel="shortcut icon" href="favicon.png">
+ <!-- <link rel="shortcut icon" href="favicon.png">-->
 
   <meta name="description" content="" />
   <meta name="keywords" content="free template, bootstrap, bootstrap4" />
@@ -58,87 +58,60 @@
       <div class="filters" data-aos="fade-up" data-aos-delay="100">
         <ul>
         </ul>
+        <form th:action="@{/stores}">
         <ul  style="padding:16px;">
           <li class ="search-menu_wrap">
-            <input id="search" class="search-menu" spellcheck="false" type="text" >
+            <input id="search" class="search-menu" name="search" spellcheck="false" type="text" >
             <label for="search"></label>
             <button type="submit">검색</button>
           </li>
         </ul>
+        </form>
       </div>
 
 
-      <div class="row mb-5">
-        <div class="col-md-6 mb-5 mb-lg-5 col-lg-4">
+      <div class="row mb-5" >
+        <div class="col-md-6 mb-5 mb-lg-5 col-lg-4" th:each = "store:${store}" th:if="${#strings.equals(store.hide_yn, 'false')}">
           <div class="blog_entry">
-            <a th:href="@{/store-detail}"><img src="images/img_h_3-min.jpg" alt="Free Website Template by Untree.co" class="img-fluid"></a>
+            <input type="hidden" id="storeId" th:value="${store.id}">
+            <a th:href="@{/stores/{id}( id=${store.id}, page=${nowPage-1})}">
+                    <!--<img src="images/img_h_3-min.jpg" alt="Free Website Template by Untree.co" class="img-fluid">-->
             <div class="p-4 bg-white" style="text-align: center;">
-              <h3 class="font-pretend"><a th:href="@{/store-detail}">브레드 잠실</a></h3>
-              <span class="date font-pretend">서울 송파구 북촌로 6-3</span>
+              <h3 class="font-pretend" th:text="${store.name}"></h3>
+              <span class="date font-pretend" th:text="${store.address}">서울 송파구 북촌로 6-3</span>
             </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 mb-5 mb-lg-5 col-lg-4">
-          <div class="blog_entry">
-            <a th:href="@{/store-detail}"><img src="images/img_h_3-min.jpg" alt="Free Website Template by Untree.co" class="img-fluid"></a>
-            <div class="p-4 bg-white" style="text-align: center;">
-              <h3><a th:href="@{/store-detail}">브레드 잠실</a></h3>
-              <span class="date">서울 송파구 북촌로 6-3</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 mb-5 mb-lg-5 col-lg-4">
-          <div class="blog_entry">
-            <a th:href="@{/store-detail}"><img src="images/img_h_3-min.jpg" alt="Free Website Template by Untree.co" class="img-fluid"></a>
-            <div class="p-4 bg-white" style="text-align: center;">
-              <h3><a th:href="@{/store-detail}">브레드 잠실</a></h3>
-              <span class="date">서울 송파구 북촌로 6-3</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 mb-5 mb-lg-5 col-lg-4">
-          <div class="blog_entry">
-            <a th:href="@{/store-detail}"><img src="images/img_h_3-min.jpg" alt="Free Website Template by Untree.co" class="img-fluid"></a>
-            <div class="p-4 bg-white" style="text-align: center;">
-              <h3><a th:href="@{/store-detail}">브레드 잠실</a></h3>
-              <span class="date">서울 송파구 북촌로 6-3</span>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="col-md-6 mb-5 mb-lg-5 col-lg-4">
-          <div class="blog_entry">
-            <a th:href="@{/store-detail}"><img src="images/img_h_3-min.jpg" alt="Free Website Template by Untree.co" class="img-fluid"></a>
-            <div class="p-4 bg-white" style="text-align: center;">
-              <h3><a th:href="@{/store-detail}">브레드 잠실</a></h3>
-              <span class="date">서울 송파구 북촌로 6-3</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 mb-5 mb-lg-5 col-lg-4">
-          <div class="blog_entry">
-            <a th:href="@{/store-detail}"><img src="images/img_h_3-min.jpg" alt="Free Website Template by Untree.co" class="img-fluid"></a>
-            <div class="p-4 bg-white" style="text-align: center;">
-              <h3><a th:href="@{/store-detail}">브레드 잠실</a></h3>
-              <span class="date">서울 송파구 북촌로 6-3</span>
-            </div>
+            </a>
           </div>
         </div>
       </div>
 
       <div class="row">
         <div class="col-lg-12 text-center">
-          <ul class="list-unstyled custom-pagination">
-            <li><a href="#">1</a></li>
-            <li class="active"><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
+          <ul class="list-unstyled custom-pagination" th:with="start=${(store.number/maxPage)*maxPage + 1}, end=(${(store.totalPages == 0) ? 1 : (start + (maxPage - 1) < store.totalPages ? start + (maxPage - 1) : store.totalPages)})">
+            <li th:if="${start > 1}">
+              <a th:href="@{/stores((page=0), search= ${param.search})}" th:text="'<<'"></a>
+            </li>
+
+            <li th:if="${start > 1}">
+              <a th:href="@{/stores(page=${start - maxPage-1}, search= ${param.search})}" th:text="'<'"></a>
+            </li>
+
+            <th:block th:each="page: ${#numbers.sequence(start, end)}">
+              <li>
+                <a th:text="${page}"  th:if="${page != nowPage}" th:href="@{/stores(page=${page - 1}, search= ${param.search})}"></a>
+              </li>
+              <li class="active">
+                <a th:if="${page==nowPage}" th:text ="${page}"></a>
+              </li>
+            </th:block>
+
+            <li th:if="${end < store.totalPages}">
+              <a th:href="@{/stores(page=${start + maxPage-1}, search= ${param.search})}" th:text="'>'"></a>
+            </li>
+
+            <li th:if="${end < store.totalPages}">
+              <a th:href="@{/stores(page=${news.totalPages - 1}, search= ${param.search})}" th:text="'>>'"></a>
+            </li>
           </ul>
         </div>
       </div>
