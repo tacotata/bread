@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().
                 loginPage("/member/login").defaultSuccessUrl("/", true).failureUrl("/member/login/error").usernameParameter("email").and().logout().logoutSuccessUrl("/").logoutRequestMatcher(new AntPathRequestMatcher("/member/logout")).and()
                 .authorizeRequests()
-                .antMatchers("/", "/static/**", "/css/**", "/images/**","/bootstrap.min.css","/animate.min.css","/aos.css","/owl.carousel.min.css","/owl.theme.default.min.css","/js/**", "/fonts/**","/scss/**","/member/login", "/member/new","/member/join", "/news/**", "/menu/**","/stores/**","/brand" ,"/member/login/error").permitAll()
+                .antMatchers("/", "/static/**", "/css/**", "/images/**","/bootstrap.min.css","/animate.min.css","/aos.css","/owl.carousel.min.css","/owl.theme.default.min.css","/js/**", "/fonts/**","/scss/**","/member/login", "/member/new","/member/join", "/news/**", "/items", "/item/**", "/stores/**","/brand" ,"/member/login/error", "/upload/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority(Role.ADMIN.name())
                 .antMatchers("/owner/**").hasAuthority(Role.OWNER.name())
                 .anyRequest().authenticated()

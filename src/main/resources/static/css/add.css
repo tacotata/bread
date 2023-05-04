@@ -453,3 +453,9 @@ color:#c2bebe;
     border-radius: 15px;
     font-size: 10px;
 }
+
+/*item-detail*/
+.btn.btn-item {
+    padding-left: 22px;
+    padding-right: 22px;
+}

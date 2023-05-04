@@ -62,50 +62,64 @@
 <div class="section-grey contact-wrap">
     <div class="container p-5">
         <div class="block">
-            <div class="row justify-content-center">
+                <div class="row justify-content-center">
                 <div class="col-md-12 col-lg-12 pb-4" data-aos="fade-up" data-aos-delay="200">
-                    <form>
+                    <form role="form" th:action="@{/admin/item/new}" method="post" enctype="multipart/form-data" th:object="${itemFormDto}" id="form">
+                   <!-- <input type="hidden" th:field="*{id}">-->
                         <div class="form-group">
-                            <label class="text-black" for="type">종류</label>
-                            <select class="form-control select" id="type" aria-label="Default select example">
-                                <option style="background:#E8E5DE;" selected>유형</option>
-                                <option value="1">도넛</option>
-                                <option value="2">케이크</option>
-                                <option value="3">베이커리</option>
+                            <label class="text-black" th:for="itemsType">종류</label>
+                            <select th:field="*{itemsType}" class="form-control select"  aria-label="Default select example">
+                               <!-- <option style="background:#E8E5DE;" selected>유형</option>-->
+                                <option th:value="DONUT">도넛</option>
+                                <option th:value="BAKERY">케이크</option>
+                                <option th:value="CAKE">베이커리</option>
                             </select>
                         </div>
+                        <input type="hidden" name="ItemsStatus" th:value="SELL">
                         <div class="form-group">
-                            <label class="text-black" for="menuName">이름</label>
-                            <input type="text" class="form-control" id="menuName">
+                            <label class="text-black" th:for="name">이름</label>
+                            <input type="text" th:field="*{name}" class="form-control">
+                            <small th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                                   class="form-text  fieldError"></small>
                         </div>
                         <div class="form-group">
-                            <label class="text-black" for="menuPrice">가격</label>
-                            <input type="text" class="form-control" id="menuPrice">
+                            <label class="text-black" th:for="price">가격</label>
+                            <input type="number" th:field="*{price}" class="form-control">
+                            <small th:if="${#fields.hasErrors('price')}" th:errors="*{price}"
+                                   class="form-text  fieldError"></small>
                         </div>
                         <div class="form-group">
-                            <label class="text-black" for="menuInfo">상품설명</label>
-                            <textarea name="" class="form-control" id="menuInfo" cols="30" rows="5"></textarea>
+                            <label class="text-black" th:for="info">상품설명</label>
+                            <textarea th:field="*{info}" class="form-control" cols="30" rows="5"></textarea>
+                            <small th:if="${#fields.hasErrors('info')}" th:errors="*{info}"
+                                   class="form-text  fieldError"></small>
                         </div>
 
                         <div class="form-group">
-                            <label class="text-black" for="menuAlergy">알레르기 유발 요인</label>
-                          <textarea name="" class="form-control" id="menuAlergy" cols="30" rows="5"></textarea>
+                            <label class="text-black" th:for="allergy">알레르기 유발 요인</label>
+                            <textarea th:field="*{allergy}" class="form-control" cols="30" rows="5"></textarea>
+                            <small th:if="${#fields.hasErrors('allergy')}" th:errors="*{allergy}"
+                                   class="form-text  fieldError"></small>
                         </div>
                         <div class="form-group">
-                            <label class="text-black" for="menuNutrition">원산지정보</label>
-                            <textarea name="" class="form-control" id="menuNutrition" cols="30" rows="5"></textarea>
+                            <label class="text-black" th:for="originInfo">원산지정보</label>
+                            <textarea th:field="*{originInfo}" class="form-control"  cols="30" rows="5"></textarea>
+                            <small th:if="${#fields.hasErrors('originInfo')}" th:errors="*{originInfo}"
+                                   class="form-text  fieldError"></small>
                         </div>
                         <div style="margin-bottom: 0.5rem;">첨부사진</div>
-                        <div class="form-group file-upload-wrap">
-                            <div id="fileName"></div>
-                            <div>
-                                <i class="far fa-plus-square btn-upload" id="btn-upload" aria-hidden="true"></i>
-                                <input id="input_file" multiple="multiple" type="file" style="display:none;"
-                                       onchange="printName('menu')" accept=".gif, .jpg, .png, .jpeg">
+                        <div th:if="${#lists.isEmpty(itemFormDto.itemFileSaveDtoList)}">
+                            <div class="form-group file-upload-wrap">
+                                <div id="fileName"></div>
+                                <div>
+                                    <i class="far fa-plus-square btn-upload" id="btn-upload" aria-hidden="true"></i>
+                                    <input id="input_file" name="itemImgFile"  type="file" style="display:none;"
+                                           onchange="printName('item')" accept=".gif, .jpg, .png, .jpeg">
+                                </div>
                             </div>
                         </div>
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button type="submit" class="btn btn-primary">등록</button>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end" >
+                            <button type="submit" th:formaction="@{/admin/item/new}" class="btn btn-primary">등록</button>
                         </div>
                     </form>
                 </div>
@@ -143,7 +157,16 @@
 <script src="https://kit.fontawesome.com/0b588c2a50.js" crossorigin="anonymous"></script>
 
 <script th:src="@{/js/custom.js}"></script>
-
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            var errorMessage = [[${errorMessage}]];
+            if(errorMessage != null){
+                alert(errorMessage);
+            }
+        });
+    </script>
+</th:block>
 
 </body>
 </html>

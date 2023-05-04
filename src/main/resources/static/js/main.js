@@ -38,6 +38,10 @@ function printName(type) {
                 ext=target.files[i].name.split('.').pop().toLowerCase();
                 alert(ext + "파일은 업로드 하실 수 없습니다.");
                 return;
+         }else if(type == "item" && $.inArray(target.files[i].name.split('.').pop().toLowerCase(), [ 'jpg' ,'jpeg', 'png', 'gif']) == -1){
+                ext=target.files[i].name.split('.').pop().toLowerCase();
+                alert(ext + "파일은 업로드 하실 수 없습니다.");
+                return;
          }else{
             fileList += target.files[i].name + '<br>';
             fileName.innerHTML = fileList;
@@ -421,3 +425,40 @@ var store = {
     };
 
 store.init();
+
+
+var item = {
+    init : function(){
+        var_this = this;
+        $('#items-btn-hide').on('click', function () {
+             if (confirm("아이템 상태를 변경하시겠습니까?")) {
+                    item.hide();
+             }
+        });
+    },
+   hide : function () {
+            var itemsId = $('#itemsId').val();
+            var itemsStatus = $('#itemsStatus').val();
+            itemsStatus == "SELL" ?  itemsStatus ="DISCON" : itemsStatus ="SELL"
+
+          var data = {
+             itemsId: itemsId,
+             itemsStatus: itemsStatus
+           }
+            console.log(itemsStatus)
+            $.ajax({
+                   type: 'PUT',
+                    url: '/admin/item/api/v1/'+data.itemsId+'?itemsStatus='+itemsStatus,
+                    dataType: 'json',
+                    contentType:'application/json; charset=utf-8',
+                    data: JSON.stringify(data)
+                }).done(function() {
+                    alert('아이템 상태가 수정되었습니다.');
+                    window.location.href = '/';
+                }).fail(function (error) {
+                    alert(JSON.stringify(error));
+                });
+            },
+        };
+
+item.init();

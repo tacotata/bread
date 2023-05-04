@@ -2,22 +2,27 @@ package com.example.helloproject.controller;
 
 import com.example.helloproject.config.auth.LoginUser;
 import com.example.helloproject.config.auth.dto.SessionUser;
+import com.example.helloproject.data.dto.item.ItemFormDto;
 import com.example.helloproject.data.dto.news.NewsResponseDto;
 import com.example.helloproject.data.dto.news.NewsSaveRequestDto;
 import com.example.helloproject.data.dto.news.NewsUpdateRequestDto;
 import com.example.helloproject.data.dto.store.StoreResponseDto;
 import com.example.helloproject.data.dto.store.StoreSaveRequestDto;
 import com.example.helloproject.data.dto.store.StoreUpdateRequestDto;
+import com.example.helloproject.service.ItemsService;
 import com.example.helloproject.service.StoreService;
 import com.example.helloproject.service.UploadService;
 import com.example.helloproject.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -30,6 +35,7 @@ public class AdminController {
     private final NewsService newsService;
     private final UploadService uploadService;
     private final StoreService storeService;
+    private final ItemsService itemsService;
 
     @PostMapping("/api/v1/news")
     @ResponseBody
@@ -83,13 +89,13 @@ public class AdminController {
         return id;
     }
 
-    @GetMapping("/news/registration")
+    @GetMapping("/news/new")
     public String adminNewsRegi(Model model, @LoginUser SessionUser user) {
         if(user !=null){
             model.addAttribute("userName", user.getName());
             model.addAttribute("role", user.getRole());
         }
-        return "/admin/news/registration";
+        return "/admin/news/new";
     }
 
     @GetMapping("/news/modify/{id}")
@@ -150,33 +156,108 @@ public class AdminController {
     }
 
 
-    @RequestMapping(value = "/menu/registration", method = RequestMethod.GET)
-    public String adminMenuRegi(Model model, @LoginUser SessionUser user) {
+    @GetMapping("/item/new")
+    public String adminItemRegi(Model model, @LoginUser SessionUser user) {
+
         if(user !=null){
             model.addAttribute("userName", user.getName());
             model.addAttribute("role", user.getRole());
         }
-        return "/admin/menu/registration";
+        model.addAttribute("itemFormDto", new ItemFormDto());
+        return "/admin/item/new";
+    }
+
+    @PostMapping("/item/new")
+    public String itemNew(@Valid  @ModelAttribute("itemFormDto") ItemFormDto itemFormDto, BindingResult bindingResult, @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList  ,Model model, @LoginUser SessionUser user) {
+
+        if(bindingResult.hasErrors()){
+            log.info("bindingResult.hasErrors()");
+            return "/admin/item/new";
+        }
+
+        if(itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null){
+            model.addAttribute("errorMessage", "이미지는 필수 입력 값 입니다.");
+            return "/admin/item/new";
+        }
+
+        try{
+            String type = "item";
+            itemsService.saveItem(type, itemFormDto, itemImgFileList);
+
+        }catch(Exception e){
+            log.info(e.getMessage());
+            model.addAttribute("errorMessage", "상품 등록 중 에러가 발생했습니다..");
+            return "/admin/item/new";
+        }
+        return "redirect:/";
     }
 
 
-    @RequestMapping(value = "/menu/modify", method = RequestMethod.GET)
-    public String adminMenuModify(Model model, @LoginUser SessionUser user) {
+    @GetMapping("/item/modify/{itemsId}")
+    public String adminItemModify(@PathVariable Long itemsId, Model model, @LoginUser SessionUser user) {
+
         if(user !=null){
             model.addAttribute("userName", user.getName());
             model.addAttribute("role", user.getRole());
         }
-        return "/admin/menu/modify";
+        //model.addAttribute("page", page);// 0부터 시작
+        try{
+            ItemFormDto itemFormDto = itemsService.getItemDetail(itemsId);
+           log.info("itemFormDto.getItemsFileResponseDtoList().size() {}", itemFormDto.getItemsFileResponseDtoList().size());
+            //  log.info("getItemFileSaveDtoList{}", itemFormDto.getItemFileSaveDtoList().get(0));
+            model.addAttribute("itemFormDto", itemFormDto);
+        }catch(EntityNotFoundException  e){
+            log.info(e.getMessage());
+            model.addAttribute("errorMessage", new ItemFormDto());
+            return  "/admin/item/modify";
+        }
+        return "/admin/item/modify";
     }
 
 
-    @GetMapping("/store/registration")
+    @PostMapping("/item/modify/{itemsId}")
+    public String updateItem( @PathVariable Long itemsId,@Valid  @ModelAttribute("itemFormDto") ItemFormDto itemFormDto, BindingResult bindingResult, @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList  ,Model model, @LoginUser SessionUser user) {
+
+        if(bindingResult.hasErrors()){
+            log.info("bindingResult.hasErrors()");
+            return "/admin/item/modify";
+        }
+
+        if(itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null){
+            model.addAttribute("errorMessage", "이미지는 필수 입력 값 입니다.");
+            return "/admin/item/modify";
+        }
+
+        try{
+            String type = "item";
+            itemsService.updateItem(itemFormDto, itemImgFileList, type);
+
+        }catch(Exception e){
+            log.info(e.getMessage());
+            model.addAttribute("errorMessage", "상품 수정 중 에러가 발생했습니다..");
+            return "/admin/item/modify";
+        }
+        return "redirect:/";
+    }
+
+    //item 상태 변경 변경
+    @PutMapping("/item/api/v1/{itemsId}")
+    @ResponseBody
+    public Long updateItemStatus(@PathVariable Long itemsId, @RequestParam(value = "itemsStatus", required=false) String itemsStatus) {
+        log.info("=============== ITEM STATUS CHANGE START ====================");
+        log.info("ITEM ID : {}, NOW ITEM STATUS : {}", itemsId , itemsStatus);
+        log.info("=============== ITEM STATUS CHANGE END ====================");
+        return itemsService.updateItemStatus(itemsId, itemsStatus);
+    }
+
+
+    @GetMapping("/store/new")
     public String adminStoreRegi(Model model, @LoginUser SessionUser user) {
         if(user !=null){
             model.addAttribute("userName", user.getName());
             model.addAttribute("role", user.getRole());
         }
-        return "/admin/store/registration";
+        return "/admin/store/new";
     }
 
     @PostMapping("/api/v1/store")

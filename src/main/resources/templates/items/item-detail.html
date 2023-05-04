@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Untree.co">
-    <link rel="shortcut icon" href="favicon.png">
+   <!-- <link rel="shortcut icon" href="favicon.png">-->
 
     <meta name="description" content=""/>
     <meta name="keywords" content="free template, bootstrap, bootstrap4"/>
@@ -65,17 +65,21 @@
         <div class="row justify-content-around align-items-center">
             <div class="col-lg-6">
                 <div class="image-stack-v2 itemImg">
-                    <div class="image-stack__item image-stack__item--bottom">
-                        <img src="images/best-1.png" alt="Image" class="img-fluid">
+                    <div class="image-stack__item image-stack__item--bottom" th:each="itemFile : ${item.itemsFileResponseDtoList}">
+                       <img th:if="${not #strings.isEmpty(itemFile.filePath)}" th:src="|/upload/item/${#temporals.format(itemFile.regDate, 'yyyyMMdd')}/${itemFile.fileName}|" alt="Image" class="img-fluid">
                     </div>
                 </div>
             </div>
             <div class="col-lg-4 menu-detail-info-top">
-                <h2 class="mb-4 font-weight-bold">클래식 도넛</h2>
+                <input type="hidden" id="itemsId" th:value="${item.id}">
+                <input type="hidden" id="itemsStatus" th:value="${item.itemsStatus}">
+                <h2 class="mb-4 font-weight-bold">[[${item.name}]]</h2>
                 <div class="line my-3"></div>
-                <p>18,000</p>
-                <p>Bread. 클래식 도넛</p>
+                <p th:text="${#numbers.formatInteger(item.price, 0, 'COMMA') + ' 원'}">18,000</p>
+                <p>[[${item.info}]]</p>
             </div>
+
+
         </div>
     </div>
 </div>
@@ -92,7 +96,7 @@
                     </h2>
                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion_1">
                         <div class="accordion-body">
-                            <p>밀, 우유, 대두, 계란 함유</p>
+                            <p>[[${item.allergy}]]</p>
                         </div>
                     </div>
                 </div> <!-- .accordion-item -->
@@ -105,14 +109,29 @@
                     </h2>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion_1">
                         <div class="accordion-body">
-                            <p>빵류[곡류가공품{밀가루(밀:미국, 캐나다산)}, 전란액(국내산), 버터(덴마크산)], 가공유크림Ⅰ(독일산), 가공유크림Ⅱ(네덜란드산)</p>
+                            <p>[[${item.originInfo}]]</p>
                         </div>
                     </div>
                 </div> <!-- .accordion-item -->
             </div>
+
+            <div class="d-flex justify-content-end" >
+                <div class="d-grid gap-2 d-md-flex justify-content-md-left mt-5 mr-2">
+                    <button type="button" class="btn btn-primary wd-300-btn  btn-item" id="items-btn-hide">삭제</button>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-left mt-5 mr-2">
+                    <button type="button" class="btn btn-primary wd-300-btn btn-item"  th:onclick="|location.href='@{/admin/item/modify/{itemsId}(itemsId=${item?.id})}'|">수정</button>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-left mt-5">
+                    <button type="button" class="btn btn-primary wd-300-btn  btn-item"  th:onclick="|location.href='@{/items(page=${page})}'|">목록</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 
 
 <th:block th:replace="/include/footer :: footerFragment"></th:block>
@@ -142,6 +161,7 @@
 
 
 <script th:src="@{/js/custom.js}"></script>
+<script th:src="@{/js/main.js}"></script>
 
 </body>
 </html>

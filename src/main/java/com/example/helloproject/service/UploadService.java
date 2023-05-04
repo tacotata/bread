@@ -1,12 +1,16 @@
 
 package com.example.helloproject.service;
 
+import com.example.helloproject.data.dto.item.ItemFileSaveDto;
 import com.example.helloproject.data.dto.news.NewsFileResponseDto;
 import com.example.helloproject.data.dto.news.NewsFileSaveDto;
 import com.example.helloproject.data.dto.store.StoreFileResponseDto;
 import com.example.helloproject.data.dto.store.StoreFileSaveDto;
+import com.example.helloproject.data.entity.menu.Items;
+import com.example.helloproject.data.entity.menu.ItemsFile;
 import com.example.helloproject.data.entity.news.NewsFile;
 import com.example.helloproject.data.entity.store.StoreFile;
+import com.example.helloproject.data.repository.items.ItemsFileRepository;
 import com.example.helloproject.data.repository.news.NewsFileRepository;
 import com.example.helloproject.data.repository.store.StoreFileRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +19,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityExistsException;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -34,6 +41,7 @@ public class UploadService {
 
     private final NewsFileRepository newsFileRepository;
     private final StoreFileRepository storeFileRepository;
+    private final ItemsFileRepository itemsFileRepository;
 
     //파일 저장
     public Long saveFiles(List<MultipartFile> multipartFiles, Long id, String type)  {
@@ -71,7 +79,16 @@ public class UploadService {
                                     .build();
                             fileId = insertStoreFile(storeFileSaveDto.toEntity());
 
-                        }else if("menu".equals(type)){
+                        }else if("item".equals(type)){
+                            ItemFileSaveDto itemFileSaveDto = ItemFileSaveDto.builder()
+                                    .items(Items.builder().id(id).build())
+                                    .fileName(savedFileName)
+                                    .oriFileName(oriFileName)
+                                    .filePath(savedFilePath)
+                                    .extension(extension)
+                                    .build();
+
+                            fileId = insertItemFile(itemFileSaveDto.toEntity());
 
                         }else{
                             NewsFileSaveDto newsFileSaveDto = NewsFileSaveDto.builder().newsId(id)
@@ -99,6 +116,67 @@ public class UploadService {
             e.printStackTrace();
         }
         return fileId;
+    }
+
+    //아이템 파일 업데이트
+    public void updateFile(Long id, MultipartFile multipartFile, String type) throws Exception{
+
+        if(!multipartFile.isEmpty()){
+            String localDateFormat
+                    = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+            ItemsFile savedItemsFile = itemsFileRepository.findById(id).orElseThrow(EntityExistsException::new);
+
+            if(!StringUtils.isEmpty(savedItemsFile.getOriFileName())){
+                this.deleteFile(savedItemsFile.getFilePath()+"/"+savedItemsFile.getFileName());
+            }
+
+            String oriFileName = multipartFile.getOriginalFilename();
+            String fileName = this.uploadFile(uploadDir, oriFileName, multipartFile.getBytes(), type);
+            String imgUrl = uploadDir + File.separator + type.toLowerCase() + File.separator + localDateFormat + File.separator;
+            String extension = fileName.substring(fileName.lastIndexOf("."));
+
+            log.info("ORI FILE NAME : {}", oriFileName);
+            savedItemsFile.updateItemFile(fileName, oriFileName, imgUrl, extension);
+
+        }
+    }
+
+    //아이템 파일 업로드
+    public String uploadFile(String uploadPath, String originalFileName, byte[] fileData, String type) throws Exception{
+
+        String localDateFormat
+                = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String localDateTimeFormat
+                = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+        String savedFileName = UUID.randomUUID() + "_" + localDateTimeFormat+extension;
+        String fileUploadFullUrl =  uploadDir + File.separator + type.toLowerCase() + File.separator + localDateFormat + File.separator;
+
+        File dir = new File(fileUploadFullUrl);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+        log.info("SAVED FILE NAME : {}", savedFileName);
+        log.info("FILE PATH : {}", fileUploadFullUrl);
+
+        FileOutputStream fos = new FileOutputStream(fileUploadFullUrl+savedFileName);
+        fos.write(fileData);
+        fos.close();
+
+        return savedFileName;
+    }
+
+    //아이템 파일 삭제
+    public void deleteFile(String filePath)throws Exception{
+
+        File deleteFile = new File(filePath);
+        if(deleteFile.exists()){
+            deleteFile.delete();
+            log.info("파일을 삭제했습니다.");
+        }else{
+            log.info("파일이 존재하지 않습니다.");
+        }
     }
 
     //news-file 테이블 insert
@@ -149,6 +227,12 @@ public class UploadService {
         StoreFile storeFile = storeFileRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 이미지가 없습니다. id=" + id));
         storeFileRepository.delete(storeFile);
+    }
+
+    //item_file insert
+    @Transactional
+    public Long insertItemFile(ItemsFile itemsFile) {
+        return itemsFileRepository.save(itemsFile).getId();
     }
 
 }

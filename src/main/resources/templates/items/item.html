@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Untree.co">
-    <link rel="shortcut icon" href="favicon.png">
+<!--    <link rel="shortcut icon" href="favicon.png">-->
 
     <meta name="description" content=""/>
     <meta name="keywords" content="free template, bootstrap, bootstrap4"/>
@@ -30,7 +30,6 @@
     <link rel="stylesheet" th:href="@{/aos.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/add.css}">
-
     <title>Bread.</title>
 </head>
 <body>
@@ -40,8 +39,6 @@
     </div>
 </div>
 <!-- END lines -->
-
-
 <th:block th:replace="/include/header :: headerFragment"></th:block>
 <th:block th:replace="/include/nav :: navFragment"></th:block>
 
@@ -59,61 +56,75 @@
     </div>
 </div>
 
+<div class="site-section" id="portfolio-section">
+    <div class="container search">
+        <div class="filters" data-aos="fade-up" data-aos-delay="100">
+            <ul>
+                <li class="active" data-filter="*">All</li>
+                <li data-filter=".donut">Donut</li>
+                <li data-filter=".cake">Cake</li>
+                <li data-filter=".bakery">Bakery</li>
+            </ul>
+            <form th:action="@{/items}">
+                <ul style="padding:16px;">
+                    <li class="search-menu_wrap">
+                        <input id="search" class="search-menu" name="search" spellcheck="false" type="text">
+                        <label for="search"></label>
+                        <button style="" type="submit">검색</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
 
-<div class="section" style="padding: 0px 0px 0px 0px;">
-    <div class="container">
-        <div class="row justify-content-around align-items-center">
-            <div class="col-lg-6">
-                <div class="image-stack-v2 itemImg">
-                    <div class="image-stack__item image-stack__item--bottom">
-                        <img src="images/best-1.png" alt="Image" class="img-fluid">
+        <div class="filters-content mb-5" data-aos="fade-up" data-aos-delay="200">
+            <div class="row grid">
+                <th:block th:each = "items:${items}">
+                    <div class="isotope-card col-sm-4 all "  th:classappend="${#strings.toLowerCase(items.itemsType)}" >
+                        <input type="hidden" th:value="${items.id}">
+                        <a th:href="@{/item/{itemsId}( itemsId=${items.id}, page=${nowPage-1})}">
+                            <img th:src="|/upload/item/${#temporals.format(items.regDate, 'yyyyMMdd')}/${items.fileName}|" alt="Image" class="img-fluid">
+                            <div class="contents">
+                                <h3>[[${items.name}]]</h3>
+                                <div class="cat" th:text="${#numbers.formatInteger(items.price, 0, 'COMMA')}"></div>
+                            </div>
+                        </a>
                     </div>
-                </div>
+                </th:block>
             </div>
-            <div class="col-lg-4 menu-detail-info-top">
-                <h2 class="mb-4 font-weight-bold">클래식 도넛</h2>
-                <div class="line my-3"></div>
-                <p>18,000</p>
-                <p>Bread. 클래식 도넛</p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <ul class="list-unstyled custom-pagination" th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
+                    <li th:if="${start > 1}">
+                        <a th:href="@{/items((page=0), search= ${param.search})}" th:text="'<<'"></a>
+                    </li>
+
+                    <li th:if="${start > 1}">
+                        <a th:href="@{/items(page=${start - maxPage-1}, search= ${param.search})}" th:text="'<'"></a>
+                    </li>
+
+                    <th:block th:each="page: ${#numbers.sequence(start, end)}">
+                        <li>
+                            <a th:text="${page}"  th:if="${page != nowPage}" th:href="@{/items(page=${page - 1}, search= ${param.search})}"></a>
+                        </li>
+                        <li class="active">
+                            <a th:if="${page==nowPage}" th:text ="${page}"></a>
+                        </li>
+                    </th:block>
+
+                    <li th:if="${end < items.totalPages}">
+                        <a th:href="@{/items(page=${start + maxPage-1}, search= ${param.search})}" th:text="'>'"></a>
+                    </li>
+
+                    <li th:if="${end < items.totalPages}">
+                        <a th:href="@{/items(page=${items.totalPages - 1}, search= ${param.search})}" th:text="'>>'"></a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 </div>
-
-<div class="container pb-5 mb-5 border-bottom">
-    <div class="row justify-content-around">
-        <div class="col-lg-11 col-lg-font">
-            <div class="custom-accordion" id="accordion_1">
-                <div class="accordion-item">
-                    <h2 class="mb-0">
-                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
-                                aria-expanded="true" aria-controls="collapseOne">알레르기 유발 요인
-                        </button>
-                    </h2>
-                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion_1">
-                        <div class="accordion-body">
-                            <p>밀, 우유, 대두, 계란 함유</p>
-                        </div>
-                    </div>
-                </div> <!-- .accordion-item -->
-
-                <div class="accordion-item">
-                    <h2 class="mb-0">
-                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                                data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">원산지정보
-                        </button>
-                    </h2>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion_1">
-                        <div class="accordion-body">
-                            <p>빵류[곡류가공품{밀가루(밀:미국, 캐나다산)}, 전란액(국내산), 버터(덴마크산)], 가공유크림Ⅰ(독일산), 가공유크림Ⅱ(네덜란드산)</p>
-                        </div>
-                    </div>
-                </div> <!-- .accordion-item -->
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <th:block th:replace="/include/footer :: footerFragment"></th:block>
 
