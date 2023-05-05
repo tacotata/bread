@@ -66,6 +66,15 @@
           <form  enctype="multipart/form-data" id="form" >
             <input type="hidden" id="storeId" th:value="${store.id}">
             <input type="hidden" id="storeFileId" th:value="${file.id}">
+
+            <div class="form-group">
+            <label class="text-black" for="hideYn">등록 유무</label>
+            <select class="form-control select" name="pickUptime" id="hideYn" aria-label="Default select example">
+              <option value="ture">보이기</option>
+              <option value="false">숨기기</option>
+            </select>
+        </div>
+
             <div class="form-group">
               <label class="text-black" for="name">매장 이름</label>
               <input type="text" class="form-control" id="name" th:value="${store.name}">
@@ -92,8 +101,13 @@
             </div>
 
             <div class="form-group">
+              <label class="text-black" for="pickUpTime">픽업시간</label>
+              <input type="text" class="form-control" id="pickUpTime" th:value="${store.pickUpTime}">
+            </div>
+
+            <div class="form-group">
               <label class="text-black" for="info">특이사항</label>
-              <input type="text" class="form-control" id="info" th:value="${store.info}">
+              <textarea  th:text="${store.info}" class="form-control"  id="info" cols="30" rows="5" maxlength="5000"></textarea>
             </div>
 
             <div style="margin-bottom: 0.5rem;">파일 업로드</div>

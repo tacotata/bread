@@ -81,6 +81,9 @@ function storeValidation() {
     }else if($('#lastOrder').val()==""){
           alert("lastOrder를 작성해주세요.");
           return false;
+    }else if($('#pickUpTime').val()==""){
+               alert("픽업시간을 작성해주세요.");
+               return false;
     }else{
         return true;
     }
@@ -338,7 +341,8 @@ var store = {
             address : $('#address').val(),
             hours : $('#hours').val(),
             lastOrder : $('#lastOrder').val(),
-            info : $('#info').val()
+            info : $('#info').val(),
+            pickUpTime : $('#pickUpTime').val()
         };
         var form =$('#form')[0];
         var formData = new FormData(form);
@@ -376,6 +380,7 @@ var store = {
                 hours : $('#hours').text(),
                 lastOrder : $('#lastOrder').text(),
                 info : $('#info').text(),
+                pickUpTime : $('#pickUpTime').text(),
                 hide_yn : 1
             }
             console.log(data)
@@ -396,12 +401,14 @@ var store = {
             var id =  $('#storeId').val()
             var fileId = $('#storeFileId').val()
             var data = {
+               hideYn : $("#hideYn option:selected").val(),
                name : $("#name").val(),
                tel : $('#tel').val(),
                address : $('#address').val(),
                hours : $('#hours').val(),
                lastOrder : $('#lastOrder').val(),
                info : $('#info').val(),
+               pickUpTime : $('#pickUpTime').val(),
             };
             var form =$('#form')[0];
             var formData = new FormData(form);

@@ -14,6 +14,7 @@ public class StoreResponseDto {
     private String info;
     private String lastOrder;
     private boolean hide_yn;
+    private String pickUpTime;
 
 
     public StoreResponseDto(Store entity){
@@ -25,6 +26,6 @@ public class StoreResponseDto {
         this.info = entity.getInfo();
         this.lastOrder = entity.getLastOrder();
         this.hide_yn = entity.isHide_yn();
-
+        this.pickUpTime = entity.getPickUpTime();
     }
 }

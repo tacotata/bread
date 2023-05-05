@@ -23,10 +23,11 @@ public class Store extends BaseEntity {
     private String info;
     private String lastOrder;
     private boolean hide_yn;
+    private String pickUpTime;
 
 
     @Builder
-    public Store(Long id, String name, String tel, String address, String hours, String info, String lastOrder, boolean hide_yn) {
+    public Store(Long id, String name, String tel, String address, String hours, String info, String lastOrder, boolean hide_yn, String pickUpTime) {
         this.id = id;
         this.name = name;
         this.tel = tel;
@@ -35,12 +36,12 @@ public class Store extends BaseEntity {
         this.info = info;
         this.lastOrder = lastOrder;
         this.hide_yn = hide_yn;
-
+        this.pickUpTime =pickUpTime;
     }
 
 
 
-    public void update(String name, String tel, String address, String hours, String info, String lastOrder, boolean hide_yn) {
+    public void update(String name, String tel, String address, String hours, String info, String lastOrder, boolean hide_yn, String pickUpTime) {
         this.name = name;
         this.tel = tel;
         this.address = address;
@@ -48,7 +49,6 @@ public class Store extends BaseEntity {
         this.info = info;
         this.lastOrder = lastOrder;
         this.hide_yn = hide_yn;
-
-
+        this.pickUpTime = pickUpTime;
     }
 }
