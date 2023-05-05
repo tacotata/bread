@@ -1,8 +1,11 @@
 package com.example.helloproject.data.entity;
 
 import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
@@ -11,6 +14,7 @@ import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
@@ -19,10 +23,13 @@ public class BaseEntity {
     @Column(updatable = false)
     private LocalDateTime regDate;
 
-    @LastModifiedBy
+    @LastModifiedDate
     private LocalDateTime updDate;
 
-//    public void setUpdDate(LocalDateTime updDate) {
-//        this.updDate = updDate;
-//    }
+    @CreatedBy
+    private Long regUser;
+
+    @LastModifiedBy
+    private Long updUser;
+
 }
