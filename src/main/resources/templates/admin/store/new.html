@@ -80,23 +80,76 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="text-black" for="hours">영업시간</label>
-                            <input type="text" class="form-control" id="hours" placeholder="10:00 ~ 20:00">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="text-black" for="lastOrder">Last order</label>
-                            <input type="text" class="form-control" id="lastOrder" placeholder="19:30">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="text-black" for="pickUpTime">픽업시간</label>
-                            <input type="text" class="form-control" id="pickUpTime" placeholder="12:00 ~ 19:00">
-                        </div>
-
-                        <div class="form-group">
                             <label class="text-black" for="info">특이사항</label>
                             <textarea  class="form-control"  id="info" cols="30" rows="5" maxlength="5000"></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="text-black" for="open">오픈시간</label>
+                                    <input type="time" class="form-control" id="open" >
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="text-black " for="close">마감시간</label>
+                                    <input type="time" class="form-control" id="close">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="text-black " for="lastOrder">Last order</label>
+                                    <input type="time" class="form-control" id="lastOrder">
+                                </div>
+                            </div>
+                        </div>
+<!--                        <div class="form-group">-->
+<!--                            <label class="text-black" for="startHour">영업시간</label>-->
+<!--                            <input type="time" class="form-control" id="startHour" placeholder="10:00 ~ 20:00">-->
+<!--                            ~-->
+<!--                          &lt;!&ndash;  <label class="text-black" for="hours">영업시간</label>&ndash;&gt;-->
+<!--                            <input type="time" class="form-control" id="endHour" placeholder="10:00 ~ 20:00">-->
+<!--                        </div>-->
+
+<!--                        <div class="form-group">-->
+<!--                            <label class="text-black" for="hours">영업시간</label>-->
+<!--                            <input type="time" class="form-control" id="hours" placeholder="10:00 ~ 20:00">-->
+<!--                        </div>-->
+
+<!--                        <div class="form-group">-->
+<!--                            <label class="text-black" for="lastOrder">Last order</label>-->
+<!--                            <input type="time" class="form-control" id="lastOrder" placeholder="19:30">-->
+<!--                        </div>-->
+
+<!--                        <div class="form-group">-->
+<!--                            <label class="text-black" for="pickUpTime">픽업시간</label>-->
+<!--                            <input type="time" class="form-control" id="pickUpTime" placeholder="12:00 ~ 19:00">-->
+<!--                        </div>-->
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="text-black" for="startPickupTime">픽업 오픈시간</label>
+                                    <input type="time" class="form-control"  id="startPickupTime" >
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="text-black " for="endPickupTime">픽업 마감시작</label>
+                                    <input type="time" class="form-control"id="endPickupTime">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="text-black " for="reserveNum">픽업시간당 예약팀</label>
+                                    <input type="number" class="form-control"id="reserveNum">
+                                    <small>* 픽업시간 30분단위로 가능한 예약팀</small>
+                                </div>
+                            </div>
                         </div>
 
                         <div style="margin-bottom: 0.5rem;">매장사진</div>
@@ -108,7 +161,9 @@
                                        onchange="printName('store')" accept=".jpg, .png, jpeg">
                             </div>
                         </div>
-                        <small class="form-text text-muted mb-3">등록 가능 확장자 : jpg, jpeg, png
+                        <small class="form-text txt-muted mb-3">
+                            파일은 20MB 이하 총 1개까지 업로드 가능합니다.<br>
+                            등록 가능 확장자 : jpg, jpeg, png
                         </small>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="button" class="btn btn-primary" id="storeSaveBtn">등록</button>

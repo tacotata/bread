@@ -91,25 +91,69 @@
             </div>
 
             <div class="form-group">
+                <label class="text-black" for="info">특이사항</label>
+                <textarea  th:text="${store.info}" class="form-control" id="info" cols="30" rows="5" maxlength="5000"></textarea>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="text-black" for="open">오픈시간</label>
+                        <input type="time" class="form-control" id="open" th:value="${store.open}">
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="text-black " for="close">마감시간</label>
+                        <input type="time" class="form-control" id="close" th:value="${store.close}">
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="text-black " for="lastOrder">Last order</label>
+                        <input type="time" class="form-control" id="lastOrder" th:value="${store.lastOrder}">
+                    </div>
+                </div>
+            </div>
+            <!--<div class="form-group">
               <label class="text-black" for="hours">영업시간</label>
               <input type="text" class="form-control" id="hours" th:value="${store.hours}">
-            </div>
+            </div>-->
 
-            <div class="form-group">
-              <label class="text-black" for="lastOrder">Last order</label>
-              <input type="text" class="form-control" id="lastOrder" th:value="${store.lastOrder}">
-            </div>
+<!--            <div class="form-group">-->
+<!--              <label class="text-black" for="lastOrder">Last order</label>-->
+<!--              <input type="text" class="form-control" id="lastOrder" th:value="${store.lastOrder}">-->
+<!--            </div>-->
 
-            <div class="form-group">
-              <label class="text-black" for="pickUpTime">픽업시간</label>
-              <input type="text" class="form-control" id="pickUpTime" th:value="${store.pickUpTime}">
-            </div>
+<!--            <div class="form-group">-->
+<!--              <label class="text-black" for="pickUpTime">픽업시간</label>-->
+<!--              <input type="text" class="form-control" id="pickUpTime" th:value="${store.pickUpTime}">-->
+<!--            </div>-->
+              <div class="row">
+                  <div class="col-md-4">
+                      <div class="form-group">
+                          <label class="text-black" for="startPickupTime">픽업 오픈시간</label>
+                          <input type="time" class="form-control"  id="startPickupTime" th:value="${store.startPickupTime}">
+                      </div>
+                  </div>
 
-            <div class="form-group">
-              <label class="text-black" for="info">특이사항</label>
-              <textarea  th:text="${store.info}" class="form-control"  id="info" cols="30" rows="5" maxlength="5000"></textarea>
-            </div>
+                  <div class="col-md-4">
+                      <div class="form-group">
+                          <label class="text-black " for="endPickupTime">픽업 마감시작</label>
+                          <input type="time" class="form-control"id="endPickupTime" th:value="${store.endPickupTime}">
+                      </div>
+                  </div>
 
+                  <div class="col-md-4">
+                      <div class="form-group">
+                          <label class="text-black " for="reserveNum">픽업시간당 예약팀</label>
+                          <input type="number" class="form-control"id="reserveNum" th:value="${store.reserveNum}">
+                          <small>* 픽업시간 30분단위로 가능한 예약팀</small>
+                      </div>
+                  </div>
+              </div>
             <div style="margin-bottom: 0.5rem;">파일 업로드</div>
             <div class="form-group file-upload-wrap">
               <div id="fileName"></div>
@@ -119,9 +163,10 @@
                        onchange="printName('store')" accept=".gif, .jpg, .png">
               </div>
             </div>
-
-            <small class="form-text text-muted mb-3">20MB 이하 총 1개 업로드 가능합니다.<br>등록 가능 확장자 : jpg, jpeg, png
-            </small>
+              <small class="form-text txt-muted mb-3">
+                  파일은 20MB 이하 총 1개까지 업로드 가능합니다.<br>
+                  등록 가능 확장자 : jpg, jpeg, png
+              </small>
             <div class="container mb-5 border-bottom d-flex justify-content-end login-form-wrap mypage-table-wrap">
               <div class="row justify-content-end pr-3 mr-2 ">
                 <button type="button" class="btn btn-primary bg-secondary border border-secondary store-modify-btn" th:onclick="|location.href='@{/stores/}'|">목록</button>

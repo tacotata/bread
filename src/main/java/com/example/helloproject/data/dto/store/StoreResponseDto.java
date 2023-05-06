@@ -10,11 +10,15 @@ public class StoreResponseDto {
     private String name;
     private String tel;
     private String address;
-    private String hours;
     private String info;
     private String lastOrder;
     private boolean hide_yn;
-    private String pickUpTime;
+    private String open;
+    private String close;
+    private String startPickupTime;
+    private String endPickupTime;
+    private int reserveNum;
+
 
 
     public StoreResponseDto(Store entity){
@@ -22,10 +26,13 @@ public class StoreResponseDto {
         this.name = entity.getName();
         this.tel = entity.getTel();
         this.address = entity.getAddress();
-        this.hours = entity.getHours();
         this.info = entity.getInfo();
         this.lastOrder = entity.getLastOrder();
         this.hide_yn = entity.isHide_yn();
-        this.pickUpTime = entity.getPickUpTime();
+        this.open = entity.getOpen();
+        this.close = entity.getClose();
+        this.startPickupTime = entity.getStartPickupTime();
+        this.endPickupTime = entity.getEndPickupTime();
+        this.reserveNum = entity.getReserveNum();
     }
 }

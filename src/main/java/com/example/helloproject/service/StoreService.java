@@ -27,7 +27,7 @@ public class StoreService {
     @Transactional
     public Long update(Long id, StoreUpdateRequestDto requestDto){
         Store store = storeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-        store.update(requestDto.getName(), requestDto.getTel(), requestDto.getAddress(), requestDto.getHours(), requestDto.getInfo(), requestDto.getLastOrder(), requestDto.isHide_yn(), requestDto.getPickUpTime());
+        store.update(requestDto.getName(), requestDto.getTel(), requestDto.getAddress(), requestDto.getInfo(), requestDto.getLastOrder(), requestDto.isHide_yn(), requestDto.getOpen(), requestDto.getClose(), requestDto.getStartPickupTime(), requestDto.getEndPickupTime(),requestDto.getReserveNum() );
         return id;
     }
 

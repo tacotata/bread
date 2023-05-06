@@ -85,9 +85,12 @@
         <p id="address" th:text ="${store.address}"><span class="pl-2" ><a class="text-secondary">[ 지도보기 ]</a></span></p>
         </div>
         <div class="mb-4">
-          <p> <span class="text-secondary">픽업시간</span> <span id="pickUpTime" th:text ="${store.pickUpTime}"> 20:30</span></p>
-          <p> <span class="text-secondary">영업시간</span> <span id="hours" th:text ="${store.hours}"> 09:00 ~ 21:00</span></p>
-          <p> <span class="text-secondary">Last order</span> <span id="lastOrder" th:text ="${store.lastOrder}"> 20:30</span></p>
+          <p> <span class="text-secondary">영업시간</span> <span id="open" th:text ="${store.open}"></span> ~ <span  id="close" th:text ="${store.close}"></span></p>
+          <p> <span class="text-secondary">Last order</span> <span id="lastOrder" th:text ="${store.lastOrder}"></span></p>
+          <p> <span class="text-secondary">픽업시간</span> <span id="startPickupTime" th:text ="${store.startPickupTime}"></span> ~ <span  id="endPickupTime" th:text ="${store.endPickupTime}"></span></p>
+
+<!--          <p> <span class="text-secondary">영업시간</span> <span id="hours" th:text ="${store.hours}"> 09:00 ~ 21:00</span></p>-->
+
         </div>
         <th:block th:if="${store.info != null}">
         <div class="mb-5">

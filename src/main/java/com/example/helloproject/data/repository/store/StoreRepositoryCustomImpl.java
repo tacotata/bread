@@ -1,5 +1,6 @@
 package com.example.helloproject.data.repository.store;
 
+import com.example.helloproject.data.entity.menu.ItemsStatus;
 import com.example.helloproject.data.entity.news.News;
 import com.example.helloproject.data.entity.news.NewsType;
 import com.example.helloproject.data.entity.news.QNews;
@@ -33,6 +34,7 @@ public class StoreRepositoryCustomImpl implements StoreRepositoryCustom {
         QStore store = QStore.store;
         List<Store> results = queryFactory
                 .selectFrom(store)
+                .where(store.hide_yn.eq(Boolean.valueOf("false")))
                 .where(eqAdrress(search))
                 .orderBy(store.id.desc())
                 .offset(pageable.getOffset())
@@ -42,6 +44,7 @@ public class StoreRepositoryCustomImpl implements StoreRepositoryCustom {
         JPAQuery<Long> countQuery = queryFactory
                 .select(store.count())
                 .from(store)
+                .where(store.hide_yn.eq(Boolean.valueOf("false")))
                 .where(eqAdrress(search))
                 .orderBy(store.id.desc());
         return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);

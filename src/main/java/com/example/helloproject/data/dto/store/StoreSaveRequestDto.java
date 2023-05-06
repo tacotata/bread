@@ -13,27 +13,33 @@ public class StoreSaveRequestDto {
     private String name;
     private String tel;
     private String address;
-    private String hours;
     private String info;
     private String lastOrder;
     private boolean hide_yn;
-    private String pickUpTime;
+    private String open;
+    private String close;
+    private String startPickupTime;
+    private String endPickupTime;
+    private int reserveNum;
 
 
     @Builder
-    public StoreSaveRequestDto( String name, String tel, String address, String hours, String info, String lastOrder, boolean hide_yn, String pickUpTime) {
+    public StoreSaveRequestDto( String name, String tel, String address, String info, String lastOrder, boolean hide_yn, String open, String close, String startPickupTime, String endPickupTime, int reserveNum) {
         this.name = name;
         this.tel = tel;
         this.address = address;
-        this.hours = hours;
         this.info = info;
         this.lastOrder = lastOrder;
         this.hide_yn = hide_yn;
-        this.pickUpTime = pickUpTime;
+        this.open = open;
+        this.close = close;
+        this.startPickupTime = startPickupTime;
+        this.endPickupTime = endPickupTime;
+        this.reserveNum = reserveNum;
     }
 
     public Store toEntity(){
-        return Store.builder().name(name).tel(tel).address(address).hours(hours).info(info).lastOrder(lastOrder).hide_yn(hide_yn).pickUpTime(pickUpTime).build();
+        return Store.builder().name(name).tel(tel).address(address).info(info).lastOrder(lastOrder).hide_yn(hide_yn).open(open).close(close).startPickupTime(startPickupTime).endPickupTime(endPickupTime).reserveNum(reserveNum).build();
     }
 }
 
