@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Untree.co">
-    <link rel="shortcut icon" href="favicon.png">
+<!--    <link rel="shortcut icon" href="favicon.png">-->
 
     <meta name="description" content=""/>
     <meta name="keywords" content="free template, bootstrap, bootstrap4"/>
@@ -57,43 +57,59 @@
     </div>
 </div>
 
+<!--모달-->
+<div class="cartItemModal font-pretend" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"  style="display:none">
+    <div class="modal-dialog">
+        <div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLiveLabel">알림</h5>
+                </div>
+                <div class="modal-body">
+                 해당상품이 장바구니에 담겼습니다.
+                </div>
+                <div class="modal-footer">
+                    <a  class="btn btn-secondary text-white"  th:onclick="|location.href='@{/order/menu-pick/{cartId}(cartId=${cartId})}'|">닫기</a>
+                    <a  class="btn btn-primary text-white" th:onclick="|location.href='@{/order/cart/{cartId}(cartId=${cartId})}'|">장바구니 가기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="section" style="padding: 0px 0px 0px 0px;">
     <div class="container">
         <div class="row justify-content-around align-items-center menu-pick-detail-mid-wrap">
             <div class="col-lg-6">
                 <div class="image-stack-v2 itemImg">
-                    <div class="image-stack__item ">
-                        <div data-jarallax-element="-100" class="jarallax"
-                             style="position: relative; z-index: 0; transform: translate3d(0px, -31.0769px, 0px);">
-                            <div id="jarallax-container-1"
-                                 style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; z-index: -100;">
-                                <div style="pointer-events: none; transform-style: preserve-3d; backface-visibility: hidden; will-change: transform, opacity; position: fixed;"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="image-stack__item image-stack__item--bottom">
-                        <img src="/images/best-1.png" alt="Image" class="img-fluid">
+                    <div class="image-stack__item image-stack__item--bottom" th:each="itemFile : ${item.itemsFileResponseDtoList}">
+                        <img th:if="${not #strings.isEmpty(itemFile.filePath)}" th:src="|/upload/item/${#temporals.format(itemFile.regDate, 'yyyyMMdd')}/${itemFile.fileName}|" alt="Image" class="img-fluid">
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <h2 class="mb-4 mt-3 font-weight-bold" style="font-family: 'Pretendard';">클래식 도넛</h2>
+            <div class="col-lg-4 menu-detail-info-top">
+
+                <input type="hidden" id="itemsId" name="itemId" th:value="${item.id}">
+                <input type="hidden" id="cartId" name="cartId" th:value="${cartId}">
+                <input type="hidden" id="page" name="page" th:value="${page}">
+                <h2 class="mb-4 mt-3 font-weight-bold" style="font-family: 'Pretendard';">[[${item.name}]]</h2>
                 <div class="line my-3"></div>
-                <p>Bread. 클래식 도넛</p>
-                <div class="mb-5 d-flex flex-row justify-content-between">
+                <p>[[${item.info}]]</p>
+                <div class=" d-flex flex-row justify-content-between">
                     <div class="number-input-wrap">
-                        <button type="button" class="btn bg-transparent menu-cnt-btn">-</button>
-                        <input class="text-center border-0 p-0  bg-transparent" type="text" readonly min="1" value="1">
-                        <button type="button" class="btn bg-transparent menu-cnt-btn">+</button>
+                        <button type="button" class="btn bg-transparent menu-cnt-btn" id="minusBtn">-</button>
+                        <input class="text-center border-0 p-0  bg-transparent" id="count" name="count" type="text" readonly min="1" value="1">
+                        <button type="button" class="btn bg-transparent menu-cnt-btn" id="plusBtn">+</button>
                     </div>
                     <div class="menu-pick-price-wrap">
-                        <span>3,500</span>
+                        <span th:text="${#numbers.formatInteger(item.price, 0, 'COMMA') + ' 원'}">3,500</span>
                     </div>
                 </div>
-                <div class="text-center mb-2">
-                    <button type="submit" class="btn btn-primary wd-280-btn">주문하기</button>
+                    <small>* 최대 10개까지 구매가능합니다.</small>
+                <div class="text-center mb-2 mt-5">
+                    <button type="button" class="btn btn-primary wd-280-btn" id="menuPickDetailBtn">주문하기</button>
                 </div>
+
             </div>
         </div>
     </div>
@@ -112,7 +128,7 @@
 
                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion_1">
                         <div class="accordion-body">
-                            <p>밀, 우유, 대두, 계란 함유</p>
+                            <p>[[${item.allergy}]]</p>
                         </div>
                     </div>
                 </div> <!-- .accordion-item -->
@@ -125,7 +141,7 @@
                     </h2>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion_1">
                         <div class="accordion-body">
-                            <p>빵류[곡류가공품{밀가루(밀:미국, 캐나다산)}, 전란액(국내산), 버터(덴마크산)], 가공유크림Ⅰ(독일산), 가공유크림Ⅱ(네덜란드산)</p>
+                            <p>[[${item.originInfo}]]</p>
                         </div>
                     </div>
                 </div> <!-- .accordion-item -->
@@ -162,6 +178,40 @@
 
 
 <script th:src="@{/js/custom.js}"></script>
+<script th:src="@{/js/main.js}"></script>
 
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+  var count =parseInt( $('#count').val());
+$(document).ready(function(){
+
+
+    $('#minusBtn').on('click', function () {
+        if( count > 1 ){
+            $('#count').val(count -= 1) ;
+        }
+    });
+
+    $('#plusBtn').on('click', function () {
+        console.log(count);
+        if( count < 10 ){
+            $('#count').val(count += 1) ;
+        }
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+</th:block>
 </body>
 </html>

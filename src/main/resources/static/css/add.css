@@ -246,7 +246,7 @@ a{
 .fc-header-toolbar > .fc-toolbar-chunk:nth-child(3)::before {
     font-size: 0.9em;
     font-family: 'Pretendard';
-    content: '* 예약은 최소 2일 전 ~ 최대 7일 전에만 가능합니다.';
+    content: '* 예약은 오늘로부터 최소 2일 ~ 최대 7일 후 까지만 가능합니다.';
 }
 
 

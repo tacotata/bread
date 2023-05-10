@@ -74,16 +74,6 @@ public class MemberController {
         return "/member/mypage";
     }
 
-    @GetMapping("/cart")
-    public String cart(Model model, @LoginUser SessionUser user){
-        if(user !=null){
-            model.addAttribute("userName", user.getName());
-            model.addAttribute("role", user.getRole());
-        }
-        return "/member/cart";
-    }
-
-
     @GetMapping("/modify-before")
     public String modifyBefore(Model model, @LoginUser SessionUser user){
         if(user !=null){

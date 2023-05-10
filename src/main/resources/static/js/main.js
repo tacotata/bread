@@ -58,9 +58,9 @@ function newsValidation() {
         return false;
     }else if($('#message').val()=="" && $('#input_file').val()==""){
         alert("내용, 첨부사진 중 하나는 입력되어야합니다.");
-         return false;
+        return false;
     }else{
-         return true;
+        return true;
     }
 }
 
@@ -75,17 +75,26 @@ function storeValidation() {
     }else if($('#address').val()=="" ){
         alert("주소를 작성해주세요.");
         return false;
-    }else if($('#hours').val()==""){
-         alert("영업시간을 작성해주세요.");
+    }else if($('#open').val()==""){
+         alert("오픈시간을 작성해주세요.");
          return false;
+    }else if($('#close').val()==""){
+         alert("마감시간을 작성해주세요.");
+         return false;
+    }else if($('#startPickupTime').val()==""){
+          alert("픽업 오픈시간을 작성해주세요.");
+          return false;
+    }else if($('#endPickupTime').val()==""){
+          alert("픽업 마감시간을 작성해주세요.");
+          return false;
+    }else if($('#reserveNum').val()==""){
+           alert("픽업시간당 예약팀 수를 작성해주세요.");
+           return false;
     }else if($('#lastOrder').val()==""){
           alert("lastOrder를 작성해주세요.");
           return false;
-    }else if($('#pickUpTime').val()==""){
-               alert("픽업시간을 작성해주세요.");
-               return false;
     }else{
-        return true;
+          return true;
     }
 }
 
@@ -339,10 +348,13 @@ var store = {
             name : $("#name").val(),
             tel : $('#tel').val(),
             address : $('#address').val(),
-            hours : $('#hours').val(),
             lastOrder : $('#lastOrder').val(),
             info : $('#info').val(),
-            pickUpTime : $('#pickUpTime').val()
+            open : $('#open').val(),
+            close : $('#close').val(),
+            startPickupTime : $('#startPickupTime').val(),
+            endPickupTime : $('#endPickupTime').val(),
+            reserveNum : $('#reserveNum').val()
         };
         var form =$('#form')[0];
         var formData = new FormData(form);
@@ -377,11 +389,14 @@ var store = {
                 name : $("#name").text(),
                 tel : $('#tel').text(),
                 address : $('#address').text(),
-                hours : $('#hours').text(),
                 lastOrder : $('#lastOrder').text(),
                 info : $('#info').text(),
-                pickUpTime : $('#pickUpTime').text(),
-                hide_yn : 1
+                hide_yn : 1,
+                open : $('#open').val(),
+                close : $('#close').val(),
+                startPickupTime : $('#startPickupTime').val(),
+                endPickupTime : $('#endPickupTime').val(),
+                reserveNum : $('#reserveNum').val()
             }
             console.log(data)
             $.ajax({
@@ -405,10 +420,14 @@ var store = {
                name : $("#name").val(),
                tel : $('#tel').val(),
                address : $('#address').val(),
-               hours : $('#hours').val(),
                lastOrder : $('#lastOrder').val(),
                info : $('#info').val(),
-               pickUpTime : $('#pickUpTime').val(),
+               open : $('#open').val(),
+               close : $('#close').val(),
+               startPickupTime : $('#startPickupTime').val(),
+               endPickupTime : $('#endPickupTime').val(),
+               reserveNum : $('#reserveNum').val()
+
             };
             var form =$('#form')[0];
             var formData = new FormData(form);
@@ -469,3 +488,98 @@ var item = {
         };
 
 item.init();
+
+
+
+
+var order = {
+    init : function(){
+        $('.orderTimeBtn').on('click', function () {
+            var_this = this;
+           var time= $('input:radio[name="reservedTime"]:checked').val();
+            console.log(time);
+            console.log(selectedDate);
+        if ((selectedDate <  start || selectedDate >  end )) {
+             alert("예약할 수 없는 일자입니다. 다시 선택해주세요.");
+             return false;
+         }else if( isEmpty(time)){
+             alert("예약 시간을 선택해주세요");
+             return false;
+         }else{
+            if (confirm("30분 내 미결제 시 예약대기는 자동 취소 됩니다.")) {
+                  order.save();
+            }
+         }
+    });
+
+    $('#menuPickDetailBtn').on('click', function () {
+        order.saveItem();
+    });
+},
+    save  : function () {
+         var data = {
+             storeId : $('#storeId').val(),
+             reservedTime : $('input:radio[name="reservedTime"]:checked').val(),
+             reservedDate : selectedDate,
+         };
+        console.log(data);
+        $.ajax({
+               type: 'POST',
+               url: '/order/api/v1/datePick/'+data.storeId,
+               dataType: 'json',
+               contentType:'application/json; charset=utf-8',
+               data: JSON.stringify(data)
+           }).done(function(cartId) {
+               window.location.href ='/order/menu-pick/'+cartId ;
+           }).fail(function (error) {
+               alert(JSON.stringify(error));
+           });
+       },
+
+       saveItem  : function () {
+                var data = {
+                    page : $('#page').val(),
+                    cartId : $('#cartId').val(),
+                    itemsId : $('#itemsId').val(),
+                    count : $('#count').val()
+                };
+               console.log(data);
+               $.ajax({
+                      type: 'POST',
+                      url: '/order/api/v1/cartItem/'+data.itemsId+'?page='+data.page+'&cartId='+data.cartId,
+                      dataType: 'json',
+                      contentType:'application/json; charset=utf-8',
+                      data: JSON.stringify(data)
+                  }).done(function() {
+                       $('.cartItemModal').css('display', 'block');
+                  }).fail(function (error) {
+                      alert(JSON.stringify(error));
+                  });
+              },
+        };
+
+order.init();
+
+function isEmpty(str){
+    if(typeof str == "undefined" || str == null || str == ""){
+        return true;
+    }else{
+         return false;
+    }
+
+}
+
+function datePickValidation(reservedTime) {
+     if ((selectedDate <  start || selectedDate >  end )) {
+             alert("예약할 수 없는 일자입니다. 다시 선택해주세요.");
+             return false;
+         }else if( isEmpty(time)){
+             alert("예약 시간을 선택해주세요");
+             return false;
+         }else{
+            if (confirm("30분 내 미결제 시 예약대기는 자동 취소 됩니다.")) {
+             return true;
+        }
+    }
+}
+

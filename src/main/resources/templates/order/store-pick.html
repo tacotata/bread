@@ -64,13 +64,15 @@
         <li class="reservation-nav-li">STEP02 일자선택</li>
         <li class="reservation-nav-li">STEP03 메뉴선택</li>
       </ul>
-      <ul>
-        <li class ="search-menu_wrap">
-          <input id="search" class="search-menu" spellcheck="false" type="text" >
-          <label for="search"></label>
-          <button style=""type="submit">검색</button>
-        </li>
-      </ul>
+      <form th:action="@{/order/store-pick}">
+        <ul>
+          <li class ="search-menu_wrap">
+            <input id="search" class="search-menu" name="search" spellcheck="false" type="text" >
+            <label for="search"></label>
+            <button style=""type="submit">검색</button>
+          </li>
+        </ul>
+      </form>
     </div>
 
     <div class="row mb-5" style="margin-top: 1rem;">
@@ -78,59 +80,114 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="custom-accordion" id="accordion_1">
-              <div class="accordion-item font-pretend">
-                <h2 class="mb-0">
-                  <button class="btn btn-link font-weight-bold" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">브레드 해운대</button>
-                </h2>
 
-                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion_1">
+<!--              <div class="accordion-item font-pretend">-->
+<!--                <h2 class="mb-0">-->
+<!--                  <button class="btn btn-link font-weight-bold" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">브레드 해운대</button>-->
+<!--                </h2>-->
+<!--                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion_1">-->
+<!--                  <div class="accordion-body comment-list">-->
+<!--                    <li class="comment">-->
+<!--                      <div class="vcard bio">-->
+<!--                        <img src="/images/store1.jpg" alt="Image placeholder">-->
+<!--                      </div>-->
+<!--                      <div class="comment-body">-->
+
+<!--                        <table><tr><th class="text-secondary">주소</th><td >서울 강남구 도산대로53길 15 <a class="map text-secondary">[지도보기]</a></td></tr><tr><th class="text-secondary">영업시간</th><td class="pl-2">09:00 ~ 21:00</td></tr><tr><th class="text-secondary">픽업가능시간</th><td class="pl-2">10:00 ~ 20:00</td></tr><tr><th class="text-secondary">특이사항</th><td class="pl-2">10:00 ~ 20:00</td></tr>-->
+<!--                                     <tr><td colspan="2" class="text-secondary">Last order - 20:30</td></tr></table>-->
+<!--                        <p class="d-grid gap-2 d-md-flex  mb-3 mt-3 justify-content-md">-->
+<!--                          <a href="#" class="reply">매장 선택</a>-->
+<!--                          </p>-->
+<!--                      </div>-->
+<!--                    </li>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div> &lt;!&ndash; .accordion-item &ndash;&gt;-->
+
+
+
+              <div class="accordion-item font-pretend" th:each = "store:${store}" >
+                <h2 class="mb-0">
+                  <button class="btn btn-link font-weight-bold font-pretend" type="button" data-toggle="collapse"  th:attr="data-target='#collapse'+${store.id }" aria-expanded="false" th:text="${store.name}"></button>
+                </h2>
+                <div th:id="|collapse${store.id}|"  class="collapse "  th:attr="aria-labelledby='heading'+ ${store.id}"
+                     data-parent="#accordion_1">
+                  <input type="hidden" th:value="${store.id}" id="storeId">
+<!--                  <input type="hidden" th:value="${store.hideYn}" id="hideYn">-->
                   <div class="accordion-body comment-list">
                     <li class="comment">
                       <div class="vcard bio">
                         <img src="/images/store1.jpg" alt="Image placeholder">
                       </div>
                       <div class="comment-body">
-
-                        <table><tr><th class="text-secondary">주소</th><td >서울 강남구 도산대로53길 15 <a class="map text-secondary">[지도보기]</a></td></tr><tr><th class="text-secondary">영업시간</th><td class="pl-2">09:00 ~ 21:00</td></tr><tr><th class="text-secondary">픽업가능시간</th><td class="pl-2">10:00 ~ 20:00</td></tr><tr><th class="text-secondary">특이사항</th><td class="pl-2">10:00 ~ 20:00</td></tr>
-                                     <tr><td colspan="2" class="text-secondary">Last order - 20:30</td></tr></table>
+                        <table>
+                          <tr>
+                            <th class="text-secondary">주소</th>
+                            <td th:text="${store.address}">서울 강남구 도산대로53길 15 <a class="map text-secondary">[지도보기]</a></td>
+                          </tr>
+                          <tr>
+                            <th class="text-secondary" >영업시간</th>
+                            <td class="pl-2">
+                              <span id="open" th:text ="${store.open}"></span> ~ <span  id="close" th:text ="${store.close}"></span>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th class="text-secondary">픽업가능시간</th>
+                            <td class="pl-2">
+                              <span id="startPickupTime" th:text ="${store.startPickupTime}"></span> ~ <span  id="endPickupTime" th:text ="${store.endPickupTime}"></span>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th class="text-secondary">특이사항</th>
+                            <td class="pl-2"  th:text="${store.info}"></td>
+                          </tr>
+                          <tr>
+                            <td colspan="2" th:text="'Last order - ' +${store.lastOrder}" class="text-secondary"></td>
+                          </tr>
+                        </table>
                         <p class="d-grid gap-2 d-md-flex  mb-3 mt-3 justify-content-md">
-                          <a href="#" class="reply">매장 선택</a>
-                          </p>
+                          <a th:onclick="|location.href='@{/order/date-pick(storeId=${store?.id}, storeName=${store?.name})}'|" class="reply">매장 선택</a>
+                        </p>
                       </div>
                     </li>
                   </div>
                 </div>
               </div> <!-- .accordion-item -->
-
-              <div class="accordion-item">
-                <h2 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">How to create your paypal account?</button>
-                </h2>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion_1">
-                  <div class="accordion-body">
-                    A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.
-                  </div>
-                </div>
-              </div> <!-- .accordion-item -->
-              <div class="accordion-item">
-                <h2 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">How to link your paypal and bank account?</button>
-                </h2>
-
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion_1">
-                  <div class="accordion-body">
-                    When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane. Pityful a rethoric question ran over her cheek, then she continued her way.
-                  </div>
-                </div>
-
-              </div> <!-- .accordion-item -->
-
             </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <ul class="list-unstyled custom-pagination" th:with="start=${(store.number/maxPage)*maxPage + 1}, end=(${(store.totalPages == 0) ? 1 : (start + (maxPage - 1) < store.totalPages ? start + (maxPage - 1) : store.totalPages)})">
+          <li th:if="${start > 1}">
+            <a th:href="@{/order/store-pick((page=0), search= ${param.search})}" th:text="'<<'"></a>
+          </li>
 
+          <li th:if="${start > 1}">
+            <a th:href="@{/order/store-pick(page=${start - maxPage-1}, search= ${param.search})}" th:text="'<'"></a>
+          </li>
+
+          <th:block th:each="page: ${#numbers.sequence(start, end)}">
+            <li>
+              <a th:text="${page}"  th:if="${page != nowPage}" th:href="@{/order/store-pick(page=${page - 1}, search= ${param.search})}"></a>
+            </li>
+            <li class="active">
+              <a th:if="${page==nowPage}" th:text ="${page}"></a>
+            </li>
+          </th:block>
+
+          <li th:if="${end < store.totalPages}">
+            <a th:href="@{/order/store-pick(page=${start + maxPage-1}, search= ${param.search})}" th:text="'>'"></a>
+          </li>
+
+          <li th:if="${end < store.totalPages}">
+            <a th:href="@{/order/store-pick(page=${news.totalPages - 1}, search= ${param.search})}" th:text="'>>'"></a>
+          </li>
+        </ul>
+      </div>
+    </div>
 
   </div>
 </div>
