@@ -10,7 +10,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="author" content="Untree.co">
-  <link rel="shortcut icon" href="favicon.png">
+<!--  <link rel="shortcut icon" href="favicon.png">-->
 
   <meta name="description" content="" />
   <meta name="keywords" content="free template, bootstrap, bootstrap4" />
@@ -58,51 +58,36 @@
 </div>
 
 
+<th:block th:if="${!#lists.isEmpty(cartItems)}">
 <div class="container  mb-5 border-bottom login-form-wrap mypage-table-wrap">
   <div class="row justify-content-center">
     <div class="col-lg-12">
         <div class="p-3 cart-storeChage-wrap">
-        <p  style="text-indent: 20px;">브래드 잠실점 2023-02-03 12:00</p>
-        <span><a style="text-indent: 20px;" href="#" class="reply bg-dark text-white ml-3 rounded-pill pl-3 pr-3 pt-2 pb-2">변경</a></span>
+        <p  style="text-indent: 20px;">  [[${cart.name}]]   [[${cart.reservedDate}]]   [[${cart.reservedTime}]]</p>
+            <input type="hidden" id="cartId" th:value="${cart.cartId}">
+            <span><a style="text-indent: 20px;"class="reply bg-dark text-white ml-3 rounded-pill pl-3 pr-3 pt-2 pb-2"  id="changeStore-btn">변경</a></span>
         </div>
         <table class="table cart-table">
             <tbody>
-                <tr>
+                <tr th:each="cartItems, cartItemsStat: ${cartItems}">
+                    <input type="hidden" th:value="${cartItems.cartItemId}">
                     <div class="table-responsive-md">
                         <td>
-                            <img src="/images/best-1.png" alt="choose bread"  class="rounded-circle mr-2 ml-3 pr-1" >
-                            생크림우유도넛
+                            <img  th:src="|/upload/item/${#temporals.format(cartItems.updDate, 'yyyyMMdd')}/${cartItems.fileName}|" alt="choose bread"  class="rounded-circle mr-2 ml-3 pr-1">
+                           <!-- <img src="/images/best-1.png" alt="choose bread"  class="rounded-circle mr-2 ml-3 pr-1" >-->
+                            [[${cartItems.name}]]
                         </td>
 
                     </div>
                     <div class="table-responsive-md">
                         <td class=".text-center">
                             <div class="number-input-wrap ">
-                                <button type="button" class="btn bg-transparent menu-cnt-btn">-</button>
-                                <input class="text-center border-0 p-0  bg-transparent" type="text" readonly="" min="1" value="1">
-                                <button type="button" class="btn bg-transparent menu-cnt-btn">+</button>
+                                <button type="button" class="btn bg-transparent menu-cnt-btn" th:id="minusBtn">-</button>
+                                <input class="text-center border-0 p-0  bg-transparent" type="text" readonly="" min="1" th:id="'count'+${cartItemsStat.index}" th:value="${cartItems.count}">
+                                <button type="button" class="btn bg-transparent menu-cnt-btn" th:id="plusBtn">+</button>
                             </div>
                         </td>
-                        <td class=".text-center">3,500원</td>
-                        <td class=".text-center remove-menu-btn">X</td>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="table-responsive-md">
-                        <td>
-                            <img src="/images/best-1.png" alt="choose bread"  class="rounded-circle mr-2 ml-3 pr-1" >
-                            생크림우유도넛
-                        </td>
-                    </div>
-                    <div class="table-responsive-md">
-                        <td class=".text-center">
-                            <div class="number-input-wrap ">
-                                <button type="button" class="btn bg-transparent menu-cnt-btn">-</button>
-                                <input class="text-center border-0 p-0  bg-transparent" type="text" readonly="" min="1" value="1">
-                                <button type="button" class="btn bg-transparent menu-cnt-btn">+</button>
-                            </div>
-                        </td>
-                        <td class=".text-center">3,500원</td>
+                        <td class=".text-center" th:text="${#numbers.formatInteger(cartItems.price * cartItems.count, 0, 'COMMA') + ' 원'}"></td>
                         <td class=".text-center remove-menu-btn">X</td>
                     </div>
                 </tr>
@@ -110,16 +95,58 @@
         </table>
         <div class="d-flex justify-content-end pr-3 pt-2 cart-tPrice-wrap">
             <span>합계금액</span>
-            <span>25,000원</span>
+            <span id="total" th:text="${#numbers.formatInteger(#aggregates.sum(cartItems.![price]), 0, 'COMMA') + ' 원'}">25,000원</span>
         </div>
   </div>
 </div>
 </div>
 
 <div class="row justify-content-center mt-4 cart-bottom-btn-wrap">
-    <button type="submit" class="btn btn-primary mr-3 mb-2">상품추가</button>
+    <button class="btn btn-primary mr-3 mb-2"  th:onclick="|location.href='@{/order/menu-pick/{cartId}(cartId=${cart.cartId})}'|">상품추가</button>
     <button type="submit" class="btn btn-primary mr-3 mb-2">결제하기</button>
 </div>
+</th:block>
+
+
+
+
+<th:block th:if="${#lists.isEmpty(cartItems)}">
+<div class="container  mb-5 border-bottom login-form-wrap mypage-table-wrap">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+<!--            <div class="p-3 cart-storeChage-wrap">-->
+<!--                <p  style="text-indent: 20px;"></p>-->
+<!--                <span><a style="text-indent: 20px;" href="#" class="reply bg-dark text-white ml-3 rounded-pill pl-3 pr-3 pt-2 pb-2">변경</a></span>-->
+<!--            </div>-->
+            <table class="table cart-table text-center ">
+                <tbody>
+                <tr>
+                    <div class="table-responsive-md">
+                        <td>
+                          선택하신 상품이 없습니다.
+                        </td>
+
+                    </div>
+
+                </tr>
+
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end pr-3 pt-2 cart-tPrice-wrap">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<div class="row justify-content-center mt-4 cart-bottom-btn-wrap">-->
+<!--    <button type="submit" class="btn btn-primary mr-3 mb-2">상품추가</button>-->
+<!--    <button type="submit" class="btn btn-primary mr-3 mb-2">결제하기</button>-->
+<!--</div>-->
+</th:block>
+
+
 
 <th:block th:replace="/include/footer :: footerFragment"></th:block>
 
@@ -148,7 +175,7 @@
 
 
 <script th:src="@{/js/custom.js}"></script>
-
+<script th:src="@{/js/main.js}"></script>
 
 </body>
 </html>

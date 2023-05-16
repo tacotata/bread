@@ -29,7 +29,8 @@ public class CartItem  extends BaseEntity {
     private int count;
 
     @Builder
-    public CartItem(Cart cart, Items item, int count) {
+    public CartItem(Long id, Cart cart, Items item, int count) {
+        this.id = id;
         this.cart = cart;
         this.item = item;
         this.count = count;

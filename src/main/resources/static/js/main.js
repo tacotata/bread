@@ -12,6 +12,14 @@
         e.preventDefault();
         $('#input_file').click();
     });
+
+       $('#changeStore-btn').click(function (e) {
+            e.preventDefault();
+            if (confirm("초기화(변경)시 장바구니 내 주문 내역은 자동 삭제되며, 첫 화면으로 이동됩니다.")) {
+                   order.delete();
+                }
+        });
+
 });
 
 var fileList ='';
@@ -556,6 +564,20 @@ var order = {
                       alert(JSON.stringify(error));
                   });
               },
+        delete :  function () {
+                 var cartId = $('#cartId').val();
+                 $.ajax({
+                     type: 'DELETE',
+                     url: '/order/api/v1/cart/'+cartId,
+                     dataType:'text',
+                     contentType:'application/json; charset=utf-8'
+                 }).done(function() {
+                     window.location.href = '/order/store-pick/';
+                 }).fail(function (error) {
+                     alert(JSON.stringify(error));
+                 });
+             },
+
         };
 
 order.init();

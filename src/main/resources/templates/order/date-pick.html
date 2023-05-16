@@ -58,7 +58,7 @@
   <div class="container search">
     <div class="filters" data-aos="fade-up" data-aos-delay="100">
       <ul>
-       <li class="reservation-nav-li">STEP01 매장선택</li>
+       <li class="reservation-nav-li" >STEP01 매장선택</li>
        <li class="text-white bg-primary reservation-nav-li">STEP02 일자선택</li>
        <li class="reservation-nav-li">STEP03 메뉴선택</li>
       </ul>
@@ -66,7 +66,7 @@
         <li class ="search-menu_wrap">
           <input id="search" class="search-menu" spellcheck="false" type="text" >
           <label for="search"></label>
-          <button style=""type="submit">검색</button>
+          <button style=""type="button">검색</button>
         </li>
       </ul>
      </div>
@@ -76,6 +76,11 @@
 
 
     <div class="container">
+<!--      <input type="hidden" id="storeName" name="name" th:value="${store.name}">-->
+     <input type="hidden" id="storeId" name="storeId" th:value="${storeId}">
+<!--      <input type="hidden" id="userId" name="userId" th:value="${userId}">-->
+     <input type="hidden" id="reservedDate" name="reservedDate" value="">
+    <input type="hidden" id="reservedTime" name="reservedTime" value="">
       <div class="row justify-content-around align-items-center">
 
         <div class="col-lg-6 ">
@@ -84,92 +89,14 @@
 
         <div class="col-lg-6 pb-4">
           <div class="row row-cols-4 row-cols-md-2 row-cols-md-5 pl-2 pr-3 pt-5 text-center" >
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time0">
-              <label for="time0" >11:00</label>
+            <div class="mb-4 ml-4 time-box" th:each="timeList, timeListStat: ${pickupTimeList}">
+              <input type="radio" name="reservedTime" th:value="${timeList}" class="form-control" th:id="'time'+${timeListStat.count}">
+              <label th:for="'time'+${timeListStat.count}" th:text="${timeList}" ></label>
             </div>
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time1">
-              <label for="time1" >11:30</label>
-            </div>
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time2">
-              <label for="time2" >12:00</label>
-            </div>
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time3">
-              <label for="time3" >12:30</label>
-            </div>
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time4">
-              <label for="time4" >13:00</label>
-            </div>
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time5">
-              <label for="time5" >13:30</label>
-            </div>
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time6">
-              <label for="time6" >14:00</label>
-            </div>
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time7">
-              <label for="time7" >14:30</label>
-            </div>
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time8">
-              <label for="time8" >15:00</label>
-            </div>
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time9">
-              <label for="time9" >15:30</label>
-            </div>
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time10">
-              <label for="time10" >16:00</label>
-            </div>
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time11">
-              <label for="time11" >16:30</label>
-            </div>
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time12">
-              <label for="time12" >17:00</label>
-            </div>
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time13">
-              <label for="time13" >17:30</label>
-            </div>
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time14">
-              <label for="time14" >18:00</label>
-            </div>
-
-            <div class="mb-4 ml-4 time-box">
-              <input type="radio" name="time" class="form-control" id="time15">
-              <label for="time15" >18:30</label>
-            </div>
-
           </div>
         </div>
-        <button type="submit" class="btn btn-primary orderTimeBtn font-pretend">예약시간 설정</button>
+        <button type="button" class="btn btn-primary orderTimeBtn font-pretend ">예약시간 설정</button>
       </div>
-
     </div>
 
 
@@ -202,6 +129,18 @@
 <script th:src="@{/js/custom.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js"></script>
 <script th:src="@{/js/calendar.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
 
+history.pushState(null, null, location.href);
+window.onpopstate = function(event) {
+ if (confirm("진행중인 예약정보가 초기화 됩니다.")) {
+         order.delete();
+    }
+	history.go(1);
+};
+    </script>
+</th:block>
 </body>
 </html>

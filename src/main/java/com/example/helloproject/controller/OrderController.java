@@ -3,6 +3,8 @@ package com.example.helloproject.controller;
 
 import com.example.helloproject.config.auth.LoginUser;
 import com.example.helloproject.config.auth.dto.SessionUser;
+import com.example.helloproject.data.dto.cart.CartDetailDto;
+import com.example.helloproject.data.dto.cart.CartItemDetailDto;
 import com.example.helloproject.data.dto.cart.CartItemSaveRequestDto;
 import com.example.helloproject.data.dto.cart.CartSaveRequestDto;
 import com.example.helloproject.data.dto.item.ItemFormDto;
@@ -184,17 +186,49 @@ public class OrderController {
         return cartItemId;
     }
 
-    @GetMapping("/cart/{cartId}")
-    public String cart(@PathVariable Long cartId, Model model, @LoginUser SessionUser user){
-        if(user !=null){
-            model.addAttribute("userName", user.getName());
-            model.addAttribute("role", user.getRole());
-        }
-        //cartItem select해서 가져와야함
+    @GetMapping(value = {"/cart/{cartId}", "/cart"})
+    public String cart(@PathVariable(required = false) Long cartId, Model model, @LoginUser SessionUser user){
 
+       try{
+           if(user !=null){
+               model.addAttribute("userName", user.getName());
+               model.addAttribute("role", user.getRole());
+           }
+           List<CartItemDetailDto> cartItemDetailList = cartService.getCartItemList(user.getEmail());
 
+           log.info("장바구니 리스트 개수 : {}",cartItemDetailList.size());
+           if(!cartItemDetailList.isEmpty() || cartItemDetailList != null || cartItemDetailList.size() != 0 ){
+                   model.addAttribute("cartItems", cartItemDetailList);
+                   CartDetailDto cartDetailDto = cartService.getCartList( cartItemDetailList.get(0).getCartId());
+                   log.info("CART ID {}" ,cartDetailDto.getCartId());
+                   model.addAttribute("cart",cartDetailDto);
+           }
+       }catch(Exception e){
+           log.info(e.getMessage());
+       }
         return "/order/cart";
     }
+
+    @DeleteMapping("/api/v1/cart/{cartId}")
+    @ResponseBody
+    public void delete(@PathVariable Long cartId ) {
+        try {
+            List<Long> cartItemList = cartService.deleteCartItem(cartId);
+            for(Long cartItem : cartItemList) {
+                log.info("DELETE CART ITEM ID : {}" , cartItem);
+            }
+            if(!cartItemList.isEmpty()){
+                Long deletedCartId  = cartService.delete(cartId);
+                log.info("DELETE CART ID : {}" , deletedCartId);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    //결제하기
+
+
 
 
     @RequestMapping(value = "/list" , method = RequestMethod.GET)
