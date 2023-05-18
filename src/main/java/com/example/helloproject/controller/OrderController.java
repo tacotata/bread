@@ -3,10 +3,7 @@ package com.example.helloproject.controller;
 
 import com.example.helloproject.config.auth.LoginUser;
 import com.example.helloproject.config.auth.dto.SessionUser;
-import com.example.helloproject.data.dto.cart.CartDetailDto;
-import com.example.helloproject.data.dto.cart.CartItemDetailDto;
-import com.example.helloproject.data.dto.cart.CartItemSaveRequestDto;
-import com.example.helloproject.data.dto.cart.CartSaveRequestDto;
+import com.example.helloproject.data.dto.cart.*;
 import com.example.helloproject.data.dto.item.ItemFormDto;
 import com.example.helloproject.data.dto.item.MainItemDto;
 import com.example.helloproject.data.dto.store.StoreResponseDto;
@@ -23,6 +20,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -218,7 +217,7 @@ public class OrderController {
                 log.info("DELETE CART ITEM ID : {}" , cartItem);
             }
             if(!cartItemList.isEmpty()){
-                Long deletedCartId  = cartService.delete(cartId);
+                Long deletedCartId  = cartService.deleteCart(cartId);
                 log.info("DELETE CART ID : {}" , deletedCartId);
             }
         }catch (Exception e){
@@ -226,12 +225,17 @@ public class OrderController {
         }
     }
 
-    //결제하기
+   //결제하기
+    @PostMapping("/api/v1/order/{cartId}")
+    public @ResponseBody ResponseEntity orderCartItem(@PathVariable Long cartId, @RequestBody CartOrderDto cartOrderDto, @LoginUser SessionUser user ){
+        List<CartOrderDto> cartOrderDtoList = cartOrderDto.getCartOrderDtoList();
+        Long orderId = cartService.orderCartItem(cartOrderDtoList, user.getEmail(), cartId);
+        log.info("주문 ID : {}", orderId);
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+    }
 
-
-
-
-    @RequestMapping(value = "/list" , method = RequestMethod.GET)
+    //고객 주문 리스트
+    @GetMapping("/list")
     public String orderList(Model model, @LoginUser SessionUser user  ){
         if(user !=null){
             model.addAttribute("userName", user.getName());

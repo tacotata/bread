@@ -500,7 +500,7 @@ item.init();
 
 
 
-var order = {
+var orders = {
     init : function(){
         $('.orderTimeBtn').on('click', function () {
             var_this = this;
@@ -515,16 +515,20 @@ var order = {
              return false;
          }else{
             if (confirm("30분 내 미결제 시 예약대기는 자동 취소 됩니다.")) {
-                  order.save();
+                  orders.saveCart();
             }
          }
     });
 
+    $('#orderBtn').on('click', function () {
+            orders.order();
+    });
+
     $('#menuPickDetailBtn').on('click', function () {
-        order.saveItem();
+        orders.saveItem();
     });
 },
-    save  : function () {
+    saveCart  : function () {
          var data = {
              storeId : $('#storeId').val(),
              reservedTime : $('input:radio[name="reservedTime"]:checked').val(),
@@ -578,9 +582,37 @@ var order = {
                  });
              },
 
+          order : function () {
+                 var cartId = $('#cartId').val();
+                 var dataList = new Array();
+                 var paramData = new Object();
+                 $("input[name=cartItemId]").each(function(index, item){
+                    var cartItemId = $(this).val();
+                    var data = new Object();
+                    data["cartItemId"] = cartItemId;
+                    dataList.push(data);
+                });
+                paramData['cartOrderDtoList'] = dataList;
+                var param = JSON.stringify(paramData);
+                console.log(param)
+                 $.ajax({
+                     type: 'POST',
+                     url: '/order/api/v1/order/'+cartId,
+                     dataType:'json',
+                     cache : false,
+                     contentType:'application/json',
+                     data :param,
+                 }).done(function() {
+                     alert("주문이 완료됐습니다.")
+                     window.location.href = '/order/list';
+                 }).fail(function (request,status,error) {
+                     alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                 });
+            },
+
         };
 
-order.init();
+orders.init();
 
 function isEmpty(str){
     if(typeof str == "undefined" || str == null || str == ""){

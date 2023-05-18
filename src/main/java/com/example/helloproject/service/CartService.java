@@ -2,7 +2,9 @@ package com.example.helloproject.service;
 
 
 import com.example.helloproject.data.dto.cart.*;
+import com.example.helloproject.data.dto.orders.OrderDto;
 import com.example.helloproject.data.entity.cart.Cart;
+import com.example.helloproject.data.entity.cart.CartItem;
 import com.example.helloproject.data.entity.user.Users;
 import com.example.helloproject.data.repository.cart.CartItemRepository;
 import com.example.helloproject.data.repository.cart.CartRepository;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +27,7 @@ public class CartService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final UsersRepository usersRepository;
+    private final OrderService orderService;
 
     public Long save(CartSaveRequestDto cartSaveRequestDto){
         return cartRepository.save(cartSaveRequestDto.toEntity()).getId();
@@ -44,7 +48,6 @@ public class CartService {
             return cartItemDetailDtoList;
         }
         cartItemDetailDtoList = cartItemRepository.findCartItemDetailDtoList(cart.getId());
-        log.info("cartItemDetailDtoList.size() {}",cartItemDetailDtoList.size());
         return cartItemDetailDtoList;
     }
 
@@ -54,7 +57,7 @@ public class CartService {
     }
 
    //cart delete
-    public Long delete (Long cartId) {
+    public Long deleteCart (Long cartId) {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 장바구니가 없습니다. id=" + cartId));
         cartRepository.delete(cart);
@@ -67,6 +70,32 @@ public class CartService {
         List<Long> cartItemIds = cartItemRepository.findByCartItemIds(cartId);
         cartItemRepository.deleteAllByCartItemIds(cartItemIds);
         return cartItemIds;
+    }
+
+    public Long orderCartItem(List<CartOrderDto> cartOrderDtoList, String email, Long cartId){
+        List<OrderDto> orderDtoList = new ArrayList<>();
+        for (CartOrderDto cartOrderDto : cartOrderDtoList) {
+            CartItem cartItem = cartItemRepository
+                    .findById(cartOrderDto.getCartItemId())
+                    .orElseThrow(EntityNotFoundException::new);
+            OrderDto orderDto = new OrderDto();
+            orderDto.setItemId(cartItem.getItem().getId());
+            orderDto.setCartItemId(cartItem.getId());
+            orderDto.setCount(cartItem.getCount());
+            orderDtoList.add(orderDto);
+        }
+        // orderItem , order save
+        Long orderId = orderService.orders(orderDtoList, email, cartId);
+       //cart, cartItem 삭제
+        for (CartOrderDto cartOrderDto : cartOrderDtoList) {
+            CartItem cartItem = cartItemRepository
+                    .findById(cartOrderDto.getCartItemId())
+                    .orElseThrow(EntityNotFoundException::new);
+            cartItemRepository.delete(cartItem);
+        }
+        Long deletedCartId = this.deleteCart(cartId);
+        log.info("DELETE CART ID : {}", deletedCartId);
+        return orderId;
     }
 
 }
