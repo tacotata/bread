@@ -7,6 +7,7 @@ import com.example.helloproject.data.entity.user.Users;
 import com.example.helloproject.data.repository.user.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UsersService {
 
     private final UsersRepository usersRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Users saveUser(Users users){
         validateDuplicateUser(users);
@@ -40,5 +42,12 @@ public class UsersService {
     public UsersResponseDto findById (Long id){
         Users entity = usersRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("다시 시도해주세요." + id));
         return new UsersResponseDto(entity);
+    }
+
+    public boolean chkPwd(Long userId, String checkPassword) {
+        Users users = usersRepository.findById(userId).orElseThrow(() ->
+                new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+        String realPassword = users.getPassword();
+        return this.passwordEncoder.matches(checkPassword, realPassword);
     }
 }

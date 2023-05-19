@@ -76,13 +76,26 @@ public class MemberController {
 
     @GetMapping("/modify-before")
     public String modifyBefore(Model model, @LoginUser SessionUser user){
-        if(user !=null){
+        if(user != null){
             model.addAttribute("userName", user.getName());
             model.addAttribute("role", user.getRole());
+            model.addAttribute("email", user.getEmail());
         }
         return "/member/modify-before";
     }
 
+    @PostMapping ("/api/v1/checkPwd")
+    @ResponseBody
+    public boolean checkPwd(@LoginUser SessionUser user, @RequestParam String checkPassword, Model model){
+        log.info("CHECK PWD START");
+        Long userId = user.getId();
+        if(!usersService.chkPwd(userId, checkPassword)){
+            log.info("CHECK PWD FAIL");
+            return false;
+        }
+        log.info("CHECK PWD SUCCESS");
+        return true;
+    }
 
     @GetMapping("/modify")
     public String modify(Model model, @LoginUser SessionUser user){

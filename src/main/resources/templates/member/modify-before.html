@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Untree.co">
-    <link rel="shortcut icon" href="favicon.png">
+<!--    <link rel="shortcut icon" href="favicon.png">-->
 
     <meta name="description" content=""/>
     <meta name="keywords" content="free template, bootstrap, bootstrap4"/>
@@ -61,17 +61,18 @@
 <div class="container  mb-5 border-bottom login-form-wrap">
     <div class="row justify-content-center">
         <div class="col-lg-6">
-            <form>
+                <p class="text-center font-pretend">회원님의 정보보호를 위해 비밀번호를 재확인하고 있습니다.</p>
                 <div class="form-group">
-                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
+                    <input type="email" class="form-control" id="email"  name="email" aria-describedby="emailHelp" th:value="${email}"
                           readonly>
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" id="password" placeholder="비밀번호를 입력해주세요.">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호를 입력해주세요.">
+                    <small style="color:#bd2130" class="error"></small>
                 </div>
-              <button type="submit" class="btn btn-primary submit-btn">다음
+
+              <button type="button" class="btn btn-primary submit-btn" id="checkPwd">다음
                 </button>
-            </form>
         </div>
     </div>
 </div>
@@ -104,6 +105,7 @@
 
 
 <script th:src="@{/js/custom.js}"></script>
+<script th:src="@{/js/mypage.js}"></script>
 
 
 </body>
