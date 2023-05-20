@@ -6,6 +6,7 @@ import com.example.helloproject.data.dto.news.NewsSaveRequestDto;
 import com.example.helloproject.data.dto.news.NewsUpdateRequestDto;
 import com.example.helloproject.data.entity.news.News;
 import com.example.helloproject.data.entity.news.NewsType;
+import com.example.helloproject.data.dto.news.NewsDetailDto;
 import com.example.helloproject.data.repository.news.NewsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -80,5 +82,12 @@ public class NewsService {
     @Transactional
     public Page<News> searchNewsAll (NewsType newsType, String search, Pageable pageable){
         return newsRepository.searchNewsAll(newsType, search, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public List<NewsDetailDto> getNewsAndNewsFile (){
+        List <NewsDetailDto> newsDetailDtoList = new ArrayList<>();
+        newsDetailDtoList = newsRepository.findNewsAndNewsFile();
+        return newsDetailDtoList;
     }
 }
