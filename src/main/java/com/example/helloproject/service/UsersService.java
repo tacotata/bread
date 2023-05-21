@@ -50,4 +50,14 @@ public class UsersService {
         String realPassword = users.getPassword();
         return this.passwordEncoder.matches(checkPassword, realPassword);
     }
+
+
+    public Long updateUserInfo( Long id, UsersUpdateRequestDto requestDto){
+        Users users = usersRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 아이디가 없습니다. id=" + id));
+        if(!users.getEmail().equals(requestDto.getEmail())){
+            validateDuplicateUser(users);
+        }
+        users.updateUserInfo(requestDto.getRole(), requestDto.getName(), requestDto.getMobile(), requestDto.getBirthyear(), requestDto.getBirthmonth() ,requestDto.getBirthday(), requestDto.isPromotionAgree(), requestDto.getStoreAddress(), requestDto.getStoreName(), requestDto.getStoreTel(), requestDto.getTeam(), requestDto.getTeamTel() );
+        return id;
+    }
 }

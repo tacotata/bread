@@ -1,3 +1,4 @@
+ //비밀번호 체크
  $('#checkPwd').click(function() {
         const checkPassword = $('#password').val();
         if(!checkPassword || checkPassword.trim() === ""){
@@ -20,3 +21,89 @@
             })
         }
     });
+
+    // 회원정보 수정 valid
+    function userInfoValid(){
+            if($('#name').val() ==""){
+              alert("이름을 입력해주세요");
+              return false;
+            }else if($('#birthyear').val() =="" ||$('#birthmonth').val() =="" || $('#birthday').val() =="" ){
+                alert("생년월일을 입력해주세요.");
+                return false;
+            }else if($('#mobile').val()==""){
+                 alert("핸드폰번호를 입력해주세요.");
+                 return false;
+            }else if($('#birthyear').val().length  != 4 ){
+                 alert("생년월일을 확인해주세요.");
+                 return false;
+            }else if($('#email').val() == '' || fn_emailChk($('#email').val())){
+                 alert("이메일을 확인해주세요.");
+                 return false;
+            }else if($('#birthmonth').val().length  != 2 || $('#birthday').val().length  != 2 ){
+                 alert("생년월일을 확인해주세요.");
+            }
+           else if($('#mobile').val().trim() !=""){
+                 return phoneValid($('#mobile').val());
+           }else{
+              return true;
+            }
+    }
+
+
+    //이메일 체크
+    function fn_emailChk(email){
+        var regExp = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.[a-zA-Z]{2,4}$/;
+        if(!regExp.test(email)){
+            return true;
+        }
+        return false;
+    }
+
+    //회원정보 수정
+     function userUpdate(){
+
+        var role = $("#role option:selected").val()
+        if(role == "" ||  role == "null" || role == undefined){
+            role ="GUEST"
+        }
+        var promotionAgree = false;
+        if( $("input:checkbox[id='promotionAgree']").is(":checked") ){
+            promotionAgree = true;
+        }
+            const data = {
+                id: $('#userId').val(),
+                name : $('#name').val(),
+                birthyear: $('#birthyear').val(),
+                birthmonth: $('#birthmonth').val(),
+                birthday: $('#birthday').val(),
+                email: $('#email').val(),
+                role : role,
+                promotionAgree : promotionAgree,
+                storeAddress: $('#storeAddress').val(),
+                storeName: $('#storeName').val(),
+                storeTel: $('#storeTel').val(),
+                team: $('#team').val(),
+                teamTel: $('#teamTel').val(),
+                mobile: $('#mobile').val(),
+            };
+
+            if(userInfoValid()){
+                if (confirm("수정하시겠습니까?")) {
+                   $.ajax({
+                         type: 'PUT',
+                         url: '/member/modify/'+data.id,
+                         contentType: 'application/json; charset=utf-8',
+                         data: JSON.stringify(data)
+                     }).done(function(result){
+                         if(result >0){
+                            alert("회원 수정이 완료되었습니다.");
+                            location.reload();
+                         }else{
+                             alert("이미 가입된 회웝입니다.");
+                         }
+                     }).fail(function(error){
+                         alert(JSON.stringify(error));
+                     });
+                }
+            }
+        }

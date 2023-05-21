@@ -103,6 +103,22 @@ public class Users extends BaseEntity {
         return this;
     }
 
+    public Users updateUserInfo(Role role, String name, String mobile, String birthyear, String birthmonth, String birthday, boolean promotionAgree, String storeAddress, String storeName, String storeTel, String team, String teamTel) {
+        this.role = role;
+        this.name = name;
+        this.mobile = mobile;
+        this.birthyear = birthyear;
+        this.birthmonth = birthmonth;
+        this.birthday = birthday;
+        this.promotionAgree = promotionAgree;
+        this.storeAddress = storeAddress;
+        this.storeName = storeName;
+        this.storeTel = storeTel;
+        this.team = team;
+        this.teamTel = teamTel;
+        return this;
+    }
+
     public static Users createUsers(UsersDto usersDto, PasswordEncoder passwordEncoder) {
         Users users = Users.builder()
                 .name(usersDto.getName())

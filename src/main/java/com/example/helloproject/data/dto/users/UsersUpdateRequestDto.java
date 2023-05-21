@@ -17,20 +17,27 @@ public class UsersUpdateRequestDto {
     private String birthmonth;
     private String birthday;
     private boolean promotionAgree;
-
+    private String storeAddress;
+    private String storeName;
+    private String storeTel;
+    private String team;
+    private String teamTel;
 
     @Builder
-    public UsersUpdateRequestDto( String name, String password,String email, Role role, String mobile, String birthyear, String birthmonth, String birthday, boolean promotionAgree) {
+    public UsersUpdateRequestDto(Role role, String name, String password, String email, String mobile, String birthyear, String birthmonth, String birthday, boolean promotionAgree, String storeAddress, String storeName, String storeTel, String team, String teamTel) {
+        this.role = role;
         this.name = name;
         this.password = password;
         this.email = email;
-        this.role = role;
         this.mobile = mobile;
         this.birthyear = birthyear;
         this.birthmonth = birthmonth;
         this.birthday = birthday;
         this.promotionAgree = promotionAgree;
+        this.storeAddress = storeAddress;
+        this.storeName = storeName;
+        this.storeTel = storeTel;
+        this.team = team;
+        this.teamTel = teamTel;
     }
-
-
 }

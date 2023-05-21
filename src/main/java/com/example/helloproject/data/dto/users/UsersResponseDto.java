@@ -20,10 +20,14 @@ public class UsersResponseDto {
     private String birthyear;
     private String mobile;
     private String snsType;
-  //  private String snsId;
     private boolean promotionAgree;
     private LocalDateTime regDate;
     private LocalDateTime  updDate;
+    private String storeAddress;
+    private String storeName;
+    private String storeTel;
+    private String team;
+    private String teamTel;
 
 
     public UsersResponseDto(Users entity){
@@ -41,5 +45,10 @@ public class UsersResponseDto {
         this.promotionAgree = entity.isPromotionAgree();
         this.regDate = entity.getRegDate();
         this.updDate = entity.getUpdDate();
+        this.storeAddress = entity.getStoreAddress();
+        this.storeName = entity.getStoreTel();
+        this.storeTel = entity.getStoreTel();
+        this.team = entity.getTeam();
+        this.teamTel = entity.getTeamTel();
     }
 }

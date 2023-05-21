@@ -3,6 +3,9 @@ package com.example.helloproject.controller;
 import com.example.helloproject.config.auth.LoginUser;
 import com.example.helloproject.config.auth.dto.SessionUser;
 import com.example.helloproject.data.dto.users.UsersDto;
+import com.example.helloproject.data.dto.users.UsersResponseDto;
+import com.example.helloproject.data.dto.users.UsersUpdateRequestDto;
+import com.example.helloproject.data.entity.user.Role;
 import com.example.helloproject.data.entity.user.Users;
 import com.example.helloproject.service.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Slf4j
@@ -103,7 +108,32 @@ public class MemberController {
             model.addAttribute("userName", user.getName());
             model.addAttribute("role", user.getRole());
         }
+
+        UsersResponseDto member = usersService.findById(user.getId());
+        model.addAttribute("user",member);
+
+        List<String> roleList = new ArrayList<>();
+        for(Role role : Role.values()){
+            roleList.add(String.valueOf(role));
+        }
+        model.addAttribute("roleList",roleList );
+
         return "/member/modify";
+    }
+
+
+    @PutMapping(value = {"/modify/{id}", "/modify"})
+    @ResponseBody
+    public Long modifyUserInfo( @PathVariable(required = false)  Long id, Model model, @LoginUser SessionUser user, @RequestBody UsersUpdateRequestDto requestDto) {
+        log.info("modify user info");
+        Long userId;
+        try {
+             userId = usersService.updateUserInfo(id, requestDto);
+        } catch (IllegalStateException e) {
+            log.info(e.getMessage());
+            return 0L;
+        }
+        return userId;
     }
 
 /*
