@@ -54,10 +54,14 @@ public class UsersService {
 
     public Long updateUserInfo( Long id, UsersUpdateRequestDto requestDto){
         Users users = usersRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 아이디가 없습니다. id=" + id));
+
         if(!users.getEmail().equals(requestDto.getEmail())){
-            validateDuplicateUser(users);
+            Users findUser = usersRepository.findByEmail(requestDto.getEmail());
+            if(findUser != null){
+                throw new IllegalStateException("이미 가입된 회원입니다.");
+            }
         }
-        users.updateUserInfo(requestDto.getRole(), requestDto.getName(), requestDto.getMobile(), requestDto.getBirthyear(), requestDto.getBirthmonth() ,requestDto.getBirthday(), requestDto.isPromotionAgree(), requestDto.getStoreAddress(), requestDto.getStoreName(), requestDto.getStoreTel(), requestDto.getTeam(), requestDto.getTeamTel() );
+        users.updateUserInfo(requestDto.getRole(), requestDto.getName(), requestDto.getEmail(), requestDto.getMobile(), requestDto.getBirthyear(), requestDto.getBirthmonth() ,requestDto.getBirthday(), requestDto.isPromotionAgree(), requestDto.getStoreAddress(), requestDto.getStoreName(), requestDto.getStoreTel(), requestDto.getTeam(), requestDto.getTeamTel() );
         return id;
     }
 }

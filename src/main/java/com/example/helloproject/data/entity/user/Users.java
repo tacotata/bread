@@ -103,9 +103,10 @@ public class Users extends BaseEntity {
         return this;
     }
 
-    public Users updateUserInfo(Role role, String name, String mobile, String birthyear, String birthmonth, String birthday, boolean promotionAgree, String storeAddress, String storeName, String storeTel, String team, String teamTel) {
+    public Users updateUserInfo(Role role, String name, String email, String mobile, String birthyear, String birthmonth, String birthday, boolean promotionAgree, String storeAddress, String storeName, String storeTel, String team, String teamTel) {
         this.role = role;
         this.name = name;
+        this.email = email;
         this.mobile = mobile;
         this.birthyear = birthyear;
         this.birthmonth = birthmonth;
