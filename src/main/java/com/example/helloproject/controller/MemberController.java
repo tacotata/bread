@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -107,10 +108,9 @@ public class MemberController {
         if(user !=null){
             model.addAttribute("userName", user.getName());
             model.addAttribute("role", user.getRole());
+            UsersResponseDto member = usersService.findById(user.getId());
+            model.addAttribute("user",member);
         }
-
-        UsersResponseDto member = usersService.findById(user.getId());
-        model.addAttribute("user",member);
 
         List<String> roleList = new ArrayList<>();
         for(Role role : Role.values()){
@@ -132,6 +132,39 @@ public class MemberController {
         } catch (IllegalStateException e) {
             log.info(e.getMessage());
             return 0L;
+        }
+        return userId;
+    }
+
+
+    @GetMapping("/modify-pwd")
+    public String modifyPwd(@LoginUser SessionUser user, Model model ){
+        if(user != null){
+            model.addAttribute("userName", user.getName());
+            model.addAttribute("role", user.getRole());
+            UsersResponseDto member = usersService.findById(user.getId());
+            model.addAttribute("user", member);
+        }
+
+        return "/member/modify-pwd";
+    }
+
+    @PutMapping(value = {"/api/v1/modify-pwd/{id}", "/api/v1/modify-pwd"})
+    @ResponseBody
+    public Long modifyPwdInfo( @PathVariable(required = false)  Long id, @LoginUser SessionUser user, @RequestBody Map<String, Object> param) {
+        log.info("MODIFY PWD START");
+        String checkPassword = (String) param.get("checkPassword");
+        String password = (String) param.get("password");
+        Long userId = 0L;
+        try {
+            if(!usersService.chkPwd(id, checkPassword)){
+                log.info("CHECK PWD FAIL");
+                return userId;
+            }
+            log.info("CHECK PWD SUCCESS");
+            userId = usersService.updateUserPwd(id, password);
+        }catch (Exception e) {
+            log.info(e.getMessage());
         }
         return userId;
     }

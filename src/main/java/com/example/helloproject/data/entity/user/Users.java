@@ -120,6 +120,11 @@ public class Users extends BaseEntity {
         return this;
     }
 
+    public Users UpdatePwd(String password, PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(password);
+        return this;
+    }
+
     public static Users createUsers(UsersDto usersDto, PasswordEncoder passwordEncoder) {
         Users users = Users.builder()
                 .name(usersDto.getName())

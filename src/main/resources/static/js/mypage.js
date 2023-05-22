@@ -49,6 +49,29 @@
             }
     }
 
+    //비밀번호 valid
+    function pwdValid(){
+        const nowPwd = $('#nowPwd').val();
+        const newPw = $('#newPw').val();
+        const newPwChk = $('#newPwChk').val();
+        if(nowPwd.trim() === "" || newPw.trim() === "" || newPwChk.trim() === ""){
+            alert("비밀번호를 입력하세요.");
+            return false;
+        }else if(!/(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\W)(?=\S+$).{8,16}/.test(newPw)){
+             alert("8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.");
+             $('#password').focus();
+             return false;
+        }else if(newPw != newPwChk){
+            alert("비밀번호가 일치하지 않습니다.");
+            return false;
+        }else if(nowPwd == newPw){
+            alert("현재 비밀번호와 새로운 비밀번호가 같습니다.");
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 
     //이메일 체크
     function fn_emailChk(email){
@@ -107,3 +130,31 @@
                 }
             }
         }
+
+     //비밀번호 변경
+      function pwdUpdate(){
+             const id = $('#userId').val();
+             const data = {
+                     checkPassword: $('#nowPwd').val(),
+                     password :  $('#newPw').val(),
+             };
+             if(pwdValid()){
+                 if (confirm("수정하시겠습니까?")) {
+                    $.ajax({
+                          type: 'PUT',
+                          url: '/member/api/v1/modify-pwd/'+id,
+                          contentType: 'application/json; charset=utf-8',
+                          data: JSON.stringify(data)
+                      }).done(function(result){
+                          if(result > 0){
+                             alert("비밀번호가 변경됐습니다.");
+                             window.location.href="/";
+                          }else{
+                              alert("비밀번호를 다시 확인해주세요.");
+                          }
+                      }).fail(function(error){
+                          alert(JSON.stringify(error));
+                      });
+                 }
+             }
+         }
