@@ -81,8 +81,7 @@ public class UsersService {
     }
 
     @Transactional(readOnly = true)
-    public WithdrawResponseDto findByUserId (Users users){
-        Withdraw entity = withdrawRepository.findByUsers(users);
-        return new WithdrawResponseDto(entity);
+    public Withdraw findByUserId (Users users){
+        return withdrawRepository.findByUsers(users);
     }
 }
