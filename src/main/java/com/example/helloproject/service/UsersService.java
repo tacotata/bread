@@ -3,8 +3,11 @@ package com.example.helloproject.service;
 
 import com.example.helloproject.data.dto.users.UsersResponseDto;
 import com.example.helloproject.data.dto.users.UsersUpdateRequestDto;
+import com.example.helloproject.data.dto.users.WithdrawResponseDto;
 import com.example.helloproject.data.entity.user.Users;
+import com.example.helloproject.data.entity.user.Withdraw;
 import com.example.helloproject.data.repository.user.UsersRepository;
+import com.example.helloproject.data.repository.user.WithdrawRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +22,7 @@ public class UsersService {
 
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
+    private final WithdrawRepository withdrawRepository;
 
     public Users saveUser(Users users){
         validateDuplicateUser(users);
@@ -70,5 +74,15 @@ public class UsersService {
         Users users = usersRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 아이디가 없습니다. id=" + id));
         users.UpdatePwd(password, passwordEncoder);
         return id;
+    }
+
+    public Long saveWithdraw(String reason, Users users){
+        return withdrawRepository.save(Withdraw.builder().users(users).reason(reason).build()).getId();
+    }
+
+    @Transactional(readOnly = true)
+    public WithdrawResponseDto findByUserId (Users users){
+        Withdraw entity = withdrawRepository.findByUsers(users);
+        return new WithdrawResponseDto(entity);
     }
 }

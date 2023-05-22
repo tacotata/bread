@@ -7,6 +7,7 @@ import com.example.helloproject.data.dto.users.UsersResponseDto;
 import com.example.helloproject.data.dto.users.UsersUpdateRequestDto;
 import com.example.helloproject.data.entity.user.Role;
 import com.example.helloproject.data.entity.user.Users;
+import com.example.helloproject.data.repository.user.UsersRepository;
 import com.example.helloproject.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,8 @@ public class MemberController {
 
     private final UsersService usersService;
     private final PasswordEncoder passwordEncoder;
+    private final HttpSession httpSession;
+    private final UsersRepository usersRepository;
 
 
     @GetMapping("/join")
@@ -129,13 +133,15 @@ public class MemberController {
         Long userId;
         try {
              userId = usersService.updateUserInfo(id, requestDto);
+             UsersResponseDto usersResponseDto = usersService.findById(userId);
+             Users users = usersRepository.findByEmail(usersResponseDto.getEmail());
+             httpSession.setAttribute("user", new SessionUser(users));
         } catch (IllegalStateException e) {
             log.info(e.getMessage());
             return 0L;
         }
         return userId;
     }
-
 
     @GetMapping("/modify-pwd")
     public String modifyPwd(@LoginUser SessionUser user, Model model ){
@@ -167,6 +173,32 @@ public class MemberController {
             log.info(e.getMessage());
         }
         return userId;
+    }
+
+    @GetMapping("/withdraw")
+    public String withdraw(@LoginUser SessionUser user, Model model ){
+        if(user != null){
+            model.addAttribute("userName", user.getName());
+            model.addAttribute("role", user.getRole());
+            UsersResponseDto member = usersService.findById(user.getId());
+            model.addAttribute("user", member);
+        }
+        return "/member/withdraw";
+    }
+
+    @PostMapping ("/api/v1/withdraw/{id}")
+    @ResponseBody
+    public Long saveWithdraw(@PathVariable(required = false)  Long id, @LoginUser SessionUser user, Model model, @RequestBody Map<String, Object> param){
+        log.info("WITHDRAW START");
+        String password = (String) param.get("password");
+        String reason = (String) param.get("reason");
+        if(!usersService.chkPwd(id, password)){
+            log.info("CHECK PWD FAIL");
+            return -1L;
+        }
+        log.info("CHECK PWD SUCCESS");
+        Users users = usersRepository.findByEmail(user.getEmail());
+        return usersService.saveWithdraw(reason, users);
     }
 
 /*

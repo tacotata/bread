@@ -222,7 +222,7 @@ QR코드 등록 정보:삭제 시점으로부터6개월 보관
                         <div class="control__indicator"></div>
                     </label>
                 </div>
-                <p class="text-right"><a>회원탈퇴</a></p>
+                <a th:href="@{/member/withdraw}"><p class="text-right">회원탈퇴</p></a>
                 <button type="button" class="btn btn-primary submit-btn" th:onclick="userUpdate()">회원정보 수정</button>
         </div>
     </div>

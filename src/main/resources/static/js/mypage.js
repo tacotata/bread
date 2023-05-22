@@ -72,6 +72,18 @@
         }
     }
 
+    function withdrawValid(){
+       if($('#password').val() == ""){
+            alert("비밀번호를 작성해주세요.")
+            return false;
+          }else if($('#reason').val() == ""){
+            alert("탈퇴 이유를 작성해주세요.")
+            return false ;
+          }else{
+            return true;
+          }
+    }
+
 
     //이메일 체크
     function fn_emailChk(email){
@@ -157,4 +169,32 @@
                       });
                  }
              }
-         }
+     };
+
+      //회원 탈퇴
+   function withdrawSave(){
+          const id = $('#userId').val();
+          const data = {
+              reason: $('#reason').val(),
+              password :  $('#password').val(),
+          };
+          if(withdrawValid()){
+              if (confirm("탈퇴하시겠습니까?")) {
+                 $.ajax({
+                       type: 'POST',
+                       url: '/member/api/v1/withdraw/'+id,
+                       contentType: 'application/json; charset=utf-8',
+                       data: JSON.stringify(data)
+                   }).done(function(result){
+                       if(result > 0){
+                          alert("그동안 감사했습니다. 탈퇴 완료됐습니다.");
+                          window.location.href="/member/logout";
+                       }else{
+                           alert("비밀번호를 다시 확인해주세요.");
+                       }
+                   }).fail(function(error){
+                       alert(JSON.stringify(error));
+                   });
+              }
+        }
+  };

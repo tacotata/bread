@@ -1,8 +1,10 @@
 package com.example.helloproject.config;
 
 import com.example.helloproject.config.auth.dto.SessionUser;
+import com.example.helloproject.data.dto.users.WithdrawResponseDto;
 import com.example.helloproject.data.entity.user.Users;
 import com.example.helloproject.data.repository.user.UsersRepository;
+import com.example.helloproject.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -28,6 +30,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
     private final HttpSession httpSession;
+    private final UsersService usersService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -39,7 +42,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         UserDetails userDetails;
 
-        if (users == null) {
+        WithdrawResponseDto withdrawResponseDto = usersService.findByUserId(users);
+        if (users == null || withdrawResponseDto.getUsers().getId().equals(users.getId())) {
             log.info("UsernameNotFoundException");
             throw new UsernameNotFoundException(username);
         }
@@ -54,7 +58,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         }
 
         httpSession.setAttribute("user", new SessionUser(users));
-        log.info("로그인 성공 {}", users);
+        log.info("로그인 성공");
         return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
     }
 
