@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Untree.co">
-    <link rel="shortcut icon" href="favicon.png">
+<!--    <link rel="shortcut icon" href="favicon.png">-->
     <meta name="description" content=""/>
     <meta name="keywords" content="free template, bootstrap, bootstrap4"/>
 
@@ -63,27 +63,32 @@
         <div class="block">
             <div class="row justify-content-center">
                 <div class="col-md-12 col-lg-12 pb-4" data-aos="fade-up" data-aos-delay="200">
-                    <form>
-                        <div class="row">
-                            <div class="col-6">
+                    <form enctype="multipart/form-data" id="form">
+                        <input type="hidden" th:value="${userId}" id="userId">
+<!--                        <div class="row">-->
+<!--                            <div class="col-6">-->
                                 <div class="form-group">
-                                    <label class="text-black" for="type">문의유형</label>
-                                    <select class="form-control select" id="type"
+                                    <label class="text-black" for="csType">문의유형</label>
+                                    <select class="form-control select" id="csType"
                                             aria-label="Default select example">
                                         <option style="background:#E8E5DE;" selected>유형</option>
-                                        <option value="1">칭찬</option>
-                                        <option value="2">제안</option>
-                                        <option value="3">불만</option>
-                                        <option value="3">기타</option>
+                                        <option value="PRAISE">칭찬</option>
+                                        <option value="PROPOSAL">제안</option>
+                                        <option value="DISCONTENT">불만</option>
+                                        <option value="ETC">기타</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label class="text-black" for="lname">이름</label>
-                                    <input type="text" class="form-control" id="lname">
-                                </div>
-                            </div>
+<!--                            </div>-->
+<!--                            <div class="col-6">-->
+<!--                                <div class="form-group">-->
+<!--                                    <label class="text-black" for="name">이름</label>-->
+<!--                                    <input type="text" class="form-control" id="name">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                        <div class="form-group">
+                            <label class="text-black" for="title">제목</label>
+                            <input type="text" class="form-control" id="title">
                         </div>
                         <div class="form-group">
                             <label class="text-black" for="email">이메일</label>
@@ -101,14 +106,15 @@
                             <div id="fileName"></div>
                             <div>
                                 <i class="far fa-plus-square btn-upload" id="btn-upload" aria-hidden="true"></i>
-                                <input id="input_file" multiple="multiple" type="file" style="display:none;"
-                                       onchange='printName()' accept=".gif, .jpg, .png, .jpeg">
+                                <input id="input_file" name="file" multiple="multiple" type="file" style="display:none;"
+                                       onchange="printName('contact')" accept=".gif, .jpg, .png, .jpeg">
                             </div>
                         </div>
-                        <small class="form-text text-muted"> 파일첨부는 아래의 파일만 등록이 가능하며 최대 1개 등록 가능합니다.
+                        <small class="form-text text-muted"> 파일첨부는 아래의 파일만 등록이 가능하며 최대 5개 등록 가능합니다.
+                            <br>첨부파일 사이즈는 각 10MB 이내로 등록 가능합니다.
                             <br>(등록 가능 확장자 : jpg, jpeg, png, gif)</small>
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-2">
+                            <button type="button" class="btn btn-primary" id="contact-btn">Send Message</button>
                         </div>
                     </form>
                 </div>

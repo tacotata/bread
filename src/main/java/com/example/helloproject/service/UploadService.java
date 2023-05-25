@@ -1,15 +1,19 @@
 
 package com.example.helloproject.service;
 
+import com.example.helloproject.data.dto.cs.ContactFileSaveDto;
 import com.example.helloproject.data.dto.item.ItemFileSaveDto;
 import com.example.helloproject.data.dto.news.NewsFileResponseDto;
 import com.example.helloproject.data.dto.news.NewsFileSaveDto;
 import com.example.helloproject.data.dto.store.StoreFileResponseDto;
 import com.example.helloproject.data.dto.store.StoreFileSaveDto;
+import com.example.helloproject.data.entity.cs.Contact;
+import com.example.helloproject.data.entity.cs.ContactFile;
 import com.example.helloproject.data.entity.menu.Items;
 import com.example.helloproject.data.entity.menu.ItemsFile;
 import com.example.helloproject.data.entity.news.NewsFile;
 import com.example.helloproject.data.entity.store.StoreFile;
+import com.example.helloproject.data.repository.cs.ContactFileRepository;
 import com.example.helloproject.data.repository.items.ItemsFileRepository;
 import com.example.helloproject.data.repository.news.NewsFileRepository;
 import com.example.helloproject.data.repository.store.StoreFileRepository;
@@ -42,6 +46,7 @@ public class UploadService {
     private final NewsFileRepository newsFileRepository;
     private final StoreFileRepository storeFileRepository;
     private final ItemsFileRepository itemsFileRepository;
+    private final ContactFileRepository contactFileRepository;
 
     //파일 저장
     public Long saveFiles(List<MultipartFile> multipartFiles, Long id, String type)  {
@@ -90,6 +95,17 @@ public class UploadService {
 
                             fileId = insertItemFile(itemFileSaveDto.toEntity());
 
+                        }else if("cs".equals(type)){
+                            ContactFileSaveDto contactFileSaveDto = ContactFileSaveDto.builder()
+                                    .contact(Contact.builder().id(id).build())
+                                    .fileName(savedFileName)
+                                    .oriFileName(oriFileName)
+                                    .filePath(savedFilePath)
+                                    .extension(extension)
+                                    .build();
+
+                            fileId = insertContactFile(contactFileSaveDto.toEntity());
+
                         }else{
                             NewsFileSaveDto newsFileSaveDto = NewsFileSaveDto.builder().newsId(id)
                                     .fileName(savedFileName)
@@ -100,7 +116,6 @@ public class UploadService {
                                     .build();
 
                             fileId = insertFile(newsFileSaveDto.toEntity());
-
                         }
 
                         log.info("===================================");
@@ -233,6 +248,12 @@ public class UploadService {
     @Transactional
     public Long insertItemFile(ItemsFile itemsFile) {
         return itemsFileRepository.save(itemsFile).getId();
+    }
+
+    //contact_file insert
+    @Transactional
+    public Long insertContactFile(ContactFile contactFile) {
+        return contactFileRepository.save(contactFile).getId();
     }
 
 }

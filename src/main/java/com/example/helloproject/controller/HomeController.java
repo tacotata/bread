@@ -74,14 +74,7 @@ public class HomeController {
         return "/brand";
     }
 
-    @GetMapping("/contact")
-    public String contact(Model model, @LoginUser SessionUser user ){
-        if(user !=null){
-            model.addAttribute("userName", user.getName());
-            model.addAttribute("role", user.getRole());
-        }
-        return "/contact";
-    }
+
 
 
 }

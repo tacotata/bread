@@ -2,12 +2,16 @@ package com.example.helloproject.controller;
 
 import com.example.helloproject.config.auth.LoginUser;
 import com.example.helloproject.config.auth.dto.SessionUser;
+import com.example.helloproject.data.dto.cs.ContactResponseDto;
+import com.example.helloproject.data.dto.cs.ContactSaveRequestDto;
 import com.example.helloproject.data.dto.users.UsersDto;
 import com.example.helloproject.data.dto.users.UsersResponseDto;
 import com.example.helloproject.data.dto.users.UsersUpdateRequestDto;
 import com.example.helloproject.data.entity.user.Role;
 import com.example.helloproject.data.entity.user.Users;
 import com.example.helloproject.data.repository.user.UsersRepository;
+import com.example.helloproject.service.EmailService;
+import com.example.helloproject.service.UploadService;
 import com.example.helloproject.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +20,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,12 +34,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/member")
-public class MemberController {
+public class UsersController {
 
     private final UsersService usersService;
     private final PasswordEncoder passwordEncoder;
     private final HttpSession httpSession;
     private final UsersRepository usersRepository;
+    private final UploadService uploadService;
+    private final EmailService emailService;
 
 
     @GetMapping("/join")
@@ -200,6 +208,42 @@ public class MemberController {
         Users users = usersRepository.findByEmail(user.getEmail());
         return usersService.saveWithdraw(reason, users);
     }
+
+    @GetMapping("/contact")
+    public String contact(Model model, @LoginUser SessionUser user ){
+        if(user !=null){
+            model.addAttribute("userName", user.getName());
+            model.addAttribute("role", user.getRole());
+            model.addAttribute("userId", user.getId());
+        }
+        return "/contact";
+    }
+
+    @PostMapping("/api/v1/contact")
+    @ResponseBody
+    public Long saveCs(@LoginUser SessionUser user, @RequestPart(value = "file", required = false) List<MultipartFile> files, @RequestPart(value = "key") ContactSaveRequestDto requestDto) throws IOException {
+        log.info("===============CONTACT SAVE START ====================");
+        String type ="cs";
+        Long contactId =0L;
+        try {
+            contactId = usersService.saveContact(requestDto);
+            ContactResponseDto contactResponseDto = usersService.findByContactId(contactId);
+            log.info("INSERT CONTACT ID : {} ", contactId);
+            if (contactId != 0) {
+                if (!files.get(0).isEmpty()) {
+                    Long fileId = uploadService.saveFiles(files, contactId, type);
+                    log.info("INSERT CONTACT ID : {} ", fileId);
+                }
+                boolean sendEmail = emailService.sendContact(files, contactResponseDto);
+                log.info("SEND EMAIL : {} ", sendEmail);
+            }
+        }catch (Exception e){
+            log.info(e.getMessage());
+        }
+        log.info("===============CONTACT SAVE END ====================");
+        return contactId;
+    }
+
 
 /*
     @RequestMapping(value = "/pw-search" , method = RequestMethod.GET)

@@ -16,7 +16,7 @@
        $('#changeStore-btn').click(function (e) {
             e.preventDefault();
             if (confirm("초기화(변경)시 장바구니 내 주문 내역은 자동 삭제되며, 첫 화면으로 이동됩니다.")) {
-                   order.delete();
+                   orders.delete();
                 }
         });
 
@@ -32,21 +32,21 @@ var maxSize = 10 * 1024 * 1024; // 10MB
 function printName(type) {
     for(i = 0; i < target.files.length; i++){
         fileSize = target.files[i].size;
-        if(type == "news" && fileSize > maxSize){
+        if(fileSize > maxSize){
                 alert("첨부파일 사이즈는 각 10MB 이내로 등록 가능합니다.");
                 return;
         }else if(type == "news" && $.inArray(target.files[i].name.split('.').pop().toLowerCase(), ['pdf', 'txt', 'xls', 'hwp', 'hwpx', 'xlsx', 'jpg' ,'jpeg', 'png', 'gif']) == -1){
                 ext=target.files[i].name.split('.').pop().toLowerCase();
                 alert(ext + "파일은 업로드 하실 수 없습니다.");
                 return;
-         }else if( type == "news" && target.files.length > 5 || Number($('#fileCnt').val()) + target.files.length >5){
+         }else if( (type == "news" || type=="contact") && target.files.length > 5 || Number($('#fileCnt').val()) + target.files.length >5){
                 alert("파일은 5개 이하만 업로드 가능합니다.");
                 return;
          }else if(type == "store" && $.inArray(target.files[i].name.split('.').pop().toLowerCase(), [ 'jpg' ,'jpeg', 'png']) == -1){
                 ext=target.files[i].name.split('.').pop().toLowerCase();
                 alert(ext + "파일은 업로드 하실 수 없습니다.");
                 return;
-         }else if(type == "item" && $.inArray(target.files[i].name.split('.').pop().toLowerCase(), [ 'jpg' ,'jpeg', 'png', 'gif']) == -1){
+         }else if((type == "item" || type=="contact") && $.inArray(target.files[i].name.split('.').pop().toLowerCase(), [ 'jpg' ,'jpeg', 'png', 'gif']) == -1){
                 ext=target.files[i].name.split('.').pop().toLowerCase();
                 alert(ext + "파일은 업로드 하실 수 없습니다.");
                 return;
@@ -135,6 +135,48 @@ function phoneValid(phone){
             }
             return true;
 }
+
+
+function isEmpty(str){
+    if(typeof str == "undefined" || str == null || str == ""){
+        return true;
+    }else{
+         return false;
+    }
+
+}
+
+function datePickValidation(reservedTime) {
+     if ((selectedDate <  start || selectedDate >  end )) {
+             alert("예약할 수 없는 일자입니다. 다시 선택해주세요.");
+             return false;
+         }else if( isEmpty(time)){
+             alert("예약 시간을 선택해주세요");
+             return false;
+         }else{
+            if (confirm("30분 내 미결제 시 예약대기는 자동 취소 됩니다.")) {
+             return true;
+        }
+    }
+}
+
+    function csValid(){
+        if($("#csType option:selected").val() == "유형"){
+            alert("유형을 선택해주세요.");
+            return false;
+        }else if($('#email').val() ==""){
+                 alert("메일주소를 작성해주세요.");
+                 return false;
+        }else if($('#title').val() ==""){
+            alert("제목을 작성해주세요.");
+            return false;
+        }else if($('#message').val()==""){
+            alert("내용을 작성해주세요.");
+            return false;
+        }else{
+            return true;
+        }
+    }
 
 var main = {
     init : function(){
@@ -520,14 +562,14 @@ var orders = {
          }
     });
 
-    $('#orderBtn').on('click', function () {
-            orders.order();
-    });
+        $('#orderBtn').on('click', function () {
+                orders.order();
+        });
 
-    $('#menuPickDetailBtn').on('click', function () {
-        orders.saveItem();
-    });
-},
+        $('#menuPickDetailBtn').on('click', function () {
+            orders.saveItem();
+        });
+    },
     saveCart  : function () {
          var data = {
              storeId : $('#storeId').val(),
@@ -609,31 +651,63 @@ var orders = {
                      alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                  });
             },
-
         };
 
 orders.init();
 
-function isEmpty(str){
-    if(typeof str == "undefined" || str == null || str == ""){
-        return true;
-    }else{
-         return false;
-    }
 
+var cs = {
+    init : function(){
+    $('#contact-btn').on('click', function () {
+            if(csValid()){
+                if (confirm("답변은 작성하신 이메일로 발송됩니다.이메일 주소를 확인해주세요.")) {
+                      cs.save();
+               }
+            }
+        });
+
+    },
+
+
+    save  : function () {
+        var data = {
+            userId : $('#userId').val(),
+            csType : $("#csType option:selected").val(),
+            title : $('#title').val(),
+            email : $('#email').val(),
+            contents : $('#message').val(),
+        };
+        console.log(data);
+        var form =$('#form')[0];
+        var formData = new FormData(form);
+        formData.append('file', $('#input_file'));
+        formData.append('key', new Blob([JSON.stringify(data)] , {type: "application/json"}));
+
+        $.ajax({
+            type: 'POST',
+            url: '/member/api/v1/contact',
+            processData: false,
+            contentType:false,
+            data: formData,
+        }).done(function(id) {
+          $("#form")[0].reset();
+          fileName.innerText ='';
+          target.value ='';
+            if(id > 0){
+                alert('답변은 작성하신 이메일로 발송됩니다.');
+                location.reload();
+            }else{
+                alert('다시 시도해주세요.');
+                location.reload();
+            }
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+            $("#form")[0].reset();
+            fileName.innerText ='';
+            target.value ='';
+
+        });
+    },
 }
 
-function datePickValidation(reservedTime) {
-     if ((selectedDate <  start || selectedDate >  end )) {
-             alert("예약할 수 없는 일자입니다. 다시 선택해주세요.");
-             return false;
-         }else if( isEmpty(time)){
-             alert("예약 시간을 선택해주세요");
-             return false;
-         }else{
-            if (confirm("30분 내 미결제 시 예약대기는 자동 취소 됩니다.")) {
-             return true;
-        }
-    }
-}
-
+cs.init();

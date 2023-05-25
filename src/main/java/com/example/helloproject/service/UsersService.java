@@ -1,11 +1,16 @@
 package com.example.helloproject.service;
 
 
+import com.example.helloproject.data.dto.cs.ContactResponseDto;
+import com.example.helloproject.data.dto.cs.ContactSaveRequestDto;
+import com.example.helloproject.data.dto.news.NewsResponseDto;
+import com.example.helloproject.data.dto.news.NewsSaveRequestDto;
 import com.example.helloproject.data.dto.users.UsersResponseDto;
 import com.example.helloproject.data.dto.users.UsersUpdateRequestDto;
-import com.example.helloproject.data.dto.users.WithdrawResponseDto;
+import com.example.helloproject.data.entity.cs.Contact;
 import com.example.helloproject.data.entity.user.Users;
 import com.example.helloproject.data.entity.user.Withdraw;
+import com.example.helloproject.data.repository.cs.ContactRepository;
 import com.example.helloproject.data.repository.user.UsersRepository;
 import com.example.helloproject.data.repository.user.WithdrawRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +28,7 @@ public class UsersService {
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
     private final WithdrawRepository withdrawRepository;
+    private  final ContactRepository contactRepository;
 
     public Users saveUser(Users users){
         validateDuplicateUser(users);
@@ -83,5 +89,16 @@ public class UsersService {
     @Transactional(readOnly = true)
     public Withdraw findByUserId (Users users){
         return withdrawRepository.findByUsers(users);
+    }
+
+    public Long saveContact(ContactSaveRequestDto requestDto){
+        return contactRepository.save(requestDto.toEntity()).getId();
+    }
+
+    //contact detail
+    @Transactional(readOnly = true)
+    public ContactResponseDto findByContactId (Long id){
+        Contact entity = contactRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다. id=" + id));
+        return new ContactResponseDto(entity);
     }
 }
