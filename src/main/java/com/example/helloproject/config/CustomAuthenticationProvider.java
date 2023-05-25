@@ -3,6 +3,7 @@ package com.example.helloproject.config;
 import com.example.helloproject.config.auth.dto.SessionUser;
 import com.example.helloproject.data.dto.users.WithdrawResponseDto;
 import com.example.helloproject.data.entity.user.Users;
+import com.example.helloproject.data.entity.user.Withdraw;
 import com.example.helloproject.data.repository.user.UsersRepository;
 import com.example.helloproject.service.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +43,16 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         UserDetails userDetails;
 
-        WithdrawResponseDto withdrawResponseDto = usersService.findByUserId(users);
-        if (users == null || withdrawResponseDto.getUsers().getId().equals(users.getId())) {
+        Withdraw withdraw = usersService.findByUserId(users);
+        if(withdraw != null ){
+           WithdrawResponseDto withdrawResponseDto = new WithdrawResponseDto(withdraw);
+                if(withdrawResponseDto.getUsers().getId().equals(users.getId())){
+                    log.info("탈퇴한 회원입니다.");
+                    throw new UsernameNotFoundException(username);
+                }
+        }
+
+        if (users == null ) {
             log.info("UsernameNotFoundException");
             throw new UsernameNotFoundException(username);
         }
