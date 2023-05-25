@@ -244,18 +244,52 @@ public class UsersController {
         return contactId;
     }
 
+    @GetMapping("/id-search")
+    public String idSearch( ){
+        return "/member/id-search";
+    }
 
-/*
-    @RequestMapping(value = "/pw-search" , method = RequestMethod.GET)
+    @PostMapping ("/api/v1/id-search")
+    public String searchId( @RequestParam String name,  @RequestParam String mobile, Model model){
+        log.info("searchId START");
+        String email="";
+        try{
+            UsersResponseDto usersResponseDto = usersService.findByNameAndMobile(name,mobile);
+            email = usersResponseDto.getEmail();
+        }catch (Exception e){
+            log.info(e.getMessage());
+            model.addAttribute("message","일치하는 회원정보가 없습니다." );
+            return "/member/id-search";
+        }
+        model.addAttribute("message","가입하신 아이디는 "+email+ " 입니다." );
+        return  "/member/id-search";
+    }
+
+    @GetMapping("/pw-search")
     public String pwSearch( ){
         return "/member/pw-search";
     }
 
-    @RequestMapping(value = "/id-search" , method = RequestMethod.GET)
-    public String idSearch( ){
-        return "/member/id-search";
+    @PostMapping("/api/v1/pw-search")
+    public String searchPw( @RequestParam String email,  @RequestParam String name, Model model){
+        log.info("viewPw START");
+       try{
+           UsersResponseDto responseDto =  usersService.findByEmailAndName(email, name);
+           if(responseDto != null){
+              String changePw = emailService.getTempPassword();
+              Long id = usersService.updateUserPwd(responseDto.getId(), changePw);
+              boolean sendEmail = emailService.sendTempPw(id, changePw);
+           }
+       }catch(Exception e){
+           log.info(e.getMessage());
+           model.addAttribute("message","일치하는 회원정보가 없습니다." );
+           return "/member/pw-search";
+       }
+       model.addAttribute("message","가입하신 이메일로 임시비밀번호가 발송되었습니다." );
+       return "/member/pw-search";
     }
-*/
+
+
 
 
 }

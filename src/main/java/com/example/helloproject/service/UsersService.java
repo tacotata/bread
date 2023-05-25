@@ -101,4 +101,21 @@ public class UsersService {
         Contact entity = contactRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다. id=" + id));
         return new ContactResponseDto(entity);
     }
+
+    //id-search
+    @Transactional(readOnly = true)
+    public UsersResponseDto findByNameAndMobile (String name, String mobile){
+        Users entity = usersRepository.findByNameAndMobile(name, mobile).orElseThrow(() -> new IllegalArgumentException("일치하는 회원정보가 없습니다."));
+        return new UsersResponseDto(entity);
+    }
+
+
+    //pw-search
+    @Transactional(readOnly = true)
+    public UsersResponseDto findByEmailAndName (String email, String name){
+        Users entity = usersRepository.findByEmailAndName(email, name).orElseThrow(() -> new IllegalArgumentException("일치하는 회원정보가 없습니다."));
+        return new UsersResponseDto(entity);
+    }
+
+
 }

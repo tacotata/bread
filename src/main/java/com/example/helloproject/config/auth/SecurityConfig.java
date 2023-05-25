@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().
                 loginPage("/member/login").defaultSuccessUrl("/", true).failureUrl("/member/login/error").usernameParameter("email").and().logout().logoutSuccessUrl("/").logoutRequestMatcher(new AntPathRequestMatcher("/member/logout")).and()
                 .authorizeRequests()
-                .antMatchers("/", "/static/**", "/css/**", "/images/**","/bootstrap.min.css","/animate.min.css","/aos.css","/owl.carousel.min.css","/owl.theme.default.min.css","/js/**", "/fonts/**","/scss/**","/member/login", "/member/new","/member/join", "/news/**", "/items", "/item/**", "/stores/**","/brand" ,"/member/login/error", "/upload/**").permitAll()
+                .antMatchers("/", "/index", "/static/**", "/css/**", "/images/**","/bootstrap.min.css","/animate.min.css","/aos.css","/owl.carousel.min.css","/owl.theme.default.min.css","/js/**", "/fonts/**","/scss/**","/member/login", "/member/new","/member/join", "/news/**", "/items", "/item/**", "/stores/**","/brand" ,"/member/login/error", "/upload/**", "/member/id-search", "/member/pw-search", "/member/api/v1/id-search", "/member/api/v1/pw-search").permitAll()
                 .antMatchers("/admin/**").hasAuthority(Role.ADMIN.name())
                 .antMatchers("/owner/**").hasAuthority(Role.OWNER.name())
                 .anyRequest().authenticated()

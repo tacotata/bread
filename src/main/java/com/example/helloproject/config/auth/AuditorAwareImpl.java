@@ -19,11 +19,8 @@ public class AuditorAwareImpl implements AuditorAware<Long> {
 
     @Override
     public Optional<Long> getCurrentAuditor() {
-        log.info("ddddddddddd");
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
-
         try{
-            log.info("user {}", user.getId());
             if(user == null)
                 return null;
 
