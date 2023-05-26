@@ -26,8 +26,16 @@
                     </ul>
                 </div>
                     <li class="active"><a th:href="@{/}">Home</a></li>
-                <th:block  th:if="${userName} != null and  ${#strings.equals(role, 'ADMIN')} ">
-                    <li><a th:href="@{/member/join}">Join</a></li>
+                <th:block th:if="${userName} != null and  ${#strings.equals(role, 'ADMIN')} ">
+                    <li class="has-children">
+                        <a href='javascript:void(0);'>Admin</a>
+                        <ul class="dropdown">
+                            <li><a th:href="@{/member/join}">Join</a></li>
+                            <li><a th:href="@{/admin/news/new}">News</a></li>
+                            <li><a th:href="@{/admin/item/new}">Item</a></li>
+                            <li><a th:href="@{/admin/store/new}">Store</a></li>
+                        </ul>
+                    </li>
                 </th:block>
                     <li><a th:href="@{/order/store-pick}">Reservation</a></li>
                     <li><a th:href="@{/items}">Menu</a></li>

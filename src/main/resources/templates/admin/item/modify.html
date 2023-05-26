@@ -66,23 +66,38 @@
                 <div class="col-md-12 col-lg-12 pb-4" data-aos="fade-up" data-aos-delay="200">
                     <form role="form"  method="post" enctype="multipart/form-data" th:object="${itemFormDto}" id="form">
                         <input type="hidden" th:field="*{id}">
-                        <div class="form-group">
+                     <!--   <div class="form-group">
                             <label class="text-black" th:for="itemsType">종류</label>
                             <select th:field="*{itemsType}" class="form-control select"  aria-label="Default select example">
-                                <!-- <option style="background:#E8E5DE;" selected>유형</option>-->
+                                &lt;!&ndash; <option style="background:#E8E5DE;" selected>유형</option>&ndash;&gt;
                                 <option th:value="DONUT">도넛</option>
                                 <option th:value="BAKERY">케이크</option>
                                 <option th:value="CAKE">베이커리</option>
                             </select>
-                        </div>
+                        </div>-->
+
                         <div class="form-group">
-                            <label class="text-black" th:for="itemsStatus">종류</label>
-                            <select th:field="*{itemsStatus}" class="form-control select"  aria-label="Default select example">
-                                <!-- <option style="background:#E8E5DE;" selected>유형</option>-->
-                                <option th:value="SELL">판매</option>
-                                <option th:value="DISCON">판매중단</option>
+                            <label class="text-black" th:for="type">종류</label>
+                            <select class="form-control select" th:field="*{itemsType}"  aria-label="Default select example"  >
+                                <option th:each="itemTypeList :${itemTypeList}" th:value="${itemTypeList}" th:selected="${#strings.equals(itemTypeList, itemType)}" th:text="${itemTypeList}"></option>
                             </select>
                         </div>
+
+                        <div class="form-group">
+                            <label class="text-black" th:for="type">판매여부</label>
+                            <select class="form-control select" th:field="*{itemsStatus}" aria-label="Default select example"  >
+                                <option th:each="itemsStatusList :${itemsStatusList}" th:value="${itemsStatusList}" th:selected="${#strings.equals(itemsStatusList, itemStatus)}" th:text="${itemsStatusList}"></option>
+                            </select>
+                        </div>
+
+<!--                        <div class="form-group">-->
+<!--                            <label class="text-black" th:for="itemsStatus">판매여부</label>-->
+<!--                            <select th:field="*{itemsStatus}" class="form-control select"  aria-label="Default select example">-->
+<!--                                &lt;!&ndash; <option style="background:#E8E5DE;" selected>유형</option>&ndash;&gt;-->
+<!--                                <option th:value="SELL">판매</option>-->
+<!--                                <option th:value="DISCON">판매중단</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
 
                         <input type="hidden" name="ItemsStatus" th:value="SELL">
                         <div class="form-group">

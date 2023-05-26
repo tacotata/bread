@@ -195,7 +195,7 @@ var main = {
              }
         });
 
-        $('#btn-update').on('click', function () {
+        $('#btn-newsUpdate').on('click', function () {
             if(newsValidation()){
                 if (confirm("수정하시겠습니까?")) {
                     main.update();
@@ -530,7 +530,7 @@ var item = {
                     data: JSON.stringify(data)
                 }).done(function() {
                     alert('아이템 상태가 수정되었습니다.');
-                    window.location.href = '/';
+                    window.location.href = '/items';
                 }).fail(function (error) {
                     alert(JSON.stringify(error));
                 });

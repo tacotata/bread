@@ -76,6 +76,7 @@
             <input type="hidden" id="storeId" th:value="${store.id}">
             <a th:href="@{/stores/{id}( id=${store.id}, page=${nowPage-1})}">
                     <!--<img src="images/img_h_3-min.jpg" alt="Free Website Template by Untree.co" class="img-fluid">-->
+              <img th:src="|/upload/store/${#temporals.format(store.updDate, 'yyyyMMdd')}/${store.fileName}|"  class="img-fluid">
             <div class="p-4 bg-white" style="text-align: center;">
               <h3 class="font-pretend" th:text="${store.name}"></h3>
               <span class="date font-pretend" th:text="${store.address}">서울 송파구 북촌로 6-3</span>

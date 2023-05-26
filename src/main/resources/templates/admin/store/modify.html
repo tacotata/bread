@@ -67,13 +67,12 @@
             <input type="hidden" id="storeId" th:value="${store.id}">
             <input type="hidden" id="storeFileId" th:value="${file.id}">
 
-            <div class="form-group">
-            <label class="text-black" for="hideYn">등록 유무</label>
-            <select class="form-control select" name="pickUptime" id="hideYn" aria-label="Default select example">
-              <option value="ture">보이기</option>
-              <option value="false">숨기기</option>
-            </select>
-        </div>
+              <div class="form-group">
+                  <label class="text-black" th:for="type">삭제 유무</label>
+                  <select class="form-control select" aria-label="Default select example"  id="type">
+                      <option th:each="hideYnList :${hideYnList}" th:value="${hideYnList}" th:selected="${#strings.equals(hideYnList, hideYn)}" th:text="${hideYnList}"></option>
+                  </select>
+              </div>
 
             <div class="form-group">
               <label class="text-black" for="name">매장 이름</label>

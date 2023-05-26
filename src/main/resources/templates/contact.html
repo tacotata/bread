@@ -100,7 +100,7 @@
                             <textarea name="" class="form-control" id="message" cols="30" rows="15"
                                       maxlength="1000"></textarea>
                         </div>
-                        <small class="form-text text-muted contact-content-wordCnt"> <span>298</span> / 1000</small>
+                        <small class="form-text text-muted contact-content-wordCnt"> <span id="counter"></span> / 1000</small>
                         <div style="margin-bottom: 0.5rem;">첨부사진</div>
                         <div class="form-group file-upload-wrap">
                             <div id="fileName"></div>
@@ -153,6 +153,21 @@
 <script th:src="@{/js/custom.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script src="https://kit.fontawesome.com/0b588c2a50.js" crossorigin="anonymous"></script>
+
+<th:block layout:fragment="script">
+<script th:inline="javascript">
+$('#message').keyup(function (e){
+    var content = $(this).val();
+    $('#counter').html(content.length);
+    if (content.length >= 1000){
+        alert("최대 1000자까지 입력 가능합니다.");
+        $(this).val(content.substring(0,1000));
+        $('#counter').text("1000");
+    }
+});
+
+</script>
+</th:block>
 
 </body>
 </html>

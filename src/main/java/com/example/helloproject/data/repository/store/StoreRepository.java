@@ -8,5 +8,5 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 public interface StoreRepository extends JpaRepository<Store, Long>, QuerydslPredicateExecutor<Store>, StoreRepositoryCustom {
 
-    Page<Store> searchStore(String search, Pageable pageable);
+
 }

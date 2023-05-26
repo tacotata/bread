@@ -82,7 +82,7 @@
                     <div class="isotope-card col-sm-4 all "  th:classappend="${#strings.toLowerCase(items.itemsType)}" >
                         <input type="hidden" th:value="${items.id}">
                         <a th:href="@{/item/{itemsId}( itemsId=${items.id}, page=${nowPage-1})}">
-                            <img th:src="|/upload/item/${#temporals.format(items.regDate, 'yyyyMMdd')}/${items.fileName}|" alt="Image" class="img-fluid">
+                            <img th:src="|/upload/item/${#temporals.format(items.updDate, 'yyyyMMdd')}/${items.fileName}|" alt="Image" class="img-fluid">
                             <div class="contents">
                                 <h3>[[${items.name}]]</h3>
                                 <div class="cat" th:text="${#numbers.formatInteger(items.price, 0, 'COMMA')}"></div>

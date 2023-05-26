@@ -179,8 +179,8 @@
                     </div>
                 </th:block>
 
-                <div class="row">
-                    <div class="col-md-8">
+<!--                <div class="row">-->
+<!--                    <div class="col-md-8">-->
                         <div class="form-group">
                             <label class="text-black" th:for="mobile">휴대전화</label>
                             <input type="text" th:field="*{mobile}" class="form-control" maxlength="11"
@@ -188,20 +188,20 @@
                             <small th:if="${#fields.hasErrors('mobile')}" th:errors="*{mobile}"
                                    class="form-text  fieldError"></small>
                         </div>
-                    </div>
+<!--                    </div>-->
 
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label class="text-black hidden">인증번호 버튼</label>
-                            <button type="text" class="btn btn-primary submit-btn">인증번호 받기</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="phoneChk" placeholder="인증번호 입력하세요.">
-                    <small id="phoneChkMsg" class="form-text">We'll never share your email with anyone
-                        else.</small>
-                </div>
+<!--                    <div class="col-md-4">-->
+<!--                        <div class="form-group">-->
+<!--                            <label class="text-black hidden">인증번호 버튼</label>-->
+<!--                            <button type="text" class="btn btn-primary submit-btn">인증번호 받기</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <input type="text" class="form-control" id="phoneChk" placeholder="인증번호 입력하세요.">-->
+<!--                    <small id="phoneChkMsg" class="form-text">We'll never share your email with anyone-->
+<!--                        else.</small>-->
+<!--                </div>-->
                 <div class="form-group">
                     <label class="text-black" for="message">개인정보 수집 및 이용 동의 <span
                             class="font-weight-bold">(필수)</span></label>

@@ -77,7 +77,7 @@
                             </td>
                         </th:block>
                         <td class="text-center p-0" th:each = "file:${file}" th:if="${file.extension} == '.jpg' or ${file.extension} == '.jpeg' or ${file.extension} == '.png' or ${file.extension} == '.gif'">
-                            <img   th:src="|/upload/notice/${#temporals.format(file.regDate, 'yyyyMMdd')}/${file.fileName}|"  width="90%" >
+                            <img   th:src="|/upload/notice/${#temporals.format(file.updDate, 'yyyyMMdd')}/${file.fileName}|"  width="90%" >
                         </td>
                         <td  style="white-space: pre-line;" colspan="2" rowspan="150" th:text ="${news.contents}"></td>
                     </tr>
@@ -87,12 +87,14 @@
     </div>
 </div>
 <div class="container mb-5 border-bottom d-flex justify-content-end login-form-wrap mypage-table-wrap">
+    <th:block th:if="${userName} != null and  ${#strings.equals(role, 'ADMIN')} ">
     <div class="row justify-content-end pr-3 mr-2">
         <button type="button" class="btn btn-primary  bg-secondary border border-secondary" id="btn-delete">삭제</button>
     </div>
     <div class="row justify-content-end pr-3 mr-2 ">
         <button type="button" class="btn btn-primary  bg-secondary border border-secondary" th:onclick="|location.href='@{/admin/news/modify/{newsId}(newsId=${news?.id}, page=${page})}'|">수정</button>
     </div>
+    </th:block>
     <div class="row justify-content-end pr-3 ">
         <button type="button" class="btn btn-primary" th:onclick="|location.href='@{/news/notice(page=${page})}'|">목록</button>
     </div>

@@ -30,11 +30,12 @@ public class News extends BaseEntity {
     private int fileCnt;
     //private LocalDateTime updDate;
 
-    public void update(String subject, String contents, String updId, int fileCnt) {
+    public void update(String subject, String contents, String updId, int fileCnt, NewsType type ) {
         this.subject = subject;
         this.contents = contents;
         this.updId = updId;
         this.fileCnt = fileCnt;
+        this.type = type;
         //this.setUpdDate(LocalDateTime.now());
     }
 

@@ -83,7 +83,7 @@
             <div class="col-lg-6">
                 <div class="image-stack-v2 itemImg">
                     <div class="image-stack__item image-stack__item--bottom" th:each="itemFile : ${item.itemsFileResponseDtoList}">
-                        <img th:if="${not #strings.isEmpty(itemFile.filePath)}" th:src="|/upload/item/${#temporals.format(itemFile.regDate, 'yyyyMMdd')}/${itemFile.fileName}|" alt="Image" class="img-fluid">
+                        <img th:if="${not #strings.isEmpty(itemFile.filePath)}" th:src="|/upload/item/${#temporals.format(itemFile.updDate, 'yyyyMMdd')}/${itemFile.fileName}|" alt="Image" class="img-fluid">
                     </div>
                 </div>
             </div>

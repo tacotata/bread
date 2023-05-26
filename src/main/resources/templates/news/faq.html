@@ -92,6 +92,7 @@
                                          <th:block  th:text="${news.contents}">
                                         </th:block>
                                     </div>
+                                    <th:block th:if="${userName} != null and  ${#strings.equals(role, 'ADMIN')} ">
                                     <div class="container mb-5 border-bottom d-flex justify-content-end login-form-wrap mypage-table-wrap">
                                         <div class="row justify-content-end pr-3 mr-2">
                                             <button type="button" class="btn btn-faq btn-primary bg-secondary border border-secondary" id="btn-delete">삭제</button>
@@ -100,6 +101,7 @@
                                             <button type="button" class="btn btn-faq btn-primary" th:onclick="|location.href='@{/admin/news/modify/{newsId}(newsId=${news?.id}, page=${nowPage-1})}'|">수정</button>
                                         </div>
                                     </div>
+                                    </th:block>
                                 </div>
                             </div> <!-- .accordion-item -->
                         </div>

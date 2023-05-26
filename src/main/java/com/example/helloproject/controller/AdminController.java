@@ -9,6 +9,8 @@ import com.example.helloproject.data.dto.news.NewsUpdateRequestDto;
 import com.example.helloproject.data.dto.store.StoreResponseDto;
 import com.example.helloproject.data.dto.store.StoreSaveRequestDto;
 import com.example.helloproject.data.dto.store.StoreUpdateRequestDto;
+import com.example.helloproject.data.entity.menu.ItemsType;
+import com.example.helloproject.data.entity.news.NewsType;
 import com.example.helloproject.service.ItemsService;
 import com.example.helloproject.service.StoreService;
 import com.example.helloproject.service.UploadService;
@@ -24,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -111,6 +114,11 @@ public class AdminController {
                 if (fileCnt > 0) {
                     model.addAttribute("file", uploadService.findByNewsId(id));
                 }
+                List<String> typeList = new ArrayList<>();
+                for(NewsType type  : NewsType.values()){
+                    typeList.add(String.valueOf(type));
+                }
+                    model.addAttribute("typeList",typeList );
                     model.addAttribute("news", news);
                     model.addAttribute("page", page);
         }catch (Exception e){
@@ -138,6 +146,7 @@ public class AdminController {
     public Long update(@PathVariable Long id , @RequestPart(value = "file", required = false) List<MultipartFile> files, @RequestPart(value = "key") NewsUpdateRequestDto requestDto) {
         log.info("=============== news update START ====================");
         String type = String.valueOf(requestDto.getType());
+        log.info("type: {}" ,type);
         Long fileId = 0L;
         try{
             if (!files.get(0).isEmpty()) {
@@ -206,6 +215,20 @@ public class AdminController {
            log.info("itemFormDto.getItemsFileResponseDtoList().size() {}", itemFormDto.getItemsFileResponseDtoList().size());
             //  log.info("getItemFileSaveDtoList{}", itemFormDto.getItemFileSaveDtoList().get(0));
             model.addAttribute("itemFormDto", itemFormDto);
+
+            model.addAttribute("itemType",  itemFormDto.getItemsType());
+            List<String> itemTypeList = new ArrayList<>();
+            for(ItemsType type  : ItemsType.values()){
+                itemTypeList.add(String.valueOf(type));
+            }
+            model.addAttribute("itemTypeList", itemTypeList);
+
+            List<String> itemsStatusList = new ArrayList<>();
+            itemsStatusList.add("SELL");
+            itemsStatusList.add("DISCON");
+            model.addAttribute("itemsStatusList", itemsStatusList);
+            model.addAttribute("itemStatus",  itemFormDto.getItemsStatus());
+
         }catch(EntityNotFoundException  e){
             log.info(e.getMessage());
             model.addAttribute("errorMessage", new ItemFormDto());
@@ -237,7 +260,7 @@ public class AdminController {
             model.addAttribute("errorMessage", "상품 수정 중 에러가 발생했습니다..");
             return "/admin/item/modify";
         }
-        return "redirect:/";
+        return "redirect:/items";
     }
 
     //item 상태 변경 변경
@@ -299,8 +322,15 @@ public class AdminController {
                 model.addAttribute("role", user.getRole());
             }
             StoreResponseDto store = storeService.findById(id);
+            List<String> hideYnList = new ArrayList<>();
+
+            hideYnList.add(String.valueOf(true));
+            hideYnList.add(String.valueOf(false));
+
+            model.addAttribute("hideYnList", hideYnList);
             model.addAttribute("file", uploadService.findByStoreId(id));
             model.addAttribute("store", store);
+            model.addAttribute("hideYn", store.isHide_yn());
             model.addAttribute("page", page);
         }catch (Exception e){
             e.printStackTrace();

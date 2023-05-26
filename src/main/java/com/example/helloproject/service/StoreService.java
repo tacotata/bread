@@ -1,5 +1,6 @@
 package com.example.helloproject.service;
 
+import com.example.helloproject.data.dto.store.MainStoreDto;
 import com.example.helloproject.data.dto.store.StoreResponseDto;
 import com.example.helloproject.data.dto.store.StoreSaveRequestDto;
 import com.example.helloproject.data.dto.store.StoreUpdateRequestDto;
@@ -40,5 +41,10 @@ public class StoreService {
     public StoreResponseDto findById (Long id){
         Store entity = storeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없습니다. id =" + id));
         return new StoreResponseDto(entity);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainStoreDto> getStorePage(String search, Pageable pageable){
+        return storeRepository.getStorePage(search, pageable);
     }
 }
