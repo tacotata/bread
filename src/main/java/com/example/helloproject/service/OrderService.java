@@ -1,5 +1,7 @@
 package com.example.helloproject.service;
 
+
+import com.example.helloproject.data.dto.orders.MainOrderDto;
 import com.example.helloproject.data.dto.orders.OrderDto;
 import com.example.helloproject.data.entity.cart.Cart;
 import com.example.helloproject.data.entity.cart.CartItem;
@@ -12,10 +14,13 @@ import com.example.helloproject.data.repository.orders.OrdersRepository;
 import com.example.helloproject.data.repository.user.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +49,11 @@ public class OrderService {
         Orders orders = Orders.createOrders(users, orderItemList, cart);
         ordersRepository.save(orders);
         return orders.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainOrderDto> getOrderPage(LocalDate startDate, LocalDate endDate, Long userId, Pageable pageable){
+        return ordersRepository.getOrderPage(startDate, endDate, userId, pageable);
     }
 
 }

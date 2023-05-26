@@ -6,6 +6,7 @@ import com.example.helloproject.config.auth.dto.SessionUser;
 import com.example.helloproject.data.dto.cart.*;
 import com.example.helloproject.data.dto.item.ItemFormDto;
 import com.example.helloproject.data.dto.item.MainItemDto;
+import com.example.helloproject.data.dto.orders.MainOrderDto;
 import com.example.helloproject.data.dto.store.StoreResponseDto;
 import com.example.helloproject.data.entity.cart.Cart;
 import com.example.helloproject.data.entity.menu.Items;
@@ -13,6 +14,7 @@ import com.example.helloproject.data.entity.store.Store;
 import com.example.helloproject.data.entity.user.Users;
 import com.example.helloproject.service.CartService;
 import com.example.helloproject.service.ItemsService;
+import com.example.helloproject.service.OrderService;
 import com.example.helloproject.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +22,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +44,7 @@ public class OrderController {
     private final StoreService storeService;
     private final CartService cartService;
     private final ItemsService itemsService;
+    private final OrderService orderService;
 
     @GetMapping("/store-pick")
     public String storePick(Model model, @LoginUser SessionUser user, @PageableDefault(size=9, sort="id", direction= Sort.Direction.DESC) Pageable pageable, String search  ){
@@ -235,12 +240,32 @@ public class OrderController {
     }
 
     //고객 주문 리스트
-    @GetMapping("/list")
-    public String orderList(Model model, @LoginUser SessionUser user  ){
+    @GetMapping(value ={"/list", "/list/{page}"})
+    public String orderList(@PageableDefault(size=9, sort="regDate", direction= Sort.Direction.DESC) Pageable pageable, Model model, @LoginUser SessionUser user, @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,  @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate ){
+        log.info("===============ORDER LIST START ====================");
+
         if(user !=null){
             model.addAttribute("userName", user.getName());
             model.addAttribute("role", user.getRole());
         }
+        try{
+            Page<MainOrderDto> orders = orderService.getOrderPage(startDate, endDate, user.getId(), pageable);
+            // pageable은 0부터 시작
+            int nowPage = orders.getPageable().getPageNumber() + 1; //1 더해서 0+1 = 1부터 시작
+            log.info("getTotalElements : {}", String.valueOf(orders.getTotalElements()));
+            log.info("총 페이지 개수 : {} ", orders.getTotalPages()); // pageable은 -1 해야함
+            log.info("START DATE : {} ", startDate);
+            log.info("END DATE : {} ", endDate);
+            log.info("현재 페이지 : {} ", nowPage );//1부터 시작 pageable은 0부터 시작
+
+            model.addAttribute("orders", orders);
+            model.addAttribute("nowPage", nowPage);
+            model.addAttribute("maxPage", 5);// 페이징 수
+        }catch (Exception e){
+            log.info(e.getMessage());
+        }
+
+        log.info("===============ORDER LIST END ====================");
         return "/order/list";
     }
 
