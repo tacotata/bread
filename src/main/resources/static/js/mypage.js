@@ -198,3 +198,37 @@
               }
         }
   };
+
+
+    function removeItem(cartItemId){
+                if (confirm("삭제하시겠습니까?")) {
+                   $.ajax({
+                          type: 'DELETE',
+                          url: '/order/api/v1/cartItem/'+cartItemId,
+                          datatype: "text",
+                          contentType:'application/json; charset=utf-8'
+                      }).done(function() {
+                          alert('삭제되었습니다.');
+                          location.reload();
+                      }).fail(function (error) {
+                          alert(JSON.stringify(error));
+                      });
+                  }
+          }
+    function changeItemCnt(cartItemId, ths){
+         var count = $(ths).closest("tr").find("td").eq(1).find("input[name='count']").val();
+          if (confirm("수량을 변경하시겠습니까?")) {
+                $.ajax({
+                      type: 'PUT',
+                      url: '/order/api/v1/cartItemCnt/'+cartItemId,
+                      data:  {'count': count},
+                      datatype: "text",
+                  }).done(function(result){
+                      alert('수량이 변경되었습니다.');
+                      location.reload();
+                  }).fail(function(error){
+                      alert(JSON.stringify(error));
+                  });
+             }
+    }
+

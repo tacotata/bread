@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -115,6 +116,19 @@ public class OrderController {
 
         log.info(String.valueOf(user.getId()));
 
+        Long id = cartService.findByUserId(user.getId());
+
+        if(id > 0){
+            List<Long> cartItemList = cartService.deleteCartItems(id);
+            if(!cartItemList.isEmpty()) {
+                for (Long cartItem : cartItemList) {
+                    log.info("DELETE CART ITEM ID : {}", cartItem);
+                }
+            }
+            Long deletedCartId  = cartService.deleteCart(id);
+            log.info("DELETE CART ID : {}" , deletedCartId);
+        }
+
         CartSaveRequestDto cartSaveRequestDto = CartSaveRequestDto.builder()
                 .store(Store.builder().id(storeId).build())
                 .users(Users.builder().id(user.getId()).build())
@@ -176,17 +190,39 @@ public class OrderController {
             model.addAttribute("userName", user.getName());
             model.addAttribute("role", user.getRole());
         }
+        Long cartItemId = 0L;
+        try{
+            CartResponseDto cartResponseDto = cartService.findById(cartId);
+            if(cartResponseDto != null){
+                log.info("cartId: {} , itemsId :{}", cartId, itemsId);
+                Long id = cartService.getCartItem(cartId, itemsId);
+                if(id >0){
+                    log.info("cartItem.get().getId() {}",String.valueOf(id));
+                    CartItemUpdateRequestDto cartItemUpdateRequestDto = CartItemUpdateRequestDto.builder()
+                            .cart(Cart.builder().id(cartId).build())
+                            .item(Items.builder().id(itemsId).build())
+                            .count(requestDto.getCount())
+                            .build();
+                    cartItemId = cartService.updateCartItem(id, cartItemUpdateRequestDto );
 
-        //장바구니에 userId랑 itemId 있으면 update로 해야하네
+                }else{
 
-        CartItemSaveRequestDto cartItemSaveRequestDto = CartItemSaveRequestDto.builder()
-                .cart(Cart.builder().id(cartId).build())
-                .item(Items.builder().id(itemsId).build())
-                .count(requestDto.getCount())
-                .build();
+                    CartItemSaveRequestDto cartItemSaveRequestDto = CartItemSaveRequestDto.builder()
+                            .cart(Cart.builder().id(cartId).build())
+                            .item(Items.builder().id(itemsId).build())
+                            .count(requestDto.getCount())
+                            .build();
 
-        Long cartItemId = cartService.saveCartItem(cartItemSaveRequestDto);
+                    cartItemId = cartService.saveCartItem(cartItemSaveRequestDto);
 
+                }
+            }else{
+                model.addAttribute("errorMsg", "잘못된 경로입니다. 처음부터 다시 시도해주세요.");
+            }
+
+        }catch (Exception e){
+            log.info(e.getMessage());
+        }
         return cartItemId;
     }
 
@@ -217,7 +253,7 @@ public class OrderController {
     @ResponseBody
     public void delete(@PathVariable Long cartId ) {
         try {
-            List<Long> cartItemList = cartService.deleteCartItem(cartId);
+            List<Long> cartItemList = cartService.deleteCartItems(cartId);
             for(Long cartItem : cartItemList) {
                 log.info("DELETE CART ITEM ID : {}" , cartItem);
             }
@@ -270,4 +306,28 @@ public class OrderController {
     }
 
 
+
+    @DeleteMapping("/api/v1/cartItem/{cartItemId}")
+    @ResponseBody
+    public void deleteCartItem(@PathVariable Long cartItemId ) {
+        log.info("deleteCartItem start");
+        try {
+            cartService.deleteCartItem(cartItemId);
+            log.info("DELETE CART ITEM ID : {}" , cartItemId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    @PutMapping("/api/v1/cartItemCnt/{cartItemId}")
+    @ResponseBody
+    public Long updateCartItemCnt(@PathVariable Long cartItemId,  @RequestParam(value = "count", required=false) String count) {
+        log.info("=============== updateCartItemCnt UPDATE START ====================");
+        log.info(count);
+        int countInt = Integer.parseInt(count);
+        log.info("=============== updateCartItemCnt UPDATE END ====================");
+        return cartService.updateCartItemCnt(cartItemId, countInt );
+
+    }
 }

@@ -130,17 +130,6 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js"></script>
 <script th:src="@{/js/calendar.js}"></script>
 <script th:src="@{/js/main.js}"></script>
-<th:block layout:fragment="script">
-  <script th:inline="javascript">
 
-history.pushState(null, null, location.href);
-window.onpopstate = function(event) {
- if (confirm("진행중인 예약정보가 초기화 됩니다.")) {
-         order.delete();
-    }
-	history.go(1);
-};
-    </script>
-</th:block>
 </body>
 </html>

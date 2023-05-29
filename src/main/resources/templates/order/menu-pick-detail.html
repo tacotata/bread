@@ -183,9 +183,13 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-  var count =parseInt( $('#count').val());
+ var count =parseInt( $('#count').val());
 $(document).ready(function(){
 
+    var errorMessage = [[${errorMessage}]];
+    if(errorMessage != null){
+        alert(errorMessage);
+    }
 
     $('#minusBtn').on('click', function () {
         if( count > 1 ){
@@ -200,16 +204,6 @@ $(document).ready(function(){
         }
     });
 });
-
-
-
-
-
-
-
-
-
-
 
     </script>
 </th:block>

@@ -66,7 +66,7 @@ public class CartService {
 
     //cartItem delete 전체
     @Transactional
-    public List<Long> deleteCartItem (Long cartId) {
+    public List<Long> deleteCartItems (Long cartId) {
         List<Long> cartItemIds = cartItemRepository.findByCartItemIds(cartId);
         cartItemRepository.deleteAllByCartItemIds(cartItemIds);
         return cartItemIds;
@@ -97,5 +97,51 @@ public class CartService {
         log.info("DELETE CART ID : {}", deletedCartId);
         return orderId;
     }
+    @Transactional(readOnly = true)
+    public Long findByUserId(Long userId) {
+        Cart cart  =  cartRepository.findByUserId(userId);
+        if(cart == null){
+            log.info("cart is null");
+            return 0L;
+        }
+        return cart.getId();
+    }
 
+    @Transactional(readOnly = true)
+    public CartResponseDto findById (Long id){
+        Cart entity = cartRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 장바구니가 없습니다. id=" + id));
+        return new CartResponseDto(entity);
+    }
+
+    @Transactional(readOnly = true)
+    public Long getCartItem(Long cartId, Long itemId) {
+        Long id = cartItemRepository.findByCartIdAndItemId(cartId, itemId);
+        if(id == null){
+            log.info("item is null");
+            return 0L;
+        }
+        return id;
+    }
+
+    @Transactional
+    public Long updateCartItem(Long id, CartItemUpdateRequestDto requestDto){
+        CartItem cartItem = cartItemRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 아이템이 없습니다. id=" + id));
+        cartItem.update(requestDto.getCart(), requestDto.getItem(), requestDto.getCount());
+        return id;
+    }
+
+    //cart item 단건 삭제
+    @Transactional
+    public void deleteCartItem (Long cartItemId) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 아이템이 없습니다. cartItemId =" + cartItemId ));
+        cartItemRepository.delete(cartItem);
+    }
+
+    @Transactional
+    public Long updateCartItemCnt(Long cartItemId, int count){
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new IllegalArgumentException("해당 아이템이 없습니다. cartItemId=" + cartItemId));
+        cartItem.updateCnt(count);
+        return cartItemId;
+    }
 }

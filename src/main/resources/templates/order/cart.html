@@ -67,9 +67,9 @@
             <input type="hidden" id="cartId" th:value="${cart.cartId}">
             <span><a style="text-indent: 20px;"class="reply bg-dark text-white ml-3 rounded-pill pl-3 pr-3 pt-2 pb-2"  id="changeStore-btn">변경</a></span>
         </div>
-        <table class="table cart-table">
+        <table class="table cart-table" id="table-cart">
             <tbody>
-                <tr th:each="cartItems, cartItemsStat: ${cartItems}">
+                <tr th:each="cartItems, cartItemsStat: ${cartItems}" class="cartTr">
                     <input type="hidden" name="cartItemId" th:value="${cartItems.cartItemId}">
                     <div class="table-responsive-md">
                         <td>
@@ -80,15 +80,23 @@
 
                     </div>
                     <div class="table-responsive-md">
-                        <td class=".text-center">
+                        <td class=".text-center cntBox">
                             <div class="number-input-wrap ">
-                                <button type="button" class="btn bg-transparent menu-cnt-btn" th:id="minusBtn">-</button>
-                                <input class="text-center border-0 p-0  bg-transparent" type="text" readonly="" min="1" th:id="'count'+${cartItemsStat.index}" th:value="${cartItems.count}">
-                                <button type="button" class="btn bg-transparent menu-cnt-btn" th:id="plusBtn">+</button>
+                                <button type="button" class="btn bg-transparent menu-cnt-btn" th:id="minusBtn" th:onclick="fnCalCount('m',this);">-</button>
+                                <input class="text-center border-0 p-0  bg-transparent" type="text" readonly="" name="count" min="1" th:id="'count ' +${cartItemsStat.index}" th:value="${cartItems.count}">
+                                <button type="button" class="btn bg-transparent menu-cnt-btn" th:id="plusBtn" th:onclick="fnCalCount('p',this);">+</button>
                             </div>
                         </td>
+                        <td>
+                            <button type="button" class="btn btn-primary mr-3 mb-2" id="changeItemCount-btn" th:onclick="changeItemCnt([[${cartItems.cartItemId}]], this);" style="padding-top: 5px;
+                            padding-bottom: 5px;
+                            padding-left: 13px;
+                            padding-right: 13px;
+                            border-radius: 4px;
+                            font-size: 14px;">변경</button>
+                        </td>
                         <td class=".text-center" th:text="${#numbers.formatInteger(cartItems.price * cartItems.count, 0, 'COMMA') + ' 원'}"></td>
-                        <td class=".text-center remove-menu-btn">X</td>
+                        <td class=".text-center remove-menu-btn" th:onclick="removeItem([[${cartItems.cartItemId}]])">X</td>
                     </div>
                 </tr>
             </tbody>
@@ -176,6 +184,50 @@
 
 <script th:src="@{/js/custom.js}"></script>
 <script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/mypage.js}"></script>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
 
+// total 계산 3번째 td 다 더하기
+// 개수 증감
+// 삭제
+// 결제하기 하면  count 업데이트하고 ? 아님 그냥 바로 넣어주냐 ?
+
+
+//total 계산
+var total=0;
+$(function () {
+for(var i =0; i < $('#table-cart > tbody tr').length; i++){
+    total += parseInt( $('#table-cart').find("tr").eq(i).find("td").eq(3).text().replace(",","").replace("원","").trim() )
+}
+total = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+$('#total').text(total+"원");
+});
+
+
+
+//클릭하면 가까운 count 찾고
+//값을 바꿔줘
+//
+
+
+function fnCalCount(type, ths){
+console.log(ths)
+
+
+    var $input = $(ths).parents("td").find("input[name='count']");
+    var tCount = Number($input.val());
+    console.log(tCount)
+    var tEqCount = Number($(ths).parents("tr").find("td.countBox").html());
+    if(type=='p'){
+        if(tCount < 10) $input.val(Number(tCount)+1);
+
+    }else{
+        if(tCount >1) $input.val(Number(tCount)-1);
+        }
+}
+
+</script>
+</th:block>
 </body>
 </html>
