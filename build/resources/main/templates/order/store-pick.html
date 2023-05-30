@@ -1,0 +1,227 @@
+<!-- /*
+* Template Name: Style
+* Template Author: Untree.co
+* Tempalte URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
+<!DOCTYPE HTML>
+<html lang="ko" xmlns:th="http:/www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Untree.co">
+  <link rel="shortcut icon" href="favicon.png">
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="free template, bootstrap, bootstrap4" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link  rel="stylesheet" th:href="@{/bootstrap.min.css}" >
+  <link  rel="stylesheet" th:href="@{/animate.min.css}" >
+  <link  rel="stylesheet" th:href="@{/owl.carousel.min.css}">
+  <link  rel="stylesheet" th:href="@{/owl.theme.default.min.css}" >
+  <link  rel="stylesheet" th:href="@{/fonts/icomoon/style.css}" >
+  <link  rel="stylesheet" th:href="@{/fonts/feather/style.css}">
+  <link  rel="stylesheet" th:href="@{/fonts/flaticon/font/flaticon.css}">
+  <link  rel="stylesheet" th:href="@{/jquery.fancybox.min.css}">
+  <link  rel="stylesheet" th:href="@{/aos.css}">
+  <link  rel="stylesheet" th:href="@{/css/style.css}">
+ <link rel="stylesheet" th:href="@{/css/add.css}">
+  <title>Bread.</title>
+</head>
+<body>
+<div class="lines-wrap">
+  <div class="lines-inner">
+    <div class="lines"></div>
+  </div>
+</div>
+<!-- END lines -->
+<th:block th:replace="/include/header :: headerFragment"></th:block>
+<th:block th:replace="/include/nav :: navFragment"></th:block>
+
+
+
+<div class="custom-hero">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <h1 class="hero-heading">Reservation</h1>
+        <div  class="line js-line mx-auto mb-3 my-3 mt-5" ></div>
+        <p class="sub-text">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="section">
+  <div class="container search">
+    <div class="filters" data-aos="fade-up" data-aos-delay="100">
+      <ul>
+        <li class="text-white bg-primary reservation-nav-li">STEP01 매장선택</li>
+        <li class="reservation-nav-li">STEP02 일자선택</li>
+        <li class="reservation-nav-li">STEP03 메뉴선택</li>
+      </ul>
+      <form th:action="@{/order/store-pick}">
+        <ul>
+          <li class ="search-menu_wrap">
+            <input id="search" class="search-menu" name="search" spellcheck="false" type="text" >
+            <label for="search"></label>
+            <button style=""type="submit">검색</button>
+          </li>
+        </ul>
+      </form>
+    </div>
+
+    <div class="row mb-5" style="margin-top: 1rem;">
+      <div class="container pb-5 mb-5 border-bottom">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="custom-accordion" id="accordion_1">
+
+<!--              <div class="accordion-item font-pretend">-->
+<!--                <h2 class="mb-0">-->
+<!--                  <button class="btn btn-link font-weight-bold" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">브레드 해운대</button>-->
+<!--                </h2>-->
+<!--                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion_1">-->
+<!--                  <div class="accordion-body comment-list">-->
+<!--                    <li class="comment">-->
+<!--                      <div class="vcard bio">-->
+<!--                        <img src="/images/store1.jpg" alt="Image placeholder">-->
+<!--                      </div>-->
+<!--                      <div class="comment-body">-->
+
+<!--                        <table><tr><th class="text-secondary">주소</th><td >서울 강남구 도산대로53길 15 <a class="map text-secondary">[지도보기]</a></td></tr><tr><th class="text-secondary">영업시간</th><td class="pl-2">09:00 ~ 21:00</td></tr><tr><th class="text-secondary">픽업가능시간</th><td class="pl-2">10:00 ~ 20:00</td></tr><tr><th class="text-secondary">특이사항</th><td class="pl-2">10:00 ~ 20:00</td></tr>-->
+<!--                                     <tr><td colspan="2" class="text-secondary">Last order - 20:30</td></tr></table>-->
+<!--                        <p class="d-grid gap-2 d-md-flex  mb-3 mt-3 justify-content-md">-->
+<!--                          <a href="#" class="reply">매장 선택</a>-->
+<!--                          </p>-->
+<!--                      </div>-->
+<!--                    </li>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div> &lt;!&ndash; .accordion-item &ndash;&gt;-->
+
+
+
+              <div class="accordion-item font-pretend" th:each = "store:${store}" >
+                <h2 class="mb-0">
+                  <button class="btn btn-link font-weight-bold font-pretend" type="button" data-toggle="collapse"  th:attr="data-target='#collapse'+${store.id }" aria-expanded="false" th:text="${store.name}"></button>
+                </h2>
+                <div th:id="|collapse${store.id}|"  class="collapse "  th:attr="aria-labelledby='heading'+ ${store.id}"
+                     data-parent="#accordion_1">
+                  <input type="hidden" th:value="${store.id}" id="storeId">
+<!--                  <input type="hidden" th:value="${store.hideYn}" id="hideYn">-->
+                  <div class="accordion-body comment-list">
+                    <li class="comment">
+                      <div class="vcard bio">
+                        <img src="/images/store1.jpg" alt="Image placeholder">
+                      </div>
+                      <div class="comment-body">
+                        <table>
+                          <tr>
+                            <th class="text-secondary">주소</th>
+                            <td th:text="${store.address}">서울 강남구 도산대로53길 15 <a class="map text-secondary">[지도보기]</a></td>
+                          </tr>
+                          <tr>
+                            <th class="text-secondary" >영업시간</th>
+                            <td class="pl-2">
+                              <span id="open" th:text ="${store.open}"></span> ~ <span  id="close" th:text ="${store.close}"></span>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th class="text-secondary">픽업가능시간</th>
+                            <td class="pl-2">
+                              <span id="startPickupTime" th:text ="${store.startPickupTime}"></span> ~ <span  id="endPickupTime" th:text ="${store.endPickupTime}"></span>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th class="text-secondary">특이사항</th>
+                            <td class="pl-2"  th:text="${store.info}"></td>
+                          </tr>
+                          <tr>
+                            <td colspan="2" th:text="'Last order - ' +${store.lastOrder}" class="text-secondary"></td>
+                          </tr>
+                        </table>
+                        <p class="d-grid gap-2 d-md-flex  mb-3 mt-3 justify-content-md">
+                          <a th:onclick="|location.href='@{/order/date-pick(storeId=${store?.id}, storeName=${store?.name})}'|" class="reply">매장 선택</a>
+                        </p>
+                      </div>
+                    </li>
+                  </div>
+                </div>
+              </div> <!-- .accordion-item -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <ul class="list-unstyled custom-pagination" th:with="start=${(store.number/maxPage)*maxPage + 1}, end=(${(store.totalPages == 0) ? 1 : (start + (maxPage - 1) < store.totalPages ? start + (maxPage - 1) : store.totalPages)})">
+          <li th:if="${start > 1}">
+            <a th:href="@{/order/store-pick((page=0), search= ${param.search})}" th:text="'<<'"></a>
+          </li>
+
+          <li th:if="${start > 1}">
+            <a th:href="@{/order/store-pick(page=${start - maxPage-1}, search= ${param.search})}" th:text="'<'"></a>
+          </li>
+
+          <th:block th:each="page: ${#numbers.sequence(start, end)}">
+            <li>
+              <a th:text="${page}"  th:if="${page != nowPage}" th:href="@{/order/store-pick(page=${page - 1}, search= ${param.search})}"></a>
+            </li>
+            <li class="active">
+              <a th:if="${page==nowPage}" th:text ="${page}"></a>
+            </li>
+          </th:block>
+
+          <li th:if="${end < store.totalPages}">
+            <a th:href="@{/order/store-pick(page=${start + maxPage-1}, search= ${param.search})}" th:text="'>'"></a>
+          </li>
+
+          <li th:if="${end < store.totalPages}">
+            <a th:href="@{/order/store-pick(page=${news.totalPages - 1}, search= ${param.search})}" th:text="'>>'"></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<th:block th:replace="/include/footer :: footerFragment"></th:block>
+
+<script th:src="@{/js/jquery-3.5.1.min.js}"></script>
+<script th:src="@{/js/jquery-migrate-3.0.0.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/aos.js}"></script>
+<script th:src="@{/js/imagesloaded.pkgd.js}"></script>
+<script th:src="@{/js/isotope.pkgd.min.js}"></script>
+<script th:src="@{/js/jquery.animateNumber.min.js}"></script>
+<script th:src="@{/js/jquery.stellar.min.js}"></script>
+<script th:src="@{/js/jarallax.min.js}"></script>
+<script th:src="@{/js/jarallax-element.min.js}"></script>
+<script th:src="@{/js/jquery.waypoints.min.js}"></script>
+<script th:src="@{/js/jquery.fancybox.min.js}"></script>
+
+<script th:src="@{/js/jquery.lettering.js}"></script>
+
+
+<script th:src="@{/js/TweenMax.min.js}"></script>
+<script th:src="@{/js/ScrollMagic.min.js}"></script>
+<script th:src="@{/js/scrollmagic.animation.gsap.min.js}"></script>
+<script th:src="@{/js/debug.addIndicators.min.js}"></script>
+
+
+<script th:src="@{/js/custom.js}"></script>
+
+
+</body>
+</html>

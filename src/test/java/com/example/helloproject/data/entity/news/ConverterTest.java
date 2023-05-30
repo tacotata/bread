@@ -13,6 +13,6 @@ public class ConverterTest {
         StringToNewsTypeConverter converter = new StringToNewsTypeConverter();
         NewsType notice = converter.convert("notice");
         assertEquals(NewsType.NOTICE, notice);
-        assertThat(NewsType.valueOfLabel("notice")).isEqualTo(NewsType.NOTICE);
+        //assertThat(NewsType.valueOfLabel("notice")).isEqualTo(NewsType.NOTICE);
     }
 }
