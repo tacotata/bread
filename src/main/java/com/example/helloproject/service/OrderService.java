@@ -56,4 +56,9 @@ public class OrderService {
         return ordersRepository.getOrderPage(startDate, endDate, userId, pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Page<MainOrderDto> getStoreOrderPage(LocalDate startDate, LocalDate endDate, Long storeId, Pageable pageable){
+        return ordersRepository.getStoreOrderPage(startDate, endDate, storeId, pageable);
+    }
+
 }
