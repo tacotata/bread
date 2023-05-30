@@ -95,29 +95,40 @@
                     <label class="text-black" th:for="email">이메일</label>
                     <input type="email" id="email" class="form-control" th:value="${user.email}" th:name="email" aria-describedby="emailHelp" >
                 </div>
+            <th:block th:if="${#strings.equals(role, 'OWNER')} ">
+                <div class="form-group">
+                    <label class="text-black" th:for="role">매장명</label>
+                    <select class="form-control select" aria-label="Default select example"  id="storeId">
+                        <option th:each="store :${store}" th:value="${store.id}" th:selected="${#strings.equals(store.id, user.storeId)}" th:text="${store.name}"></option>
+                    </select>
+                </div>
+            </th:block>
+            <th:block th:if="${#strings.equals(role, 'ADMIN')} or  ${#strings.equals(role, 'OWNER')} ">
+                <div class="form-group">
+                    <label class="text-black" th:for="role">유형</label>
+                    <select class="form-control select" aria-label="Default select example"  id="role">
+                        <option th:each="roleList :${roleList}" th:value="${roleList}" th:selected="${#strings.equals(roleList, role)}" th:text="${roleList}"></option>
+                    </select>
+                </div>
+            </th:block>
 
                 <th:block th:if="${userName} != null and  ${#strings.equals(role, 'ADMIN')} ">
-                    <div class="form-group">
-                        <label class="text-black" th:for="role">유형</label>
-                        <select class="form-control select" aria-label="Default select example"  id="role">
-                           <option th:each="roleList :${roleList}" th:value="${roleList}" th:selected="${#strings.equals(roleList, role)}" th:text="${roleList}"></option>
-                        </select>
-                    </div>
 
-                    <div class="form-group owner">
-                        <label class="text-black" th:for="storeAddress">매장 주소</label>
-                        <input type="text" id="storeAddress" class="form-control" th:value="${user.storeAddress}" th:name="storeAddress">
-                    </div>
 
-                    <div class="form-group owner">
-                        <label class="text-black" th:for="storeName">매장명</label>
-                        <input type="text" id="storeName" class="form-control" th:value="${user.storeName}" th:name="storeName">
-                    </div>
+<!--                    <div class="form-group owner">-->
+<!--                        <label class="text-black" th:for="storeAddress">매장 주소</label>-->
+<!--                        <input type="text" id="storeAddress" class="form-control" th:value="${user.storeAddress}" th:name="storeAddress">-->
+<!--                    </div>-->
 
-                    <div class="form-group owner">
-                        <label class="text-black" th:for="storeTel">매장 전화번호</label>
-                        <input type="text" id="storeTel" class="form-control" th:value="${user.storeTel}" th:name="storeTel">
-                    </div>
+<!--                    <div class="form-group owner">-->
+<!--                        <label class="text-black" th:for="storeName">매장명</label>-->
+<!--                        <input type="text" id="storeName" class="form-control" th:value="${user.storeName}" th:name="storeName">-->
+<!--                    </div>-->
+
+<!--                    <div class="form-group owner">-->
+<!--                        <label class="text-black" th:for="storeTel">매장 전화번호</label>-->
+<!--                        <input type="text" id="storeTel" class="form-control" th:value="${user.storeTel}" th:name="storeTel">-->
+<!--                    </div>-->
 
 
                     <div class="form-group admin">

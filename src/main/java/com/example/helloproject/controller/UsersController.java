@@ -4,6 +4,7 @@ import com.example.helloproject.config.auth.LoginUser;
 import com.example.helloproject.config.auth.dto.SessionUser;
 import com.example.helloproject.data.dto.cs.ContactResponseDto;
 import com.example.helloproject.data.dto.cs.ContactSaveRequestDto;
+import com.example.helloproject.data.dto.store.StoreResponseDto;
 import com.example.helloproject.data.dto.users.UsersDto;
 import com.example.helloproject.data.dto.users.UsersResponseDto;
 import com.example.helloproject.data.dto.users.UsersUpdateRequestDto;
@@ -11,6 +12,7 @@ import com.example.helloproject.data.entity.user.Role;
 import com.example.helloproject.data.entity.user.Users;
 import com.example.helloproject.data.repository.user.UsersRepository;
 import com.example.helloproject.service.EmailService;
+import com.example.helloproject.service.StoreService;
 import com.example.helloproject.service.UploadService;
 import com.example.helloproject.service.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +44,7 @@ public class UsersController {
     private final UsersRepository usersRepository;
     private final UploadService uploadService;
     private final EmailService emailService;
+    private final StoreService storeService;
 
 
     @GetMapping("/join")
@@ -50,7 +53,11 @@ public class UsersController {
             model.addAttribute("userName", user.getName());
             model.addAttribute("role", user.getRole());
         }
+        List<StoreResponseDto> store = storeService.findAll();
+        model.addAttribute("store", store);
+
         model.addAttribute("usersDto", new UsersDto());
+
         return "/member/join";
     }
 
@@ -123,6 +130,8 @@ public class UsersController {
             UsersResponseDto member = usersService.findById(user.getId());
             model.addAttribute("user",member);
         }
+        List<StoreResponseDto> store = storeService.findAll();
+        model.addAttribute("store", store);
 
         List<String> roleList = new ArrayList<>();
         for(Role role : Role.values()){

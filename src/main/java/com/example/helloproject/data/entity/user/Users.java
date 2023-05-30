@@ -2,6 +2,7 @@ package com.example.helloproject.data.entity.user;
 
 import com.example.helloproject.data.dto.users.UsersDto;
 import com.example.helloproject.data.entity.BaseEntity;
+import com.example.helloproject.data.entity.store.Store;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -62,8 +63,12 @@ public class Users extends BaseEntity {
     @Column
     private String teamTel;
 
+
+    private Long storeId;
+
+
     @Builder
-    public Users(String password, String birthmonth, boolean promotionAgree, boolean privacyAgree , Long id, String name, String email, String picture, Role role, String birthday, String birthyear, String mobile, String snsType, String snsId ,String storeAddress, String storeName, String storeTel, String team, String teamTel ) {
+    public Users(String password, String birthmonth, boolean promotionAgree, boolean privacyAgree , Long id, String name, String email, String picture, Role role, String birthday, String birthyear, String mobile, String snsType, String snsId ,String storeAddress, String storeName, String storeTel, String team, String teamTel, Long storeId ) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -85,6 +90,9 @@ public class Users extends BaseEntity {
         this.storeTel = storeTel;
         this.team = team;
         this.teamTel = teamTel;
+
+
+        this.storeId =storeId;
     }
 
     public Users update (String name, String picture, String mobile){
@@ -103,7 +111,7 @@ public class Users extends BaseEntity {
         return this;
     }
 
-    public Users updateUserInfo(Role role, String name, String email, String mobile, String birthyear, String birthmonth, String birthday, boolean promotionAgree, String storeAddress, String storeName, String storeTel, String team, String teamTel) {
+    public Users updateUserInfo(Role role, String name, String email, String mobile, String birthyear, String birthmonth, String birthday, boolean promotionAgree, String storeAddress, String storeName, String storeTel, String team, String teamTel, Long storeId) {
         this.role = role;
         this.name = name;
         this.email = email;
@@ -117,6 +125,7 @@ public class Users extends BaseEntity {
         this.storeTel = storeTel;
         this.team = team;
         this.teamTel = teamTel;
+        this.storeId = storeId;
         return this;
     }
 
@@ -141,6 +150,7 @@ public class Users extends BaseEntity {
                 .storeTel(usersDto.getStoreTel())
                 .team(usersDto.getTeam())
                 .teamTel(usersDto.getTeamTel())
+                .storeId(usersDto.getStoreId())
                 .build();
         return users;
     }

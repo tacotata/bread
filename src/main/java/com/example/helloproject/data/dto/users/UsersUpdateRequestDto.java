@@ -1,5 +1,6 @@
 package com.example.helloproject.data.dto.users;
 
+import com.example.helloproject.data.entity.store.Store;
 import com.example.helloproject.data.entity.user.Role;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,9 +23,10 @@ public class UsersUpdateRequestDto {
     private String storeTel;
     private String team;
     private String teamTel;
+    private Long storeId;
 
     @Builder
-    public UsersUpdateRequestDto(Role role, String name, String password, String email, String mobile, String birthyear, String birthmonth, String birthday, boolean promotionAgree, String storeAddress, String storeName, String storeTel, String team, String teamTel) {
+    public UsersUpdateRequestDto(Role role, String name, String password, String email, String mobile, String birthyear, String birthmonth, String birthday, boolean promotionAgree, String storeAddress, String storeName, String storeTel, String team, String teamTel, Long storeId) {
         this.role = role;
         this.name = name;
         this.password = password;
@@ -39,5 +41,6 @@ public class UsersUpdateRequestDto {
         this.storeTel = storeTel;
         this.team = team;
         this.teamTel = teamTel;
+        this.storeId = storeId;
     }
 }

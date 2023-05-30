@@ -1,5 +1,6 @@
 package com.example.helloproject.data.dto.users;
 
+import com.example.helloproject.data.entity.store.Store;
 import com.example.helloproject.data.entity.user.Role;
 import com.example.helloproject.data.entity.user.Users;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class UsersResponseDto {
     private String storeTel;
     private String team;
     private String teamTel;
+    private Long storeId;
 
 
     public UsersResponseDto(Users entity){
@@ -50,5 +52,6 @@ public class UsersResponseDto {
         this.storeTel = entity.getStoreTel();
         this.team = entity.getTeam();
         this.teamTel = entity.getTeamTel();
+        this.storeId = entity.getStoreId();
     }
 }

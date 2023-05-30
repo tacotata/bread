@@ -1,5 +1,6 @@
 package com.example.helloproject.data.dto.users;
 
+import com.example.helloproject.data.entity.store.Store;
 import com.example.helloproject.data.entity.user.Role;
 import com.example.helloproject.data.entity.user.Users;
 import lombok.Builder;
@@ -58,9 +59,10 @@ public class UsersDto {
     private String storeTel;
     private String team;
     private String teamTel;
+    private Long storeId;
 
     @Builder
-    public UsersDto( String name, String password,String email, Role role, String birthday, String birthyear, String birthmonth, String mobile, boolean promotionAgree, boolean privacyAgree, String storeAddress, String storeName, String storeTel, String team, String teamTel) {
+    public UsersDto( String name, String password,String email, Role role, String birthday, String birthyear, String birthmonth, String mobile, boolean promotionAgree, boolean privacyAgree, String storeAddress, String storeName, String storeTel, String team, String teamTel, Long storeId) {
         this.name = name;
         this.password = password;
         this.email = email;
@@ -76,10 +78,11 @@ public class UsersDto {
         this.storeTel = storeTel;
         this.team = team;
         this.teamTel = teamTel;
+        this.storeId =storeId;
     }
 
     public Users toEntity(){
-        return Users.builder().name(name).password(password).email(email).role(Role.GUEST).birthday(birthday).birthyear(birthyear).mobile(mobile).promotionAgree(promotionAgree).privacyAgree(privacyAgree).build();
+        return Users.builder().name(name).password(password).email(email).role(Role.GUEST).birthday(birthday).birthyear(birthyear).mobile(mobile).promotionAgree(promotionAgree).privacyAgree(privacyAgree).storeId(storeId).build();
     }
 
 }

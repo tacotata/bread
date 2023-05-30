@@ -8,6 +8,7 @@ import com.example.helloproject.data.dto.news.NewsSaveRequestDto;
 import com.example.helloproject.data.dto.users.UsersResponseDto;
 import com.example.helloproject.data.dto.users.UsersUpdateRequestDto;
 import com.example.helloproject.data.entity.cs.Contact;
+import com.example.helloproject.data.entity.store.Store;
 import com.example.helloproject.data.entity.user.Users;
 import com.example.helloproject.data.entity.user.Withdraw;
 import com.example.helloproject.data.repository.cs.ContactRepository;
@@ -71,7 +72,7 @@ public class UsersService {
                 throw new IllegalStateException("이미 가입된 회원입니다.");
             }
         }
-        users.updateUserInfo(requestDto.getRole(), requestDto.getName(), requestDto.getEmail(), requestDto.getMobile(), requestDto.getBirthyear(), requestDto.getBirthmonth() ,requestDto.getBirthday(), requestDto.isPromotionAgree(), requestDto.getStoreAddress(), requestDto.getStoreName(), requestDto.getStoreTel(), requestDto.getTeam(), requestDto.getTeamTel() );
+        users.updateUserInfo(requestDto.getRole(), requestDto.getName(), requestDto.getEmail(), requestDto.getMobile(), requestDto.getBirthyear(), requestDto.getBirthmonth() ,requestDto.getBirthday(), requestDto.isPromotionAgree(), requestDto.getStoreAddress(), requestDto.getStoreName(), requestDto.getStoreTel(), requestDto.getTeam(), requestDto.getTeamTel(), requestDto.getStoreId() );
         return id;
     }
 

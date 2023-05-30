@@ -19,6 +19,7 @@ public class SessionUser implements Serializable {
     private String mobile;
     private String snsType;
     private Role role;
+    private Long storeId;
 
     public SessionUser(Users users) {
         this.id = users.getId();
@@ -31,6 +32,7 @@ public class SessionUser implements Serializable {
         this.mobile = users.getMobile();
         this.snsType = users.getSnsType();
         this.role = users.getRole();
+        this.storeId = users.getStoreId();
     }
 
 }
