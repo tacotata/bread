@@ -64,7 +64,7 @@
                 <input type="hidden" id="newsId" th:value="${news.id}">
                 <input type="hidden" id="fileCnt" th:value="${news.fileCnt}">
                 <thead>
-                <tr>
+                <tr class="d-flex flex-row justify-content-between">
                     <th scope="col" th:text ="${news.subject}"></th>
                     <th scope="col"class="date"th:text="${#temporals.format(news.regDate, 'yyyy-MM-dd')}"></th>
                     <th>

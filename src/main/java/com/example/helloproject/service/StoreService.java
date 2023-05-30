@@ -13,6 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -46,5 +49,10 @@ public class StoreService {
     @Transactional(readOnly = true)
     public Page<MainStoreDto> getStorePage(String search, Pageable pageable){
         return storeRepository.getStorePage(search, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public List<StoreResponseDto> findAll(){
+        return storeRepository.findAll().stream().map(StoreResponseDto::new).collect(Collectors.toList());
     }
 }
