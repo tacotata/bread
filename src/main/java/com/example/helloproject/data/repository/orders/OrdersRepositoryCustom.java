@@ -9,4 +9,6 @@ import java.time.LocalDate;
 
 public interface OrdersRepositoryCustom {
    Page<MainOrderDto> getOrderPage(LocalDate startDate, LocalDate endDate, Long userId, Pageable pageable);
+   Page<MainOrderDto> getStoreOrderPage(LocalDate startDate, LocalDate endDate, Long userId, Pageable pageable);
+
 }
