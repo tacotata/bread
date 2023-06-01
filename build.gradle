@@ -43,9 +43,6 @@ dependencies {
 
 }
 
-test {
-	useJUnitPlatform()
-}
 
 def generatedJavaSrcDir = 'src/main/generated'
 def queryDslOutput = file(generatedJavaSrcDir)
