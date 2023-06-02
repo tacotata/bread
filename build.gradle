@@ -50,3 +50,7 @@ def queryDslOutput = file(generatedJavaSrcDir)
 clean {
 	delete queryDslOutput
 }
+
+jar {
+	enabled = false
+}
