@@ -77,28 +77,10 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <label class="text-black" th:for="mobile">휴대전화</label>
-                                <input type="text"  id="mobile" class="form-control" maxlength="11" placeholder="숫자만 입력해주세요." oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="text-black hidden">인증번호 버튼</label>
-                                <button type="text" class="btn btn-primary submit-btn modalBtn">인증번호 받기</button>
-                            </div>
-                        </div>
-                    </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="phoneChk" placeholder="인증번호 입력하세요.">
-                        <small id="phoneChkMsg" class="form-text">We'll never share your email with anyone
-                            else.</small>
+                        <label class="text-black" th:for="mobile">휴대전화</label>
+                        <input type="text"  id="mobile" class="form-control" maxlength="11" placeholder="숫자만 입력해주세요." oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                     </div>
-
                     <div class="form-group">
                         <label class="text-black" for="promotionYn">홍보성 정보 수신 동의 <span class="font-weight-bold">(선택)</span></label>
                         <textarea name="" readonly class="form-control" id="promotionYn" cols="30" rows="5">

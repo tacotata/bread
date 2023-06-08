@@ -53,22 +53,17 @@ public class Users extends BaseEntity {
     private boolean privacyAgree;
 
     @Column
-    private String storeAddress;
-    @Column
-    private String storeName;
-    @Column
-    private String storeTel;
-    @Column
     private String team;
+
     @Column
     private String teamTel;
 
-
+    @Column
     private Long storeId;
 
 
     @Builder
-    public Users(String password, String birthmonth, boolean promotionAgree, boolean privacyAgree , Long id, String name, String email, String picture, Role role, String birthday, String birthyear, String mobile, String snsType, String snsId ,String storeAddress, String storeName, String storeTel, String team, String teamTel, Long storeId ) {
+    public Users(String password, String birthmonth, boolean promotionAgree, boolean privacyAgree , Long id, String name, String email, String picture, Role role, String birthday, String birthyear, String mobile, String snsType, String snsId ,  String team, String teamTel, Long storeId ) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -85,9 +80,6 @@ public class Users extends BaseEntity {
         this.promotionAgree = promotionAgree;
         this.privacyAgree = privacyAgree;
 
-        this.storeAddress = storeAddress;
-        this.storeName = storeName;
-        this.storeTel = storeTel;
         this.team = team;
         this.teamTel = teamTel;
 
@@ -111,7 +103,7 @@ public class Users extends BaseEntity {
         return this;
     }
 
-    public Users updateUserInfo(Role role, String name, String email, String mobile, String birthyear, String birthmonth, String birthday, boolean promotionAgree, String storeAddress, String storeName, String storeTel, String team, String teamTel, Long storeId) {
+    public Users updateUserInfo(Role role, String name, String email, String mobile, String birthyear, String birthmonth, String birthday, boolean promotionAgree, String team, String teamTel, Long storeId) {
         this.role = role;
         this.name = name;
         this.email = email;
@@ -120,9 +112,6 @@ public class Users extends BaseEntity {
         this.birthmonth = birthmonth;
         this.birthday = birthday;
         this.promotionAgree = promotionAgree;
-        this.storeAddress = storeAddress;
-        this.storeName = storeName;
-        this.storeTel = storeTel;
         this.team = team;
         this.teamTel = teamTel;
         this.storeId = storeId;
@@ -145,9 +134,6 @@ public class Users extends BaseEntity {
                 .birthmonth(usersDto.getBirthmonth())
                 .mobile(usersDto.getMobile())
                 .promotionAgree(usersDto.isPromotionAgree())
-                .storeAddress(usersDto.getStoreAddress())
-                .storeName(usersDto.getStoreName())
-                .storeTel(usersDto.getStoreTel())
                 .team(usersDto.getTeam())
                 .teamTel(usersDto.getTeamTel())
                 .storeId(usersDto.getStoreId())

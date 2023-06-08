@@ -53,16 +53,12 @@ public class UsersDto {
     @AssertTrue(message = "개인정보 수집 및 이용 동의는 필수입니다.")
     private boolean privacyAgree;
 
-
-    private String storeAddress;
-    private String storeName;
-    private String storeTel;
     private String team;
     private String teamTel;
     private Long storeId;
 
     @Builder
-    public UsersDto( String name, String password,String email, Role role, String birthday, String birthyear, String birthmonth, String mobile, boolean promotionAgree, boolean privacyAgree, String storeAddress, String storeName, String storeTel, String team, String teamTel, Long storeId) {
+    public UsersDto( String name, String password,String email, Role role, String birthday, String birthyear, String birthmonth, String mobile, boolean promotionAgree, boolean privacyAgree, String team, String teamTel, Long storeId) {
         this.name = name;
         this.password = password;
         this.email = email;
@@ -73,16 +69,13 @@ public class UsersDto {
         this.mobile = mobile;
         this.promotionAgree = promotionAgree;
         this.privacyAgree = privacyAgree;
-        this.storeAddress = storeAddress;
-        this.storeName = storeName;
-        this.storeTel = storeTel;
         this.team = team;
         this.teamTel = teamTel;
         this.storeId =storeId;
     }
 
     public Users toEntity(){
-        return Users.builder().name(name).password(password).email(email).role(Role.GUEST).birthday(birthday).birthyear(birthyear).mobile(mobile).promotionAgree(promotionAgree).privacyAgree(privacyAgree).storeId(storeId).build();
+        return Users.builder().name(name).password(password).email(email).role(role).birthday(birthday).birthyear(birthyear).mobile(mobile).promotionAgree(promotionAgree).privacyAgree(privacyAgree).storeId(storeId).build();
     }
 
 }

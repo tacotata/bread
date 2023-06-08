@@ -123,7 +123,7 @@
 
                 <th:block th:if="${userName} != null and  ${#strings.equals(role, 'ADMIN')} ">
                     <div class="form-group">
-                        <label class="text-black" th:for="role">매장</label>
+                        <label class="text-black" th:for="role">권한</label>
                         <select class="form-control select" th:field="*{role}" aria-label="Default select example">
                             <option th:value="GUEST">고객</option>
                             <option th:value="OWNER">점주</option>
@@ -133,7 +133,7 @@
 
 
                     <div class="form-group">
-                        <label class="text-black" th:for="role">매장명</label>
+                        <label class="text-black" th:for="storeId">매장명</label>
                         <select class="form-control select" th:field="*{storeId}" aria-label="Default select example">
                             <option value="">유형</option>
                             <th:block th:each = "store:${store}" >
@@ -194,12 +194,11 @@
                     </div>
 
                 </th:block>
-                <th:block th:unless="${userName} != null and  ${#strings.equals(role, 'ADMIN')} ">
-
+               <!-- <th:block th:unless="${userName} != null and  ${#strings.equals(role, 'ADMIN')} ">
                     <div class="form-group">
                         <input type="hidden" class="form-control" name="role" value="GUEST">
                     </div>
-                </th:block>
+                </th:block>-->
 
 <!--                <div class="row">-->
 <!--                    <div class="col-md-8">-->

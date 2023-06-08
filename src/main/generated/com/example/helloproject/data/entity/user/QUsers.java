@@ -53,13 +53,7 @@ public class QUsers extends EntityPathBase<Users> {
 
     public final StringPath snsType = createString("snsType");
 
-    public final StringPath storeAddress = createString("storeAddress");
-
     public final NumberPath<Long> storeId = createNumber("storeId", Long.class);
-
-    public final StringPath storeName = createString("storeName");
-
-    public final StringPath storeTel = createString("storeTel");
 
     public final StringPath team = createString("team");
 

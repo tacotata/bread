@@ -72,7 +72,7 @@ public class UsersService {
                 throw new IllegalStateException("이미 가입된 회원입니다.");
             }
         }
-        users.updateUserInfo(requestDto.getRole(), requestDto.getName(), requestDto.getEmail(), requestDto.getMobile(), requestDto.getBirthyear(), requestDto.getBirthmonth() ,requestDto.getBirthday(), requestDto.isPromotionAgree(), requestDto.getStoreAddress(), requestDto.getStoreName(), requestDto.getStoreTel(), requestDto.getTeam(), requestDto.getTeamTel(), requestDto.getStoreId() );
+        users.updateUserInfo(requestDto.getRole(), requestDto.getName(), requestDto.getEmail(), requestDto.getMobile(), requestDto.getBirthyear(), requestDto.getBirthmonth() ,requestDto.getBirthday(), requestDto.isPromotionAgree(), requestDto.getTeam(), requestDto.getTeamTel(), requestDto.getStoreId() );
         return id;
     }
 

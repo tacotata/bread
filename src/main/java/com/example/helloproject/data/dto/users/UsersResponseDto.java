@@ -47,9 +47,6 @@ public class UsersResponseDto {
         this.promotionAgree = entity.isPromotionAgree();
         this.regDate = entity.getRegDate();
         this.updDate = entity.getUpdDate();
-        this.storeAddress = entity.getStoreAddress();
-        this.storeName = entity.getStoreTel();
-        this.storeTel = entity.getStoreTel();
         this.team = entity.getTeam();
         this.teamTel = entity.getTeamTel();
         this.storeId = entity.getStoreId();

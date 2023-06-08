@@ -67,14 +67,23 @@
                         <th scope="col">회원정보</th>
                     </tr>
                 </thead>
+                <th:block  th:if="${snsType} != null">
                 <tbody>
+                    <tr>
+                        <td><a th:href="@{/member/modify}">회원정보 수정</a></td>
+                    </tr>
+                </tbody>
+                </th:block>
+                <th:block  th:if="${snsType} == null">
+                    <tbody>
                     <tr>
                         <td><a th:href="@{/member/modify-before}">회원정보 수정</a></td>
                     </tr>
                     <tr>
                         <td><a th:href="@{/member/modify-pwd}">비밀번호 변경</a></td>
                     </tr>
-                </tbody>
+                    </tbody>
+                </th:block>
             </table>
             <table class="table mypage-table">
                 <thead>

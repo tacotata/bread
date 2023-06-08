@@ -63,12 +63,16 @@ public class UsersController {
 
 
     @PostMapping("/join")
-    public String usersJoin( @Valid  @ModelAttribute("usersDto") UsersDto usersDto, BindingResult bindingResult, Model model) {
+    public String usersJoin( @Valid  @ModelAttribute("usersDto") UsersDto usersDto, BindingResult bindingResult, Model model, @LoginUser SessionUser user) {
 
         if(bindingResult.hasErrors()){
             return"/member/join";
         }
+
         try {
+            if(user == null){
+                usersDto.setRole(Role.GUEST);
+            }
             Users users = Users.createUsers(usersDto, passwordEncoder);
             usersService.saveUser(users);
         } catch (IllegalStateException e) {
@@ -94,6 +98,7 @@ public class UsersController {
     public String mypage(Model model, @LoginUser SessionUser user){
         if(user !=null){
             model.addAttribute("userName", user.getName());
+            model.addAttribute("snsType", user.getSnsType());
             model.addAttribute("role", user.getRole());
         }
         return "/member/mypage";
