@@ -12,8 +12,6 @@ public class NewsResponseDto {
     private NewsType type;
     private String subject;
     private String contents;
-    private String regId;
-    private String updId;
     private LocalDateTime regDate;
     private LocalDateTime  updDate;
     private int fileCnt;
@@ -23,8 +21,6 @@ public class NewsResponseDto {
         this.type = entity.getType();
         this.subject = entity.getSubject();
         this.contents = entity.getContents();
-        this.regId = entity.getRegId();
-        this.updId = entity.getUpdId();
         this.regDate = entity.getRegDate();
         this.updDate = entity.getUpdDate();
         this.fileCnt = entity.getFileCnt();

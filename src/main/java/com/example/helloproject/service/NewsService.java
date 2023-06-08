@@ -34,7 +34,7 @@ public class NewsService {
     @Transactional
     public Long update(Long id, NewsUpdateRequestDto requestDto){
         News news = newsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-        news.update(requestDto.getSubject(), requestDto.getContents(), requestDto.getUpdId(), requestDto.getFileCnt(), requestDto.getType());
+        news.update(requestDto.getSubject(), requestDto.getContents(), requestDto.getFileCnt(), requestDto.getType());
         return id;
     }
 

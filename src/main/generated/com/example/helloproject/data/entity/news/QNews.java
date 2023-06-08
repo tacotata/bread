@@ -30,8 +30,6 @@ public class QNews extends EntityPathBase<News> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regDate = _super.regDate;
 
-    public final StringPath regId = createString("regId");
-
     //inherited
     public final NumberPath<Long> regUser = _super.regUser;
 
@@ -41,8 +39,6 @@ public class QNews extends EntityPathBase<News> {
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updDate = _super.updDate;
-
-    public final StringPath updId = createString("updId");
 
     //inherited
     public final NumberPath<Long> updUser = _super.updUser;
