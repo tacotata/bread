@@ -13,7 +13,6 @@ public class ContactResponseDto {
     private String title;
     private String email;
     private String contents;
-    private Users users;
 
     public ContactResponseDto(Contact entity){
         this.id = entity.getId();
@@ -21,6 +20,5 @@ public class ContactResponseDto {
         this.title = entity.getTitle();
         this.email = entity.getEmail();
         this.contents = entity.getContents();
-        this.users = entity.getUsers();
     }
 }

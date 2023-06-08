@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,8 +16,6 @@ import com.querydsl.core.types.dsl.PathInits;
 public class QContact extends EntityPathBase<Contact> {
 
     private static final long serialVersionUID = -802846081L;
-
-    private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QContact contact = new QContact("contact");
 
@@ -46,27 +43,16 @@ public class QContact extends EntityPathBase<Contact> {
     //inherited
     public final NumberPath<Long> updUser = _super.updUser;
 
-    public final com.example.helloproject.data.entity.user.QUsers users;
-
     public QContact(String variable) {
-        this(Contact.class, forVariable(variable), INITS);
+        super(Contact.class, forVariable(variable));
     }
 
     public QContact(Path<? extends Contact> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+        super(path.getType(), path.getMetadata());
     }
 
     public QContact(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QContact(PathMetadata metadata, PathInits inits) {
-        this(Contact.class, metadata, inits);
-    }
-
-    public QContact(Class<? extends Contact> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.users = inits.isInitialized("users") ? new com.example.helloproject.data.entity.user.QUsers(forProperty("users")) : null;
+        super(Contact.class, metadata);
     }
 
 }

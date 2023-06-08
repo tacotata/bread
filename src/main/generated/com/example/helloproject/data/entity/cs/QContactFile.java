@@ -66,7 +66,7 @@ public class QContactFile extends EntityPathBase<ContactFile> {
 
     public QContactFile(Class<? extends ContactFile> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.contact = inits.isInitialized("contact") ? new QContact(forProperty("contact"), inits.get("contact")) : null;
+        this.contact = inits.isInitialized("contact") ? new QContact(forProperty("contact")) : null;
     }
 
 }

@@ -15,19 +15,17 @@ public class ContactSaveRequestDto {
     private String title;
     private String email;
     private String contents;
-    private Users users;
 
     @Builder
-    public ContactSaveRequestDto(CsType csType, String title, String email, String contents, Users users) {
+    public ContactSaveRequestDto(CsType csType, String title, String email, String contents) {
         this.csType = csType;
         this.title = title;
         this.email = email;
         this.contents = contents;
-        this.users = users;
     }
 
     public Contact toEntity(){
-        return Contact.builder().csType(csType).title(title).contents(contents).email(email).users(users).build();
+        return Contact.builder().csType(csType).title(title).contents(contents).email(email).build();
     }
 }
 

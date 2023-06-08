@@ -29,20 +29,13 @@ public class Contact extends BaseEntity {
     @Column(nullable = false)
     private String contents;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private Users users;
-
-
-
     @Builder
-    public Contact(Long id, CsType csType, String title, String email, String contents, Users users) {
+    public Contact(Long id, CsType csType, String title, String email, String contents) {
         this.id = id;
         this.csType = csType;
         this.title = title;
         this.email = email;
         this.contents = contents;
-        this.users = users;
     }
 
     public String getCsTypeKey(){
